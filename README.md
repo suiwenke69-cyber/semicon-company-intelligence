@@ -228,7 +228,7 @@ regression test.
 Defects 16-18 were found only by running against the live API — the offline suite
 passed throughout. They are locked down in `tests/test_live_run_regressions.py`.
 
-Run `pytest` to confirm all of these stay fixed. The suite is 114 tests, fully
+Run `pytest` to confirm all of these stay fixed. The suite is  tests, fully
 offline and free to run.
 
 ---
@@ -333,7 +333,7 @@ semicon/sources/sec_tables.py  MD&A segment/geographic table parsing
 templates/report.md.j2         report template
 cache/                         downloaded artifacts + LLM responses (gitignored)
 data/profiles/                 extracted profiles (committed)
-tests/                         offline regression suite (98 tests)
+tests/                         offline regression suite (122 tests)
 ```
 
 ## Setup
