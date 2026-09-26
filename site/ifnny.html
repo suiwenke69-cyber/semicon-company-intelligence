@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>INFINEON TECHNOLOGIES AG (IFNNY) — Semiconductor Intelligence Report</title>
+<style>
+/* Shared stylesheet for the static report site.
+   Inlined into every page so each HTML file is standalone and can be sent as-is.
+   System fonts only - no network request, works offline. */
+
+:root {
+  --bg: #f6f7f9;
+  --panel: #ffffff;
+  --ink: #14181f;
+  --muted: #5d6875;
+  --line: #e2e5ea;
+  --accent: #1f5f9e;
+  --fact: #1d7a4c;
+  --analysis: #8a6100;
+  --inference: #8a3d8a;
+  --neg: #b3261e;
+  --pos: #1d7a4c;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font: 15px/1.6 -apple-system, BlinkMacSystemFont, &#34;Segoe UI&#34;, Roboto,
+        &#34;Helvetica Neue&#34;, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+.wrap { max-width: 1100px; margin: 0 auto; padding: 32px 20px 80px; }
+
+/* ---------- masthead ---------- */
+.masthead { border-bottom: 2px solid var(--ink); padding-bottom: 14px; margin-bottom: 22px; }
+.masthead h1 { margin: 6px 0 2px; font-size: 27px; letter-spacing: -0.01em; }
+.masthead .sub { margin: 0; color: var(--muted); font-size: 14px; }
+.masthead .ticker {
+  font-size: 14px; font-weight: 600; color: var(--accent);
+  border: 1px solid var(--accent); border-radius: 4px;
+  padding: 1px 7px; vertical-align: 3px;
+}
+a.back { color: var(--accent); text-decoration: none; font-size: 13px; }
+a.back:hover { text-decoration: underline; }
+
+/* ---------- stat bar ---------- */
+.bar {
+  display: flex; flex-wrap: wrap; gap: 10px; margin: 0 0 20px;
+}
+.stat {
+  flex: 1 1 150px; background: var(--panel); border: 1px solid var(--line);
+  border-radius: 8px; padding: 12px 14px;
+}
+.stat b { display: block; font-size: 21px; letter-spacing: -0.02em; }
+.stat b small { font-size: 13px; color: var(--muted); font-weight: 500; }
+.stat span { color: var(--muted); font-size: 12px; text-transform: uppercase; letter-spacing: 0.04em; }
+
+/* ---------- sections ---------- */
+section {
+  background: var(--panel); border: 1px solid var(--line); border-radius: 10px;
+  padding: 20px 22px; margin-bottom: 18px;
+}
+h2 {
+  font-size: 18px; margin: 0 0 14px; padding-bottom: 9px;
+  border-bottom: 1px solid var(--line); letter-spacing: -0.01em;
+}
+h2 .n {
+  display: inline-block; min-width: 22px; height: 22px; line-height: 22px;
+  margin-right: 8px; text-align: center; font-size: 12px;
+  background: var(--ink); color: #fff; border-radius: 5px; vertical-align: 2px;
+}
+h3 { font-size: 14px; margin: 20px 0 8px; text-transform: uppercase;
+     letter-spacing: 0.05em; color: var(--muted); }
+h3:first-of-type { margin-top: 4px; }
+h4 { margin: 0 0 5px; font-size: 15px; }
+
+p { margin: 0 0 9px; }
+.muted { color: var(--muted); }
+.small { font-size: 12.5px; }
+.mono { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+.num { text-align: right; font-variant-numeric: tabular-nums; }
+.pos { color: var(--pos); }
+.neg { color: var(--neg); }
+
+/* ---------- tables ---------- */
+table { width: 100%; border-collapse: collapse; margin: 6px 0 10px; font-size: 14px; }
+th {
+  text-align: left; font-size: 11.5px; text-transform: uppercase;
+  letter-spacing: 0.05em; color: var(--muted); font-weight: 600;
+  border-bottom: 1px solid var(--line); padding: 7px 9px;
+}
+td { padding: 8px 9px; border-bottom: 1px solid var(--line); vertical-align: top; }
+tr:last-child td { border-bottom: none; }
+tr.sub td { background: #fafbfc; font-style: italic; }
+tbody tr:target { background: #fff6d9; }
+
+/* ---------- cards / lists ---------- */
+.grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 12px; }
+.card {
+  border: 1px solid var(--line); border-radius: 8px; padding: 13px 15px;
+  background: #fcfcfd;
+}
+.card p:last-child { margin-bottom: 0; }
+ul.claims { margin: 0; padding-left: 18px; }
+ul.claims li { margin-bottom: 8px; }
+.two { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.two ul { margin: 4px 0 0; padding-left: 18px; }
+
+dl.kv { display: grid; grid-template-columns: 190px 1fr; gap: 4px 14px; margin: 0 0 12px; }
+dl.kv dt { color: var(--muted); font-size: 13px; }
+dl.kv dd { margin: 0; }
+
+/* ---------- inline badges ---------- */
+.tag {
+  display: inline-block; font-size: 10.5px; font-weight: 700; letter-spacing: 0.05em;
+  text-transform: uppercase; padding: 1px 6px; border-radius: 4px;
+  vertical-align: 1px; white-space: nowrap;
+}
+.tag.fact { background: #e6f4ec; color: var(--fact); }
+.tag.analysis { background: #fdf3dd; color: var(--analysis); }
+.tag.inference { background: #f7e9f7; color: var(--inference); }
+.tag.disclosed { background: #e6f4ec; color: var(--fact); }
+
+.chip {
+  display: inline-block; font-size: 12px; background: #eef1f5; color: #3c4753;
+  border-radius: 20px; padding: 2px 10px; margin: 0 4px 4px 0;
+}
+.chips { margin: 6px 0; }
+
+a.cid {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 11.5px; color: var(--accent); text-decoration: none;
+  border-bottom: 1px dotted var(--accent);
+}
+a.cid:hover { background: #eaf2fa; }
+.srcs { margin: 7px 0 0; }
+.srcs a.cid { margin-right: 5px; }
+
+/* ---------- callouts ---------- */
+.callout {
+  background: #eef4fa; border-left: 3px solid var(--accent);
+  padding: 11px 14px; border-radius: 0 6px 6px 0; margin: 0 0 18px; font-size: 13.5px;
+}
+.callout.warn { background: #fdf6e6; border-left-color: #c8901c; }
+
+/* ---------- ledger filter ---------- */
+input[type=&#34;search&#34;] {
+  width: 100%; padding: 8px 11px; font-size: 14px; margin: 4px 0 10px;
+  border: 1px solid var(--line); border-radius: 7px; background: #fff;
+  font-family: inherit;
+}
+input[type=&#34;search&#34;]:focus { outline: 2px solid #b9d4ec; border-color: var(--accent); }
+
+footer { margin-top: 26px; padding-top: 14px; border-top: 1px solid var(--line); }
+
+@media (max-width: 620px) {
+  .two { grid-template-columns: 1fr; }
+  dl.kv { grid-template-columns: 1fr; }
+  dl.kv dt { margin-top: 6px; }
+}
+
+/* Stale-data banner: an issuer whose newest SEC filing is years old must be
+   impossible to mistake for current intelligence. */
+.callout.stale {
+  background: #fdecea;
+  border-left-color: var(--neg);
+  border-left-width: 4px;
+}
+
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="masthead">
+  <a class="back" href="index.html">&larr; All companies</a>
+  <h1>INFINEON TECHNOLOGIES AG <span class="ticker">IFNNY</span></h1>
+  <p class="sub">Semiconductor Company Intelligence Report</p>
+</header>
+
+<div class="callout stale">
+  <strong>⚠ Stale data warning.</strong> The most recent SEC filing available for
+  this company is dated <b>2009-12-08</b>. This issuer appears
+  to have stopped filing with the SEC. <b>Everything below is historical, not
+  current intelligence</b> — it is shown for reference only.
+</div>
+
+
+<section class="bar">
+  <div class="stat"><b>0</b><span>verified claims</span></div>
+  <div class="stat"><b>8<small>/8</small></b><span>sources</span></div>
+  <div class="stat"><b>0<small>/0</small></b><span>categories at target</span></div>
+  <div class="stat"><b>n/a</b><span>data as of</span></div>
+</section>
+
+<div class="callout">
+  <strong>How to read this.</strong> Claims are tagged
+  <span class="tag fact">FACT</span> (stated in a cited filing),
+  <span class="tag analysis">ANALYSIS</span> (reasoned across facts) or
+  <span class="tag inference">INFERENCE</span> (reasoned with a stated chain).
+  Every factual assertion carries a claim ID, resolvable in the Evidence Ledger.
+  No investment recommendation is made.
+</div>
+
+<section>
+<h2><span class="n">1</span> Company Overview</h2>
+<dl class="kv">
+  <dt>Value chain position</dt><dd>Integrated device manufacturer (design + manufacturing)</dd>
+  <dt>Ticker / CIK</dt><dd>IFNNY / 0001107457</dd>
+  <dt>Fiscal year end</dt><dd>month 09-30</dd>
+</dl>
+<p class="muted">No company overview claims were extracted.</p></section>
+
+
+<section>
+<h2><span class="n">2</span> Product &amp; Technology</h2>
+
+
+
+<h3>Products</h3>
+<p class="muted">No products were extracted with verifiable support.</p>
+<h3>Technologies</h3>
+<p class="muted">No technologies were extracted with verifiable support.</p></section>
+
+<section>
+<h2><span class="n">3</span> Market Drivers</h2>
+<p class="muted">No market drivers identified with verifiable support.</p>
+</section>
+
+<section>
+<h2><span class="n">4</span> Customer Analysis</h2>
+<p class="muted">No customer analysis was produced with verifiable support.</p></section>
+
+<section>
+<h2><span class="n">5</span> Competitive Landscape</h2>
+<p class="muted">No competitors were identified with verifiable support.</p>
+<div class="callout">
+  Many issuers do not name competitors in their annual report. Applied Materials'
+  Form 10-K, for example, describes competition generically without naming rivals.
+  A short list here reflects what the filings disclose, not a failed analysis.
+</div>
+</section>
+
+<section>
+<h2><span class="n">6</span> Business Analysis</h2>
+
+
+</section>
+
+<section>
+<h2><span class="n">7</span> Commercial Insights</h2>
+<p class="muted">No commercial insights were produced.</p>
+<p class="muted">No risks were extracted.</p></section>
+
+<section>
+<h2>Evidence Coverage</h2>
+<p class="muted">Measured against advisory targets. A category below target means the reviewed sources did not support it - it is not filled in to reach the target.</p>
+<table>
+  <thead><tr><th>Category</th><th class="num">Claims</th><th class="num">Target</th><th>Status</th></tr></thead>
+  <tbody>
+  </tbody>
+</table>
+</section>
+
+<section>
+<h2>Sources</h2>
+<table>
+  <thead><tr><th>Source ID</th><th>Type</th><th>Title</th><th>Published</th><th>SHA-256</th></tr></thead>
+  <tbody>
+    <tr>
+      <td class="mono small">sec_6_k_2010-08-05</td>
+      <td>8-K</td>
+      <td>Infineon 6-K filed 2010-08-05</td>
+      <td class="muted small">2010-08-05</td>
+      <td class="mono small">db94166cbca4</td>
+    </tr>
+    <tr>
+      <td class="mono small">sec_6_k_2010-08-05</td>
+      <td>8-K</td>
+      <td>Infineon 6-K filed 2010-08-05</td>
+      <td class="muted small">2010-08-05</td>
+      <td class="mono small">d71cb4ae780e</td>
+    </tr>
+    <tr>
+      <td class="mono small">sec_6_k_2010-08-02</td>
+      <td>8-K</td>
+      <td>Infineon 6-K filed 2010-08-02</td>
+      <td class="muted small">2010-08-02</td>
+      <td class="mono small">911f34a6477c</td>
+    </tr>
+    <tr>
+      <td class="mono small">sec_6_k_2010-07-28</td>
+      <td>8-K</td>
+      <td>Infineon 6-K filed 2010-07-28</td>
+      <td class="muted small">2010-07-28</td>
+      <td class="mono small">0abea41e03c0</td>
+    </tr>
+    <tr>
+      <td class="mono small">sec_20_f_2009</td>
+      <td>20-F</td>
+      <td>Infineon 20-F filed 2009-12-08</td>
+      <td class="muted small">2009-12-08</td>
+      <td class="mono small">1a4ab73b6540</td>
+    </tr>
+    <tr>
+      <td class="mono small">sec_20_f_2008</td>
+      <td>20-F</td>
+      <td>Infineon 20-F filed 2008-12-29</td>
+      <td class="muted small">2008-12-29</td>
+      <td class="mono small">0379996f16df</td>
+    </tr>
+    <tr>
+      <td class="mono small">sec_20_f_2007</td>
+      <td>20-F</td>
+      <td>Infineon 20-F filed 2007-12-07</td>
+      <td class="muted small">2007-12-07</td>
+      <td class="mono small">cd8c158e5f4a</td>
+    </tr>
+    <tr>
+      <td class="mono small">sec_xbrl_facts</td>
+      <td>SEC-XBRL</td>
+      <td>Infineon XBRL company facts</td>
+      <td class="muted small"></td>
+      <td class="mono small"></td>
+    </tr>
+  </tbody>
+</table>
+<p class="muted small">First-party filings only: annual reports, quarterly reports, 8-K earnings releases (Exhibit 99.1), SEC XBRL company facts, and peer-company filings for competitive overlap.</p>
+</section>
+
+<section>
+<h2>Evidence Ledger</h2>
+<p class="muted">0 verified claims. Each was extracted from the cited filing and checked to contain a verbatim supporting quote.</p>
+<input type="search" id="ledgerFilter" placeholder="Filter claims by text, topic or source…" autocomplete="off">
+<table id="ledger">
+  <thead><tr><th>Claim ID</th><th>Topic</th><th>Claim</th><th>Source</th><th>Verbatim quote</th></tr></thead>
+  <tbody>
+  </tbody>
+</table>
+</section>
+
+<footer>
+  <p class="muted small">
+    Generated 2026-09-26 15:10 UTC.
+    Deterministic financials from SEC XBRL; qualitative claims from language models,
+    each gated on a verbatim source quote. Peer-filing claims are typed INFERENCE
+    and kept in a separate ledger.
+  </p>
+</footer>
+
+</div>
+<script>
+// Ledger filter. Tiny and dependency-free: the ledger is the audit trail, so being
+// able to search it matters more than any interactive flourish.
+(function () {
+  var input = document.getElementById('ledgerFilter');
+  if (!input) return;
+  var rows = Array.prototype.slice.call(
+    document.querySelectorAll('#ledger tbody tr')
+  );
+  input.addEventListener('input', function () {
+    var q = input.value.trim().toLowerCase();
+    rows.forEach(function (r) {
+      r.style.display = !q || r.textContent.toLowerCase().indexOf(q) !== -1 ? '' : 'none';
+    });
+  });
+})();
+</script>
+</body>
+</html>

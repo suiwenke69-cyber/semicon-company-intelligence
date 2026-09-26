@@ -1,0 +1,917 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>KLA CORP (KLAC) — Semiconductor Intelligence Report</title>
+<style>
+/* Shared stylesheet for the static report site.
+   Inlined into every page so each HTML file is standalone and can be sent as-is.
+   System fonts only - no network request, works offline. */
+
+:root {
+  --bg: #f6f7f9;
+  --panel: #ffffff;
+  --ink: #14181f;
+  --muted: #5d6875;
+  --line: #e2e5ea;
+  --accent: #1f5f9e;
+  --fact: #1d7a4c;
+  --analysis: #8a6100;
+  --inference: #8a3d8a;
+  --neg: #b3261e;
+  --pos: #1d7a4c;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font: 15px/1.6 -apple-system, BlinkMacSystemFont, &#34;Segoe UI&#34;, Roboto,
+        &#34;Helvetica Neue&#34;, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+.wrap { max-width: 1100px; margin: 0 auto; padding: 32px 20px 80px; }
+
+/* ---------- masthead ---------- */
+.masthead { border-bottom: 2px solid var(--ink); padding-bottom: 14px; margin-bottom: 22px; }
+.masthead h1 { margin: 6px 0 2px; font-size: 27px; letter-spacing: -0.01em; }
+.masthead .sub { margin: 0; color: var(--muted); font-size: 14px; }
+.masthead .ticker {
+  font-size: 14px; font-weight: 600; color: var(--accent);
+  border: 1px solid var(--accent); border-radius: 4px;
+  padding: 1px 7px; vertical-align: 3px;
+}
+a.back { color: var(--accent); text-decoration: none; font-size: 13px; }
+a.back:hover { text-decoration: underline; }
+
+/* ---------- stat bar ---------- */
+.bar {
+  display: flex; flex-wrap: wrap; gap: 10px; margin: 0 0 20px;
+}
+.stat {
+  flex: 1 1 150px; background: var(--panel); border: 1px solid var(--line);
+  border-radius: 8px; padding: 12px 14px;
+}
+.stat b { display: block; font-size: 21px; letter-spacing: -0.02em; }
+.stat b small { font-size: 13px; color: var(--muted); font-weight: 500; }
+.stat span { color: var(--muted); font-size: 12px; text-transform: uppercase; letter-spacing: 0.04em; }
+
+/* ---------- sections ---------- */
+section {
+  background: var(--panel); border: 1px solid var(--line); border-radius: 10px;
+  padding: 20px 22px; margin-bottom: 18px;
+}
+h2 {
+  font-size: 18px; margin: 0 0 14px; padding-bottom: 9px;
+  border-bottom: 1px solid var(--line); letter-spacing: -0.01em;
+}
+h2 .n {
+  display: inline-block; min-width: 22px; height: 22px; line-height: 22px;
+  margin-right: 8px; text-align: center; font-size: 12px;
+  background: var(--ink); color: #fff; border-radius: 5px; vertical-align: 2px;
+}
+h3 { font-size: 14px; margin: 20px 0 8px; text-transform: uppercase;
+     letter-spacing: 0.05em; color: var(--muted); }
+h3:first-of-type { margin-top: 4px; }
+h4 { margin: 0 0 5px; font-size: 15px; }
+
+p { margin: 0 0 9px; }
+.muted { color: var(--muted); }
+.small { font-size: 12.5px; }
+.mono { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+.num { text-align: right; font-variant-numeric: tabular-nums; }
+.pos { color: var(--pos); }
+.neg { color: var(--neg); }
+
+/* ---------- tables ---------- */
+table { width: 100%; border-collapse: collapse; margin: 6px 0 10px; font-size: 14px; }
+th {
+  text-align: left; font-size: 11.5px; text-transform: uppercase;
+  letter-spacing: 0.05em; color: var(--muted); font-weight: 600;
+  border-bottom: 1px solid var(--line); padding: 7px 9px;
+}
+td { padding: 8px 9px; border-bottom: 1px solid var(--line); vertical-align: top; }
+tr:last-child td { border-bottom: none; }
+tr.sub td { background: #fafbfc; font-style: italic; }
+tbody tr:target { background: #fff6d9; }
+
+/* ---------- cards / lists ---------- */
+.grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 12px; }
+.card {
+  border: 1px solid var(--line); border-radius: 8px; padding: 13px 15px;
+  background: #fcfcfd;
+}
+.card p:last-child { margin-bottom: 0; }
+ul.claims { margin: 0; padding-left: 18px; }
+ul.claims li { margin-bottom: 8px; }
+.two { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.two ul { margin: 4px 0 0; padding-left: 18px; }
+
+dl.kv { display: grid; grid-template-columns: 190px 1fr; gap: 4px 14px; margin: 0 0 12px; }
+dl.kv dt { color: var(--muted); font-size: 13px; }
+dl.kv dd { margin: 0; }
+
+/* ---------- inline badges ---------- */
+.tag {
+  display: inline-block; font-size: 10.5px; font-weight: 700; letter-spacing: 0.05em;
+  text-transform: uppercase; padding: 1px 6px; border-radius: 4px;
+  vertical-align: 1px; white-space: nowrap;
+}
+.tag.fact { background: #e6f4ec; color: var(--fact); }
+.tag.analysis { background: #fdf3dd; color: var(--analysis); }
+.tag.inference { background: #f7e9f7; color: var(--inference); }
+.tag.disclosed { background: #e6f4ec; color: var(--fact); }
+
+.chip {
+  display: inline-block; font-size: 12px; background: #eef1f5; color: #3c4753;
+  border-radius: 20px; padding: 2px 10px; margin: 0 4px 4px 0;
+}
+.chips { margin: 6px 0; }
+
+a.cid {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 11.5px; color: var(--accent); text-decoration: none;
+  border-bottom: 1px dotted var(--accent);
+}
+a.cid:hover { background: #eaf2fa; }
+.srcs { margin: 7px 0 0; }
+.srcs a.cid { margin-right: 5px; }
+
+/* ---------- callouts ---------- */
+.callout {
+  background: #eef4fa; border-left: 3px solid var(--accent);
+  padding: 11px 14px; border-radius: 0 6px 6px 0; margin: 0 0 18px; font-size: 13.5px;
+}
+.callout.warn { background: #fdf6e6; border-left-color: #c8901c; }
+
+/* ---------- ledger filter ---------- */
+input[type=&#34;search&#34;] {
+  width: 100%; padding: 8px 11px; font-size: 14px; margin: 4px 0 10px;
+  border: 1px solid var(--line); border-radius: 7px; background: #fff;
+  font-family: inherit;
+}
+input[type=&#34;search&#34;]:focus { outline: 2px solid #b9d4ec; border-color: var(--accent); }
+
+footer { margin-top: 26px; padding-top: 14px; border-top: 1px solid var(--line); }
+
+@media (max-width: 620px) {
+  .two { grid-template-columns: 1fr; }
+  dl.kv { grid-template-columns: 1fr; }
+  dl.kv dt { margin-top: 6px; }
+}
+
+/* Stale-data banner: an issuer whose newest SEC filing is years old must be
+   impossible to mistake for current intelligence. */
+.callout.stale {
+  background: #fdecea;
+  border-left-color: var(--neg);
+  border-left-width: 4px;
+}
+
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="masthead">
+  <a class="back" href="index.html">&larr; All companies</a>
+  <h1>KLA CORP <span class="ticker">KLAC</span></h1>
+  <p class="sub">Semiconductor Company Intelligence Report</p>
+</header>
+
+
+
+<section class="bar">
+  <div class="stat"><b>19</b><span>verified claims</span></div>
+  <div class="stat"><b>21<small>/21</small></b><span>sources</span></div>
+  <div class="stat"><b>2<small>/7</small></b><span>categories at target</span></div>
+  <div class="stat"><b>2026-06-30</b><span>data as of</span></div>
+</section>
+
+<div class="callout">
+  <strong>How to read this.</strong> Claims are tagged
+  <span class="tag fact">FACT</span> (stated in a cited filing),
+  <span class="tag analysis">ANALYSIS</span> (reasoned across facts) or
+  <span class="tag inference">INFERENCE</span> (reasoned with a stated chain).
+  Every factual assertion carries a claim ID, resolvable in the Evidence Ledger.
+  No investment recommendation is made.
+</div>
+
+<section>
+<h2><span class="n">1</span> Company Overview</h2>
+<dl class="kv">
+  <dt>Value chain position</dt><dd>KLA CORP is positioned in the semiconductor value chain as a provider of process control and inspection equipment and services.</dd>
+  <dt>Ticker / CIK</dt><dd>KLAC / 0000319201</dd>
+  <dt>Fiscal year end</dt><dd>month 06-30</dd>
+</dl>
+<ul class="claims">
+  <li>KLA develops industry-leading equipment and services that enable innovation throughout the electronics industry. <a class="cid" href="#c_d60e96b57d">c_d60e96b57d</a></li>
+</ul>
+</section>
+
+<section>
+<h2><span class="n">1b</span> Geographic Exposure</h2>
+<p class="muted">Revenue by customer location, parsed from the 10-K MD&amp;A table.</p>
+<table>
+  <thead><tr><th>Region</th><th class="num">Revenue</th><th class="num">% of total</th><th class="num">YoY</th></tr></thead>
+  <tbody>
+    <tr>
+      <td>China</td>
+      <td class="num">4,048M</td>
+      <td class="num">30%</td>
+      <td class="num pos">+0.1%</td>
+    </tr>
+    <tr>
+      <td>Taiwan</td>
+      <td class="num">3,644M</td>
+      <td class="num">27%</td>
+      <td class="num pos">+13.7%</td>
+    </tr>
+    <tr>
+      <td>Korea</td>
+      <td class="num">1,834M</td>
+      <td class="num">14%</td>
+      <td class="num pos">+26.2%</td>
+    </tr>
+    <tr>
+      <td>North America</td>
+      <td class="num">1,757M</td>
+      <td class="num">13%</td>
+      <td class="num pos">+29.0%</td>
+    </tr>
+    <tr>
+      <td>Japan</td>
+      <td class="num">915M</td>
+      <td class="num">7%</td>
+      <td class="num neg">-19.2%</td>
+    </tr>
+    <tr>
+      <td>Rest of Asia</td>
+      <td class="num">654M</td>
+      <td class="num">5%</td>
+      <td class="num pos">+69.6%</td>
+    </tr>
+  </tbody>
+</table>
+</section>
+
+<section>
+<h2><span class="n">2</span> Product &amp; Technology</h2>
+
+<h3>Business segments</h3>
+<table>
+  <thead><tr><th>Segment</th><th class="num">Revenue</th><th class="num">% of total</th><th class="num">YoY</th><th>Basis</th></tr></thead>
+  <tbody>
+    <tr>
+      <td>Semiconductor Process Control<div class="muted small">This segment focuses on providing process control solutions for semiconductor manufacturing.</div></td>
+      <td class="num">n/a</td>
+      <td class="num">n/a</td>
+      <td class="num ">n/a</td>
+      <td class="muted small">No segment revenue row matched</td>
+    </tr>
+    <tr>
+      <td>Specialty Semiconductor Process<div class="muted small">This segment provides specialized process solutions for semiconductor manufacturing.</div></td>
+      <td class="num">n/a</td>
+      <td class="num">n/a</td>
+      <td class="num ">n/a</td>
+      <td class="muted small">No segment revenue row matched</td>
+    </tr>
+    <tr>
+      <td>PCB and Component Inspection<div class="muted small">This segment offers inspection solutions for printed circuit boards and components.</div></td>
+      <td class="num">n/a</td>
+      <td class="num">n/a</td>
+      <td class="num ">n/a</td>
+      <td class="muted small">No segment revenue row matched</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3>Process steps</h3>
+<p class="chips"><span class="chip">Process Control</span></p>
+
+<h3>Products</h3>
+<div class="grid">
+  <div class="card">
+    <h4>Process Control Product Portfolio</h4>
+<p class="muted small">Process Control</p><p>KLA&#39;s market-leading process control product portfolio is well positioned in advanced packaging.</p><p class="chips"><span class="chip">Process Control</span></p><p class="muted small">Technologies: Advanced Packaging</p>    <p class="srcs"><a class="cid" href="#c_b5e48dd4c9">c_b5e48dd4c9</a></p>
+  </div>
+  <div class="card">
+    <h4>Advanced Process Control and Process-Enabling Solutions</h4>
+<p class="muted small">Process Control</p><p>KLA provides advanced process control and process-enabling solutions for manufacturing wafers and reticles, integrated circuits, packaging and printed circuit boards.</p><p class="chips"><span class="chip">Process Control</span></p><p class="muted small">Technologies: Process-Enabling Solutions</p>    <p class="srcs"><a class="cid" href="#c_fbecf5166e">c_fbecf5166e</a></p>
+  </div>
+</div>
+
+<h3>Technologies</h3>
+<ul class="claims">
+  <li><b>Advanced Packaging</b> — Technologies that support the integration of multiple chips in advanced packaging.    <span class="srcs"><a class="cid" href="#c_b5e48dd4c9">c_b5e48dd4c9</a></span>
+  </li>
+</ul>
+</section>
+
+<section>
+<h2><span class="n">3</span> Market Drivers</h2>
+<div class="grid">
+  <div class="card">
+    <h4>AI infrastructure <span class="tag fact">FACT</span></h4>
+    <p>KLA is uniquely positioned on the critical path of AI infrastructure expansion.</p>
+    <p class="srcs"><a class="cid" href="#c_df94744496">c_df94744496</a></p>
+  </div>
+  <div class="card">
+    <h4>Advanced packaging <span class="tag fact">FACT</span></h4>
+    <p>The AI infrastructure buildout is driving new growth opportunities in advanced packaging.</p>
+    <p class="srcs"><a class="cid" href="#c_90e2bbf4ba">c_90e2bbf4ba</a></p>
+  </div>
+  <div class="card">
+    <h4>Leading-edge logic <span class="tag fact">FACT</span></h4>
+    <p>The increasing number and sophistication of leading-edge designs across foundry/logic is driving greater demand for process control.</p>
+    <p class="srcs"><a class="cid" href="#c_ad6e859452">c_ad6e859452</a></p>
+  </div>
+</div>
+
+<h3>Growth drivers</h3>
+<ul class="claims">
+  <li>AI infrastructure expansion <span class="tag fact">FACT</span>
+    <span class="srcs"><a class="cid" href="#c_df94744496">c_df94744496</a></span></li>
+  <li>Advanced packaging demand <span class="tag fact">FACT</span>
+    <span class="srcs"><a class="cid" href="#c_90e2bbf4ba">c_90e2bbf4ba</a></span></li>
+</ul>
+</section>
+
+<section>
+<h2><span class="n">4</span> Customer Analysis</h2>
+<div class="card">
+  <h4>Foundry and Logic Manufacturers
+<span class="tag inferred">inferred category</span>  </h4>
+<p><b>Value created:</b> KLA provides critical process control solutions to manage the complexity of leading-edge designs.</p>  <div class="two">
+<div><b>Requirements</b><ul><li>Advanced process control solutions</li></ul></div><div><b>Pain points</b><ul><li>Complexity of leading-edge designs</li></ul></div>  </div>
+<p class="muted small">Basis: KLA serves customers producing on leading-edge technology nodes defined as 7 nanometers and smaller.</p>  <p class="srcs"><a class="cid" href="#c_e1f4a33362">c_e1f4a33362</a></p>
+</div>
+<div class="card">
+  <h4>DRAM and NAND Flash Memory Manufacturers
+<span class="tag inferred">inferred category</span>  </h4>
+<p><b>Value created:</b> KLA&#39;s solutions help ensure yield and quality in memory manufacturing.</p>  <div class="two">
+<div><b>Requirements</b><ul><li>Process control and inspection solutions</li></ul></div><div><b>Pain points</b><ul><li>Yield and quality assurance</li></ul></div>  </div>
+<p class="muted small">Basis: KLA&#39;s Semiconductor Systems sales target customers in the DRAM and NAND flash memory markets.</p>  <p class="srcs"><a class="cid" href="#c_89c2aaf89d">c_89c2aaf89d</a></p>
+</div>
+</section>
+
+<section>
+<h2><span class="n">5</span> Competitive Landscape</h2>
+<table>
+  <thead><tr><th>Competitor</th><th>Basis</th><th>Product overlap</th><th>Technology positioning</th><th>Market exposure</th></tr></thead>
+  <tbody>
+    <tr>
+      <td><b>Applied Materials, Inc.</b></td>
+      <td><span class="tag analysis">industry</span></td>
+      <td>Materials engineering and process control</td>
+      <td>Comprehensive portfolio for semiconductor manufacturing</td>
+      <td>Global semiconductor manufacturing</td>
+    </tr>
+    <tr>
+      <td><b>Onto Innovation</b></td>
+      <td><span class="tag analysis">industry</span></td>
+      <td>Metrology and inspection tools</td>
+      <td>Focus on yield-enhancing information</td>
+      <td>Semiconductor manufacturing</td>
+    </tr>
+  </tbody>
+</table>
+<div class="grid">
+  <div class="card">
+    <h4>Applied Materials, Inc. <span class="tag analysis">industry</span></h4>
+<p><b>Strengths:</b> Leader in materials engineering solutions</p><p><b>Potential weaknesses:</b> Complexity in managing a broad product portfolio</p>    <p class="srcs"><a class="cid" href="#c_660d76bea8">c_660d76bea8</a><a class="cid" href="#c_7e45c79918">c_7e45c79918</a><a class="cid" href="#c_7ea55a0494">c_7ea55a0494</a></p>
+  </div>
+  <div class="card">
+    <h4>Onto Innovation <span class="tag analysis">industry</span></h4>
+<p><b>Strengths:</b> Advanced process control software</p><p><b>Potential weaknesses:</b> Dependence on specific market segments</p>    <p class="srcs"><a class="cid" href="#c_d5d34ef56c">c_d5d34ef56c</a><a class="cid" href="#c_435e088206">c_435e088206</a><a class="cid" href="#c_233061273a">c_233061273a</a></p>
+  </div>
+</div>
+</section>
+
+<section>
+<h2><span class="n">6</span> Business Analysis</h2>
+<table>
+  <thead><tr><th>Metric</th><th class="num">Latest FY</th><th class="num">YoY</th><th>Period</th><th>Source concept</th></tr></thead>
+  <tbody>
+    <tr>
+      <td>revenue</td>
+      <td class="num">13.6B</td>
+      <td class="num pos">+11.7%</td>
+      <td class="muted small">FY2026</td>
+      <td class="muted small mono">us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax</td>
+    </tr>
+    <tr>
+      <td>cost_of_revenue</td>
+      <td class="num">5.3B</td>
+      <td class="num pos">+10.6%</td>
+      <td class="muted small">FY2026</td>
+      <td class="muted small mono">us-gaap:CostOfRevenue</td>
+    </tr>
+    <tr>
+      <td>gross_profit</td>
+      <td class="num">1.2B</td>
+      <td class="num pos">+37.6%</td>
+      <td class="muted small">Q4 FY2021</td>
+      <td class="muted small mono">us-gaap:GrossProfit</td>
+    </tr>
+    <tr>
+      <td>rd_expense</td>
+      <td class="num">1.5B</td>
+      <td class="num pos">+12.6%</td>
+      <td class="muted small">FY2026</td>
+      <td class="muted small mono">us-gaap:ResearchAndDevelopmentExpense</td>
+    </tr>
+    <tr>
+      <td>sga_expense</td>
+      <td class="num">1.1B</td>
+      <td class="num pos">+9.9%</td>
+      <td class="muted small">FY2026</td>
+      <td class="muted small mono">us-gaap:SellingGeneralAndAdministrativeExpense</td>
+    </tr>
+    <tr>
+      <td>operating_income</td>
+      <td class="num">772.1M</td>
+      <td class="num pos">+5.8%</td>
+      <td class="muted small">FY2014</td>
+      <td class="muted small mono">us-gaap:OperatingIncomeLoss</td>
+    </tr>
+    <tr>
+      <td>net_income</td>
+      <td class="num">4.8B</td>
+      <td class="num pos">+18.9%</td>
+      <td class="muted small">FY2026</td>
+      <td class="muted small mono">us-gaap:NetIncomeLoss</td>
+    </tr>
+    <tr>
+      <td>diluted_eps</td>
+      <td class="num">$3.66</td>
+      <td class="num neg">-87.9%</td>
+      <td class="muted small">FY2026</td>
+      <td class="muted small mono">us-gaap:EarningsPerShareDiluted</td>
+    </tr>
+    <tr>
+      <td>operating_cash_flow</td>
+      <td class="num">4.1B</td>
+      <td class="num pos">+1.5%</td>
+      <td class="muted small">FY2026</td>
+      <td class="muted small mono">us-gaap:NetCashProvidedByUsedInOperatingActivities</td>
+    </tr>
+    <tr>
+      <td>capex</td>
+      <td class="num">375.9M</td>
+      <td class="num pos">+12.1%</td>
+      <td class="muted small">FY2026</td>
+      <td class="muted small mono">us-gaap:PaymentsToAcquirePropertyPlantAndEquipment</td>
+    </tr>
+    <tr>
+      <td>inventory</td>
+      <td class="num">3.6B</td>
+      <td class="num ">n/a</td>
+      <td class="muted small">FY2026 (instant)</td>
+      <td class="muted small mono">us-gaap:InventoryNet</td>
+    </tr>
+    <tr>
+      <td>deferred_revenue</td>
+      <td class="num">1.5B</td>
+      <td class="num ">n/a</td>
+      <td class="muted small">FY2026 (instant)</td>
+      <td class="muted small mono">us-gaap:ContractWithCustomerLiabilityCurrent</td>
+    </tr>
+    <tr>
+      <td>shares_diluted</td>
+      <td class="num">1,319.6M shares</td>
+      <td class="num pos">+886.6%</td>
+      <td class="muted small">FY2026</td>
+      <td class="muted small mono">us-gaap:WeightedAverageNumberOfDilutedSharesOutstanding</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3>Revenue trend</h3>
+<table>
+  <thead><tr><th>Period</th><th class="num">Revenue</th></tr></thead>
+  <tbody>
+    <tr><td>FY2026</td><td class="num">13.6B</td></tr>
+    <tr><td>FY2025</td><td class="num">12.2B</td></tr>
+    <tr><td>FY2024</td><td class="num">9.8B</td></tr>
+    <tr><td>FY2023</td><td class="num">10.5B</td></tr>
+    <tr><td>FY2022</td><td class="num">9.2B</td></tr>
+    <tr><td>FY2021</td><td class="num">6.9B</td></tr>
+    <tr><td>FY2020</td><td class="num">5.8B</td></tr>
+    <tr><td>FY2019</td><td class="num">4.6B</td></tr>
+    <tr><td>FY2018</td><td class="num">4.0B</td></tr>
+  </tbody>
+</table>
+
+<h3>Management commentary</h3>
+<ul class="claims">
+<li>KLA reported total revenues of $3.66 billion for the fourth quarter of fiscal year 2026. <a class="cid" href="#c_e6bda07a24">c_e6bda07a24</a></li><li>KLA reported GAAP net income of $1.36 billion for the fourth quarter of fiscal year 2026. <a class="cid" href="#c_b92ad02ba5">c_b92ad02ba5</a></li><li>KLA&#39;s total revenues for the fiscal year ended June 30, 2026, were $13.58 billion. <a class="cid" href="#c_a7e5bb8f7d">c_a7e5bb8f7d</a></li><li>KLA sees momentum across its business accelerating in the second half of calendar 2026 and continuing through 2027. <a class="cid" href="#c_80848ec2cc">c_80848ec2cc</a></li><li>Revenues from Semiconductor Process Control for the three months ended June 30, 2026, were $3,256,781 thousand. <a class="cid" href="#c_316e30429d">c_316e30429d</a></li><li>Revenues from Specialty Semiconductor Process for the three months ended June 30, 2026, were $159,704 thousand. <a class="cid" href="#c_33203a7873">c_33203a7873</a></li><li>Revenues from PCB and Component Inspection for the three months ended June 30, 2026, were $241,110 thousand. <a class="cid" href="#c_87bb13ce98">c_87bb13ce98</a></li><li>Total revenues for reportable segments for the three months ended June 30, 2026, were $3,657,595 thousand. <a class="cid" href="#c_33f49f08ba">c_33f49f08ba</a></li><li>Revenues from Semiconductor Process Control for the three months ended March 31, 2026, were $3,083,912 thousand. <a class="cid" href="#c_13e9507c50">c_13e9507c50</a></li><li>Revenues from Specialty Semiconductor Process for the three months ended March 31, 2026, were $164,028 thousand. <a class="cid" href="#c_5eb036857f">c_5eb036857f</a></li></ul>
+</section>
+
+<section>
+<h2><span class="n">7</span> Commercial Insights</h2>
+<div class="grid">
+  <div class="card">
+    <h4>Growth Opportunity <span class="tag analysis">ANALYSIS</span></h4>
+    <p>KLA&#39;s positioning in AI infrastructure and advanced packaging presents significant growth opportunities.</p>
+<p class="muted small">Reasoning: KLA is uniquely positioned on the critical path of AI infrastructure expansion, which is driving new growth opportunities in advanced packaging.</p>    <p class="srcs"><a class="cid" href="#c_df94744496">c_df94744496</a><a class="cid" href="#c_90e2bbf4ba">c_90e2bbf4ba</a></p>
+  </div>
+  <div class="card">
+    <h4>Technology Opportunity <span class="tag analysis">ANALYSIS</span></h4>
+    <p>The increasing complexity of leading-edge designs in foundry/logic is driving demand for KLA&#39;s process control solutions.</p>
+<p class="muted small">Reasoning: The sophistication of leading-edge designs across foundry/logic is increasing, necessitating advanced process control solutions.</p>    <p class="srcs"><a class="cid" href="#c_ad6e859452">c_ad6e859452</a></p>
+  </div>
+</div>
+
+<p class="muted">No risks were extracted.</p></section>
+
+<section>
+<h2>Evidence Coverage</h2>
+<p class="muted">Measured against advisory targets. A category below target means the reviewed sources did not support it - it is not filled in to reach the target.</p>
+<table>
+  <thead><tr><th>Category</th><th class="num">Claims</th><th class="num">Target</th><th>Status</th></tr></thead>
+  <tbody>
+    <tr>
+      <td>Products</td>
+      <td class="num">2</td>
+      <td class="num">3</td>
+      <td><span class="tag inference">below target</span></td>
+    </tr>
+    <tr>
+      <td>Process Steps</td>
+      <td class="num">0</td>
+      <td class="num">2</td>
+      <td><span class="tag inference">below target</span></td>
+    </tr>
+    <tr>
+      <td>Technologies</td>
+      <td class="num">0</td>
+      <td class="num">2</td>
+      <td><span class="tag inference">below target</span></td>
+    </tr>
+    <tr>
+      <td>Customer Needs</td>
+      <td class="num">0</td>
+      <td class="num">2</td>
+      <td><span class="tag inference">below target</span></td>
+    </tr>
+    <tr>
+      <td>Market Drivers</td>
+      <td class="num">3</td>
+      <td class="num">2</td>
+      <td><span class="tag fact">at target</span></td>
+    </tr>
+    <tr>
+      <td>Competitors</td>
+      <td class="num">0</td>
+      <td class="num">1</td>
+      <td><span class="tag inference">below target</span></td>
+    </tr>
+    <tr>
+      <td>Commercial Implications</td>
+      <td class="num">13</td>
+      <td class="num">2</td>
+      <td><span class="tag fact">at target</span></td>
+    </tr>
+  </tbody>
+</table>
+<div class="callout warn">
+  <strong>Evidence shortfall.</strong> 5 categories
+  below target. The alternative - generating claims to fill the gap - would defeat the purpose of a source-grounded report.
+</div>
+</section>
+
+<section>
+<h2>Sources</h2>
+<table>
+  <thead><tr><th>Source ID</th><th>Type</th><th>Title</th><th>Published</th><th>SHA-256</th></tr></thead>
+  <tbody>
+    <tr>
+      <td class="mono small">sec_10_k_2026</td>
+      <td>10-K</td>
+      <td>KLA 10-K filed 2026-08-06</td>
+      <td class="muted small">2026-08-06</td>
+      <td class="mono small">0d1b7c3446c9</td>
+    </tr>
+    <tr>
+      <td class="mono small">sec_8_k_2026-08-06</td>
+      <td>8-K</td>
+      <td>KLA 8-K filed 2026-08-06</td>
+      <td class="muted small">2026-08-06</td>
+      <td class="mono small">341563a26c61</td>
+    </tr>
+    <tr>
+      <td class="mono small">sec_8_k_2026-07-28</td>
+      <td>8-K</td>
+      <td>KLA 8-K filed 2026-07-28</td>
+      <td class="muted small">2026-07-28</td>
+      <td class="mono small">76636fd50183</td>
+    </tr>
+    <tr>
+      <td class="mono small">sec_8k_2026-07-28_ex991</td>
+      <td>Press Release</td>
+      <td>KLA earnings release 2026-07-28</td>
+      <td class="muted small">2026-07-28</td>
+      <td class="mono small">da581dcff9af</td>
+    </tr>
+    <tr>
+      <td class="mono small">sec_8_k_2026-06-12</td>
+      <td>8-K</td>
+      <td>KLA 8-K filed 2026-06-12</td>
+      <td class="muted small">2026-06-12</td>
+      <td class="mono small">1f0b445eeafe</td>
+    </tr>
+    <tr>
+      <td class="mono small">sec_8_k_2026-05-07</td>
+      <td>8-K</td>
+      <td>KLA 8-K filed 2026-05-07</td>
+      <td class="muted small">2026-05-07</td>
+      <td class="mono small">40ea8ac4b67a</td>
+    </tr>
+    <tr>
+      <td class="mono small">sec_10_q_2026-04-30</td>
+      <td>10-Q</td>
+      <td>KLA 10-Q filed 2026-04-30</td>
+      <td class="muted small">2026-04-30</td>
+      <td class="mono small">853ae1fdb89a</td>
+    </tr>
+    <tr>
+      <td class="mono small">sec_8_k_2026-04-29</td>
+      <td>8-K</td>
+      <td>KLA 8-K filed 2026-04-29</td>
+      <td class="muted small">2026-04-29</td>
+      <td class="mono small">0ce7270be67e</td>
+    </tr>
+    <tr>
+      <td class="mono small">sec_8k_2026-04-29_ex991</td>
+      <td>Press Release</td>
+      <td>KLA earnings release 2026-04-29</td>
+      <td class="muted small">2026-04-29</td>
+      <td class="mono small">fddcead9699f</td>
+    </tr>
+    <tr>
+      <td class="mono small">sec_8_k_2026-03-12</td>
+      <td>8-K</td>
+      <td>KLA 8-K filed 2026-03-12</td>
+      <td class="muted small">2026-03-12</td>
+      <td class="mono small">646574d30fad</td>
+    </tr>
+    <tr>
+      <td class="mono small">sec_8_k_2026-02-05</td>
+      <td>8-K</td>
+      <td>KLA 8-K filed 2026-02-05</td>
+      <td class="muted small">2026-02-05</td>
+      <td class="mono small">754d8f84b43a</td>
+    </tr>
+    <tr>
+      <td class="mono small">sec_10_q_2026-01-30</td>
+      <td>10-Q</td>
+      <td>KLA 10-Q filed 2026-01-30</td>
+      <td class="muted small">2026-01-30</td>
+      <td class="mono small">a2a0b250a890</td>
+    </tr>
+    <tr>
+      <td class="mono small">sec_8_k_2026-01-29</td>
+      <td>8-K</td>
+      <td>KLA 8-K filed 2026-01-29</td>
+      <td class="muted small">2026-01-29</td>
+      <td class="mono small">f9995158075d</td>
+    </tr>
+    <tr>
+      <td class="mono small">sec_8k_2026-01-29_ex991</td>
+      <td>Press Release</td>
+      <td>KLA earnings release 2026-01-29</td>
+      <td class="muted small">2026-01-29</td>
+      <td class="mono small">2afe7aa1163d</td>
+    </tr>
+    <tr>
+      <td class="mono small">sec_10_q_2025-10-31</td>
+      <td>10-Q</td>
+      <td>KLA 10-Q filed 2025-10-31</td>
+      <td class="muted small">2025-10-31</td>
+      <td class="mono small">aee0604afca0</td>
+    </tr>
+    <tr>
+      <td class="mono small">sec_10_k_2025</td>
+      <td>10-K</td>
+      <td>KLA 10-K filed 2025-08-08</td>
+      <td class="muted small">2025-08-08</td>
+      <td class="mono small">137e57da75ac</td>
+    </tr>
+    <tr>
+      <td class="mono small">sec_10_q_2025-05-01</td>
+      <td>10-Q</td>
+      <td>KLA 10-Q filed 2025-05-01</td>
+      <td class="muted small">2025-05-01</td>
+      <td class="mono small">4f31b31cff9a</td>
+    </tr>
+    <tr>
+      <td class="mono small">sec_10_k_2024</td>
+      <td>10-K</td>
+      <td>KLA 10-K filed 2024-08-05</td>
+      <td class="muted small">2024-08-05</td>
+      <td class="mono small">465879c597e5</td>
+    </tr>
+    <tr>
+      <td class="mono small">sec_xbrl_facts</td>
+      <td>SEC-XBRL</td>
+      <td>KLA Corporation XBRL company facts</td>
+      <td class="muted small"></td>
+      <td class="mono small">2198d006cb99</td>
+    </tr>
+    <tr>
+      <td class="mono small">sec_peer_applied_materials_2025</td>
+      <td>10-K</td>
+      <td>Applied Materials 10-K (peer filing, competitive overlap)</td>
+      <td class="muted small">2025-12-12</td>
+      <td class="mono small">62c59e06e044</td>
+    </tr>
+    <tr>
+      <td class="mono small">sec_peer_onto_innovation_2026</td>
+      <td>10-K</td>
+      <td>Onto Innovation 10-K (peer filing, competitive overlap)</td>
+      <td class="muted small">2026-02-24</td>
+      <td class="mono small">740afb5054e6</td>
+    </tr>
+  </tbody>
+</table>
+<p class="muted small">First-party filings only: annual reports, quarterly reports, 8-K earnings releases (Exhibit 99.1), SEC XBRL company facts, and peer-company filings for competitive overlap.</p>
+</section>
+
+<section>
+<h2>Evidence Ledger</h2>
+<p class="muted">19 verified claims. Each was extracted from the cited filing and checked to contain a verbatim supporting quote.</p>
+<input type="search" id="ledgerFilter" placeholder="Filter claims by text, topic or source…" autocomplete="off">
+<table id="ledger">
+  <thead><tr><th>Claim ID</th><th>Topic</th><th>Claim</th><th>Source</th><th>Verbatim quote</th></tr></thead>
+  <tbody>
+    <tr id="c_e6bda07a24">
+      <td class="mono small">c_e6bda07a24</td>
+      <td><span class="chip">financial_commentary</span></td>
+      <td>KLA reported total revenues of $3.66 billion for the fourth quarter of fiscal year 2026.</td>
+      <td class="mono small">sec_8k_2026-07-28_ex991</td>
+      <td class="muted small">“For the quarter, total revenues were $3.66 billion, above the midpoint of the guidance range;”</td>
+    </tr>
+    <tr id="c_b92ad02ba5">
+      <td class="mono small">c_b92ad02ba5</td>
+      <td><span class="chip">financial_commentary</span></td>
+      <td>KLA reported GAAP net income of $1.36 billion for the fourth quarter of fiscal year 2026.</td>
+      <td class="mono small">sec_8k_2026-07-28_ex991</td>
+      <td class="muted small">“KLA reported GAAP net income of $1.36 billion and GAAP diluted earnings per share (“EPS”) of $1.04 on total revenues of $3.66 billion for the fourth quarter of fiscal year 2026.”</td>
+    </tr>
+    <tr id="c_a7e5bb8f7d">
+      <td class="mono small">c_a7e5bb8f7d</td>
+      <td><span class="chip">financial_commentary</span></td>
+      <td>KLA&#39;s total revenues for the fiscal year ended June 30, 2026, were $13.58 billion.</td>
+      <td class="mono small">sec_8k_2026-07-28_ex991</td>
+      <td class="muted small">“For the fiscal year ended June 30, 2026, KLA reported GAAP net income of $4.83 billion and GAAP diluted EPS of $3.66 on total revenues of $13.58 billion.”</td>
+    </tr>
+    <tr id="c_b5e48dd4c9">
+      <td class="mono small">c_b5e48dd4c9</td>
+      <td><span class="chip">product</span></td>
+      <td>KLA&#39;s market-leading process control product portfolio is well positioned in advanced packaging.</td>
+      <td class="mono small">sec_8k_2026-07-28_ex991</td>
+      <td class="muted small">“the AI infrastructure buildout is also driving new growth opportunities in advanced packaging where KLA’s market-leading process control product portfolio is well positioned.”</td>
+    </tr>
+    <tr id="c_80848ec2cc">
+      <td class="mono small">c_80848ec2cc</td>
+      <td><span class="chip">financial_commentary</span></td>
+      <td>KLA sees momentum across its business accelerating in the second half of calendar 2026 and continuing through 2027.</td>
+      <td class="mono small">sec_8k_2026-07-28_ex991</td>
+      <td class="muted small">“KLA’s June quarter results reinforce that the trends driving our growth are strengthening, and we see momentum across our business accelerating in the second half of calendar 2026 and continuing through 2027,”</td>
+    </tr>
+    <tr id="c_ad6e859452">
+      <td class="mono small">c_ad6e859452</td>
+      <td><span class="chip">market_driver</span></td>
+      <td>The increasing number and sophistication of leading-edge designs across foundry/logic is driving greater demand for process control.</td>
+      <td class="mono small">sec_8k_2026-07-28_ex991</td>
+      <td class="muted small">“where the increasing number and sophistication of leading-edge designs across foundry/logic and the rising complexity and performance specifications in memory are driving greater demand for process control.”</td>
+    </tr>
+    <tr id="c_d60e96b57d">
+      <td class="mono small">c_d60e96b57d</td>
+      <td><span class="chip">company_overview</span></td>
+      <td>KLA develops industry-leading equipment and services that enable innovation throughout the electronics industry.</td>
+      <td class="mono small">sec_8k_2026-07-28_ex991</td>
+      <td class="muted small">“KLA Corporation (“KLA”) develops industry-leading equipment and services that enable innovation throughout the electronics industry.”</td>
+    </tr>
+    <tr id="c_fbecf5166e">
+      <td class="mono small">c_fbecf5166e</td>
+      <td><span class="chip">product</span></td>
+      <td>KLA provides advanced process control and process-enabling solutions for manufacturing wafers and reticles, integrated circuits, packaging and printed circuit boards.</td>
+      <td class="mono small">sec_8k_2026-07-28_ex991</td>
+      <td class="muted small">“We provide advanced process control and process-enabling solutions for manufacturing wafers and reticles, integrated circuits, packaging and printed circuit boards.”</td>
+    </tr>
+    <tr id="c_316e30429d">
+      <td class="mono small">c_316e30429d</td>
+      <td><span class="chip">financial_commentary</span></td>
+      <td>Revenues from Semiconductor Process Control for the three months ended June 30, 2026, were $3,256,781 thousand.</td>
+      <td class="mono small">sec_8k_2026-07-28_ex991</td>
+      <td class="muted small">“Semiconductor Process Control $ 3,256,781”</td>
+    </tr>
+    <tr id="c_33203a7873">
+      <td class="mono small">c_33203a7873</td>
+      <td><span class="chip">financial_commentary</span></td>
+      <td>Revenues from Specialty Semiconductor Process for the three months ended June 30, 2026, were $159,704 thousand.</td>
+      <td class="mono small">sec_8k_2026-07-28_ex991</td>
+      <td class="muted small">“Specialty Semiconductor Process 159,704”</td>
+    </tr>
+    <tr id="c_87bb13ce98">
+      <td class="mono small">c_87bb13ce98</td>
+      <td><span class="chip">financial_commentary</span></td>
+      <td>Revenues from PCB and Component Inspection for the three months ended June 30, 2026, were $241,110 thousand.</td>
+      <td class="mono small">sec_8k_2026-07-28_ex991</td>
+      <td class="muted small">“PCB and Component Inspection 241,110”</td>
+    </tr>
+    <tr id="c_33f49f08ba">
+      <td class="mono small">c_33f49f08ba</td>
+      <td><span class="chip">financial_commentary</span></td>
+      <td>Total revenues for reportable segments for the three months ended June 30, 2026, were $3,657,595 thousand.</td>
+      <td class="mono small">sec_8k_2026-07-28_ex991</td>
+      <td class="muted small">“Total revenues for reportable segments 3,657,595”</td>
+    </tr>
+    <tr id="c_13e9507c50">
+      <td class="mono small">c_13e9507c50</td>
+      <td><span class="chip">financial_commentary</span></td>
+      <td>Revenues from Semiconductor Process Control for the three months ended March 31, 2026, were $3,083,912 thousand.</td>
+      <td class="mono small">sec_8k_2026-04-29_ex991</td>
+      <td class="muted small">“Revenues: Semiconductor Process Control $ 3,083,912 $ 2,738,817 $ 8,987,952 $ 8,069,711”</td>
+    </tr>
+    <tr id="c_5eb036857f">
+      <td class="mono small">c_5eb036857f</td>
+      <td><span class="chip">financial_commentary</span></td>
+      <td>Revenues from Specialty Semiconductor Process for the three months ended March 31, 2026, were $164,028 thousand.</td>
+      <td class="mono small">sec_8k_2026-04-29_ex991</td>
+      <td class="muted small">“Specialty Semiconductor Process 164,028 156,500 424,360 445,241”</td>
+    </tr>
+    <tr id="c_7b07353456">
+      <td class="mono small">c_7b07353456</td>
+      <td><span class="chip">financial_commentary</span></td>
+      <td>Revenues from PCB and Component Inspection for the three months ended March 31, 2026, were $167,642 thousand.</td>
+      <td class="mono small">sec_8k_2026-04-29_ex991</td>
+      <td class="muted small">“PCB and Component Inspection 167,642 168,552 509,305 467,615”</td>
+    </tr>
+    <tr id="c_3aea7f8492">
+      <td class="mono small">c_3aea7f8492</td>
+      <td><span class="chip">financial_commentary</span></td>
+      <td>Total revenues for reportable segments for the three months ended March 31, 2026, were $3,415,582 thousand.</td>
+      <td class="mono small">sec_8k_2026-04-29_ex991</td>
+      <td class="muted small">“Total revenues for reportable segments 3,415,582 3,063,869 9,921,617 8,982,567”</td>
+    </tr>
+    <tr id="c_f5bd623bf1">
+      <td class="mono small">c_f5bd623bf1</td>
+      <td><span class="chip">financial_commentary</span></td>
+      <td>Total revenues for the three months ended March 31, 2026, were $3,415,078 thousand.</td>
+      <td class="mono small">sec_8k_2026-04-29_ex991</td>
+      <td class="muted small">“Total revenues $ 3,415,078 $ 3,063,029 $ 9,921,920 $ 8,981,421”</td>
+    </tr>
+    <tr id="c_df94744496">
+      <td class="mono small">c_df94744496</td>
+      <td><span class="chip">market_driver</span></td>
+      <td>KLA is uniquely positioned on the critical path of AI infrastructure expansion.</td>
+      <td class="mono small">sec_8k_2026-07-28_ex991</td>
+      <td class="muted small">“KLA remains uniquely positioned on the critical path of AI infrastructure expansion.”</td>
+    </tr>
+    <tr id="c_90e2bbf4ba">
+      <td class="mono small">c_90e2bbf4ba</td>
+      <td><span class="chip">market_driver</span></td>
+      <td>The AI infrastructure buildout is driving new growth opportunities in advanced packaging.</td>
+      <td class="mono small">sec_8k_2026-07-28_ex991</td>
+      <td class="muted small">“the AI infrastructure buildout is also driving new growth opportunities in advanced packaging”</td>
+    </tr>
+  </tbody>
+</table>
+</section>
+
+<footer>
+  <p class="muted small">
+    Generated 2026-09-26 15:10 UTC.
+    Deterministic financials from SEC XBRL; qualitative claims from language models,
+    each gated on a verbatim source quote. Peer-filing claims are typed INFERENCE
+    and kept in a separate ledger.
+  </p>
+</footer>
+
+</div>
+<script>
+// Ledger filter. Tiny and dependency-free: the ledger is the audit trail, so being
+// able to search it matters more than any interactive flourish.
+(function () {
+  var input = document.getElementById('ledgerFilter');
+  if (!input) return;
+  var rows = Array.prototype.slice.call(
+    document.querySelectorAll('#ledger tbody tr')
+  );
+  input.addEventListener('input', function () {
+    var q = input.value.trim().toLowerCase();
+    rows.forEach(function (r) {
+      r.style.display = !q || r.textContent.toLowerCase().indexOf(q) !== -1 ? '' : 'none';
+    });
+  });
+})();
+</script>
+</body>
+</html>

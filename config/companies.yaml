@@ -1,0 +1,119 @@
+# Adding a company should require editing THIS FILE ONLY.
+#
+# `cik` is optional: leave it null and resolve.py will look it up from the SEC
+# ticker map by `ticker` or `aliases`. Pinning it avoids a network call and removes
+# any chance of resolving to the wrong entity.
+#
+# sector_role drives which parts of the analysis framework are emphasised:
+#   equipment | materials | foundry | idm | fabless | eda | osat
+#
+# fiscal_year_end is a sanity check against the filings, not a source of truth.
+
+companies:
+  - name: "Applied Materials"
+    ticker: "AMAT"
+    cik: "0000006951"
+    aliases: ["Applied Materials Inc", "AMAT", "Applied"]
+    sector_role: "equipment"
+    fiscal_year_end: "10-31"
+    # Process steps this company plausibly participates in. Used to constrain the
+    # extraction taxonomy so the model selects rather than invents.
+    relevant_process_steps:
+      - "Deposition"
+      - "Etch"
+      - "Process Control"
+      - "Inspection"
+      - "Metrology"
+      - "Implantation"
+      - "CMP"
+      - "Advanced Packaging"
+      - "Thermal Processing"
+      - "Materials Engineering"
+
+  # Placeholders below are intentionally NOT yet verified against EDGAR. Steps 1-2
+  # only need Applied Materials; these exist to prove the config shape generalises.
+  - name: "Lam Research"
+    ticker: "LRCX"
+    cik: null
+    aliases: ["Lam Research Corp", "Lam"]
+    sector_role: "equipment"
+    fiscal_year_end: "06-30"
+    relevant_process_steps:
+      - "Etch"
+      - "Deposition"
+      - "CMP"
+      - "Advanced Packaging"
+
+  - name: "KLA"
+    ticker: "KLAC"
+    cik: null
+    aliases: ["KLA Corporation", "KLA-Tencor"]
+    sector_role: "equipment"
+    fiscal_year_end: "06-30"
+    relevant_process_steps:
+      - "Process Control"
+      - "Inspection"
+      - "Metrology"
+
+  - name: "ASML"
+    ticker: "ASML"
+    cik: null
+    aliases: ["ASML Holding"]
+    sector_role: "equipment"
+    fiscal_year_end: "12-31"
+    # Foreign private issuer: files 20-F, not 10-K. The form-type-aware adapter
+    # handles this without special-casing.
+    relevant_process_steps:
+      - "Lithography"
+      - "Metrology"
+
+  - name: "Micron"
+    ticker: "MU"
+    cik: null
+    aliases: ["Micron Technology"]
+    sector_role: "idm"
+    fiscal_year_end: "08-31"
+    relevant_process_steps: []
+
+  - name: "NVIDIA"
+    ticker: "NVDA"
+    cik: null
+    aliases: ["NVIDIA Corporation"]
+    sector_role: "fabless"
+    fiscal_year_end: "01-31"
+    relevant_process_steps: []
+
+  - name: "AMD"
+    ticker: "AMD"
+    cik: null
+    aliases: ["Advanced Micro Devices"]
+    sector_role: "fabless"
+    fiscal_year_end: "12-31"
+    relevant_process_steps: []
+
+  - name: "Infineon"
+    ticker: "IFNNY"
+    cik: null
+    aliases: ["Infineon Technologies"]
+    sector_role: "idm"
+    fiscal_year_end: "09-30"
+    relevant_process_steps: []
+
+  - name: "NXP"
+    # Ticker is NXPI, not NXP. The bare ticker 'NXP' belongs to NUVEEN SELECT TAX
+    # FREE INCOME PORTFOLIO (CIK 0000883618), a closed-end fund, so an exact ticker
+    # match silently resolved to the wrong entity. CIK pinned as a guard.
+    ticker: "NXPI"
+    cik: "0001413447"
+    aliases: ["NXP Semiconductors", "NXP Semiconductors N.V.", "NXPI"]
+    sector_role: "idm"
+    fiscal_year_end: "12-31"
+    relevant_process_steps: []
+
+  - name: "Analog Devices"
+    ticker: "ADI"
+    cik: "0000006281"
+    aliases: ["Analog Devices Inc"]
+    sector_role: "idm"
+    fiscal_year_end: "11-01"
+    relevant_process_steps: []

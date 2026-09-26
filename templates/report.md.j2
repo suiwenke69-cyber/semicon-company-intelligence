@@ -1,0 +1,340 @@
+{% set metric_by_name = {} %}
+{% for m in profile.financial_metrics %}{% set _ = metric_by_name.update({m.metric: m}) %}{% endfor %}
+{% set rev = metric_by_name.get("revenue") %}
+{% set rd = metric_by_name.get("rd_expense") %}
+{% set ocf = metric_by_name.get("operating_cash_flow") %}
+# {{ profile.company.name }}{% if profile.company.ticker %} ({{ profile.company.ticker }}){% endif %}
+
+## Semiconductor Company Intelligence Report
+
+| | |
+|---|---|
+| **Value chain position** | {{ profile.company.value_chain_position or "Not classified" }} |
+| **Ticker / CIK** | {{ profile.company.ticker or "n/a" }} / {{ profile.company.cik or "n/a" }} |
+| **Fiscal year end** | {{ profile.company.fiscal_year_end or "n/a" }} |
+| **Data as of** | {{ profile.as_of or "n/a" }} |
+| **Generated** | {{ profile.generated_at.strftime("%Y-%m-%d %H:%M UTC") }} |
+| **Sources used** | {{ profile.sources | selectattr("error", "none") | list | length }} of {{ profile.sources_attempted }} |
+
+{% if profile.stale_data %}
+> ## ⚠ STALE DATA WARNING
+>
+> The most recent SEC filing available for this company is dated
+> **{{ profile.newest_filing_date }}**. This issuer appears to have stopped filing
+> with the SEC, or files under a different identifier. **Everything below is
+> historical, not current intelligence.** It is presented for reference only.
+{% endif %}
+
+> **How to read this report.** Claims are tagged **FACT** (stated directly in a cited
+> first-party filing), **ANALYSIS** (reasoned across two or more facts) or
+> **INFERENCE** (reasoned with an explicit chain). Every factual assertion carries a
+> claim ID resolvable in the Evidence Ledger at the end of this document.
+> This report contains no investment recommendation.
+
+---
+
+## 1. Company Overview
+
+{% set overview = profile.evidence | selectattr("topic", "equalto", "company_overview") | list %}
+{% if overview %}
+{% for c in overview[:8] %}
+- {{ c.text }}{% if c.claim_type.value != "FACT" %} _[{{ c.claim_type.value }}]_{% endif %} `[{{ c.claim_id }}]`
+{% endfor %}
+{% else %}
+_No company overview claims were extracted._
+{% endif %}
+
+{% if profile.geographic_revenue %}
+### Geographic exposure
+
+Revenue by customer location, as reported:
+
+| Region | Revenue | % of total | YoY |
+|---|---:|---:|---:|
+{% for g in profile.geographic_revenue -%}
+| {{ g.region }}{% if g.is_subtotal %} _(subtotal)_{% endif %} | {{ g.revenue_millions | millions }} | {{ g.pct_of_total | pct }} | {{ g.change_pct | signed_pct }} |
+{% endfor %}
+{% endif %}
+
+---
+
+## 2. Product & Technology
+
+{% if profile.business_segments %}
+### Business segments
+
+| Segment | Revenue | % of total | YoY | Basis |
+|---|---:|---:|---:|---|
+{% for s in profile.business_segments -%}
+| {{ s.name }} | {{ s.revenue_millions | millions }} | {{ s.revenue_pct_of_total | pct }} | {{ s.revenue_change_pct | signed_pct }} | {{ s.revenue_note or "" }} |
+{% endfor %}
+{% else %}
+_Business segment revenue was not available for this company._
+{% endif %}
+
+### Products
+
+{% if profile.products %}
+{% for p in profile.products %}
+- **{{ p.name }}**{% if p.category %} — {{ p.category }}{% endif %}
+{% if p.description %}  {{ p.description }}{% endif %}
+{% if p.process_steps %}  *Process steps:* {{ p.process_steps | map(attribute="value") | join(", ") }}{% endif %}
+{% if p.technologies %}  *Technologies:* {{ p.technologies | join(", ") }}{% endif %}
+  `{{ p.sources | join(" ") }}`
+{% endfor %}
+{% else %}
+_No products were extracted with verifiable support._
+{% endif %}
+
+### Technologies
+
+{% if profile.technologies %}
+{% for t in profile.technologies %}
+- **{{ t.name }}**{% if t.description %} — {{ t.description }}{% endif %}
+{% if t.differentiator %}  *Differentiator:* {{ t.differentiator }}{% endif %}
+{% if t.roadmap_note %}  *Roadmap:* {{ t.roadmap_note }}{% endif %}
+  `{{ t.sources | join(" ") }}`
+{% endfor %}
+{% else %}
+_No technologies were extracted with verifiable support._
+{% endif %}
+
+### Process steps
+
+{% if profile.process_steps %}
+{% for step in profile.process_steps %}`{{ step.value }}`{% if not loop.last %} · {% endif %}{% endfor %}
+{% else %}
+_No process steps were identified._
+{% endif %}
+
+---
+
+## 3. Market Drivers
+
+{% if profile.markets %}
+{% for m in profile.markets %}
+- **{{ m.driver }}** {% if m.claim_type.value != "FACT" %}_[{{ m.claim_type.value }}]_{% endif %}
+  {{ m.relevance }}
+{% if m.company_exposure %}  *Company exposure:* {{ m.company_exposure }}{% endif %}
+  `{{ m.sources | join(" ") }}`
+{% endfor %}
+{% else %}
+_No market drivers were identified with verifiable support._
+{% endif %}
+
+{% if profile.growth_drivers %}
+### Growth drivers
+
+{% for d in profile.growth_drivers %}
+- {{ d.driver }}{% if d.claim_type.value != "FACT" %} _[{{ d.claim_type.value }}]_{% endif %} `{{ d.sources | join(" ") }}`
+{% endfor %}
+{% endif %}
+
+---
+
+## 4. Customer Analysis
+
+{% if profile.customers %}
+{% for c in profile.customers %}
+### {{ c.name }} {% if c.disclosure.value == "INFERRED_CATEGORY" %}`[inferred category]`{% else %}`[disclosed]`{% endif %}
+
+{% if c.category %}*Category:* {{ c.category }}{% endif %}
+{% if c.value_created %}*Value created:* {{ c.value_created }}{% endif %}
+{% if c.requirements %}
+*Requirements:*
+{% for r in c.requirements %}  - {{ r }}
+{% endfor %}{% endif %}
+{% if c.pain_points %}
+*Pain points:*
+{% for p in c.pain_points %}  - {{ p }}
+{% endfor %}{% endif %}
+{% if c.reasoning %}*Basis:* {{ c.reasoning }}{% endif %}
+`{{ c.sources | join(" ") }}`
+{% endfor %}
+{% else %}
+_No customer analysis was produced with verifiable support._
+{% endif %}
+
+---
+
+## 5. Competitive Landscape
+
+{% if profile.competitors %}
+Peers marked _disclosed_ are named as competitors in the subject company's own
+filing. Peers marked _industry_ were selected by a reviewer from the industry
+grouping; the overlap is evidenced by the peer's own filing, but the pairing is a
+judgement call rather than a disclosure.
+
+| Competitor | Basis | Product overlap | Technology positioning | Market exposure |
+|---|---|---|---|---|
+{% for c in profile.competitors -%}
+| {{ c.name }} | {{ c.basis }} | {{ c.product_overlap or "" }} | {{ c.technology_positioning or "" }} | {{ c.market_exposure or "" }} |
+{% endfor %}
+
+{% for c in profile.competitors %}
+**{{ c.name }}**
+{% if c.strengths %}*Strengths:* {{ c.strengths | join("; ") }}{% endif %}
+{% if c.potential_weaknesses %}*Potential weaknesses:* {{ c.potential_weaknesses | join("; ") }}{% endif %}
+`{{ c.sources | join(" ") }}`
+{% endfor %}
+{% else %}
+_No competitors were identified with verifiable support._
+
+> Note: many issuers do not name competitors in their annual report. AMAT's Form
+> 10-K, for example, describes competition generically ("small companies that
+> compete in a single region ... to global, diversified companies") without naming
+> rivals; the only appearances of a peer name such as KLA are in executive
+> biographies. A short list here reflects what the filing discloses, not a failed
+> analysis. Competitor identification from industry sources is a documented future
+> extension, not something this report will guess at.
+{% endif %}
+
+---
+
+## 6. Business Analysis
+
+{% if profile.financial_metrics %}
+### Key financials
+
+| Metric | Latest FY | YoY | Period | Source concept |
+|---|---:|---:|---|---|
+{% for m in profile.financial_metrics -%}
+{% set p = m.latest_annual or m.latest -%}
+{% if p %}
+| {{ m.metric }} | {{ p.value | money(m.unit) }} | {{ m.yoy_growth_pct | signed_pct }} | {{ p.period_label or "" }} | `{{ m.concept }}` |
+{% endif %}
+{% endfor %}
+
+{% set rev = profile.financial_metrics | selectattr("metric", "equalto", "revenue") | list | first %}
+{% if rev and rev.periods | length > 2 %}
+### Revenue trend
+
+| Period | Revenue | YoY |
+|---|---:|---:|
+{% for p in rev.periods if p.duration_days and p.duration_days > 300 %}
+| {{ p.period_label }} | {{ p.value | money(rev.unit) }} | |
+{% endfor %}
+{% endif %}
+{% else %}
+_No financial metrics were extracted._
+{% endif %}
+
+{% if rd and rd.yoy_growth_pct is not none and (rd.latest_annual or rd.latest) %}
+**R&D spending** grew {{ rd.yoy_growth_pct | signed_pct }} year over year, to {{ (rd.latest_annual or rd.latest).value | money }} in {{ (rd.latest_annual or rd.latest).period_label }}.
+{% endif %}
+{% if ocf and ocf.yoy_growth_pct is not none and (ocf.latest_annual or ocf.latest) %}
+**Operating cash flow** was {{ (ocf.latest_annual or ocf.latest).value | money }} in {{ (ocf.latest_annual or ocf.latest).period_label }} ({{ ocf.yoy_growth_pct | signed_pct }} year over year).
+{% endif %}
+
+### Management commentary
+
+{% set commentary = profile.evidence | selectattr("topic", "equalto", "financial_commentary") | list %}
+{% if commentary %}
+{% for c in commentary[:10] %}
+- {{ c.text }} `[{{ c.claim_id }}]`
+{% endfor %}
+{% else %}
+_No management commentary claims were extracted._
+{% endif %}
+
+---
+
+## 7. Commercial Insights
+
+{% if profile.commercial_insights %}
+{% set kind_labels = {"growth_opportunity": "Growth opportunity", "technology_opportunity": "Technology opportunity", "customer_opportunity": "Customer opportunity", "competitive_threat": "Competitive threat", "business_risk": "Business risk"} %}
+{% for i in profile.commercial_insights %}
+- **{{ kind_labels.get(i.kind, i.kind) }}** _[{{ i.claim_type.value }}]_ — {{ i.insight }}
+{% if i.reasoning %}  *Reasoning:* {{ i.reasoning }}{% endif %}
+  `{{ i.sources | join(" ") }}`
+{% endfor %}
+{% else %}
+_No commercial insights were produced._
+{% endif %}
+
+### Risks
+
+{% if profile.risks %}
+{% for r in profile.risks %}
+- **{{ r.risk }}**{% if r.category %} _({{ r.category }})_{% endif %} _[{{ r.claim_type.value }}]_ `{{ r.sources | join(" ") }}`
+{% if r.mitigation_note %}  *Mitigation:* {{ r.mitigation_note }}{% endif %}
+{% endfor %}
+{% else %}
+_No risks were extracted._
+{% endif %}
+
+---
+
+## Sources
+
+| Source ID | Type | Title | Published | SHA-256 |
+|---|---|---|---|---|
+{% for s in profile.sources if not s.error -%}
+| `{{ s.source_id }}` | {{ s.kind.value }} | {{ s.title }} | {{ s.published or "" }} | `{{ (s.content_hash or "")[:12] }}` |
+{% endfor %}
+
+### Source priority
+
+First-party filings only: annual reports (10-K / 20-F / 40-F), quarterly reports
+(10-Q), 8-K earnings press releases, DEF 14A proxies, and SEC XBRL company facts.
+Financial figures are taken from XBRL rather than read from prose, so they are
+exact rather than interpreted.
+
+---
+
+## Evidence Coverage
+
+Coverage is measured against advisory targets for a well-documented semiconductor
+company. A category below target means the reviewed sources did not support it -
+it is **not** filled in to reach the target.
+
+| Category | Claims | Target | Status |
+|---|---:|---:|---|
+{% for c in profile.coverage -%}
+| {{ c.category.replace("_", " ") | capitalize }} | {{ c.count }} | {{ c.target }} | {{ "at target" if c.met else "**below target**" }} |
+{% endfor %}
+
+{% set unmet = profile.coverage | rejectattr("met") | list %}
+{% if unmet %}
+> **Evidence shortfall.** {{ unmet | length }} categor{{ "y" if unmet | length == 1 else "ies" }}
+> came in below target ({{ unmet | map(attribute="category") | join(", ") }}). For a
+> company that discloses little in these areas this is expected: many issuers,
+> including Applied Materials, name no competitor at all in their annual report.
+> The alternative - generating claims to fill the gap - would defeat the purpose of
+> a source-grounded report.
+{% endif %}
+
+---
+
+## Evidence Ledger
+
+{{ profile.evidence | length }} verified claims. Each was extracted from the cited
+filing and checked to contain a verbatim supporting quote.
+
+| Claim ID | Topic | Claim | Source | Quote |
+|---|---|---|---|---|
+{% for e in profile.evidence -%}
+| `{{ e.claim_id }}` | {{ e.topic }} | {{ e.text | replace("|", "/") | truncate(160) }} | `{{ e.source_id }}` | {{ (e.excerpt or "") | replace("|", "/") | replace("\n", " ") | truncate(120) }} |
+{% endfor %}
+
+---
+
+{% if profile.warnings or profile.sources_failed %}
+## Diagnostics
+
+{% if profile.sources_failed %}
+**{{ profile.sources_failed }} source(s) could not be retrieved:**
+
+{% for s in profile.sources if s.error %}
+- `{{ s.source_id }}`: {{ s.error }}
+{% endfor %}
+{% endif %}
+
+{% if profile.warnings %}
+**{{ profile.warnings | length }} warning(s):**
+
+{% for w in profile.warnings %}
+- {{ w }}
+{% endfor %}
+{% endif %}
+{% endif %}

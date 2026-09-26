@@ -1,0 +1,166 @@
+/* Shared stylesheet for the static report site.
+   Inlined into every page so each HTML file is standalone and can be sent as-is.
+   System fonts only - no network request, works offline. */
+
+:root {
+  --bg: #f6f7f9;
+  --panel: #ffffff;
+  --ink: #14181f;
+  --muted: #5d6875;
+  --line: #e2e5ea;
+  --accent: #1f5f9e;
+  --fact: #1d7a4c;
+  --analysis: #8a6100;
+  --inference: #8a3d8a;
+  --neg: #b3261e;
+  --pos: #1d7a4c;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font: 15px/1.6 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+        "Helvetica Neue", Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+.wrap { max-width: 1100px; margin: 0 auto; padding: 32px 20px 80px; }
+
+/* ---------- masthead ---------- */
+.masthead { border-bottom: 2px solid var(--ink); padding-bottom: 14px; margin-bottom: 22px; }
+.masthead h1 { margin: 6px 0 2px; font-size: 27px; letter-spacing: -0.01em; }
+.masthead .sub { margin: 0; color: var(--muted); font-size: 14px; }
+.masthead .ticker {
+  font-size: 14px; font-weight: 600; color: var(--accent);
+  border: 1px solid var(--accent); border-radius: 4px;
+  padding: 1px 7px; vertical-align: 3px;
+}
+a.back { color: var(--accent); text-decoration: none; font-size: 13px; }
+a.back:hover { text-decoration: underline; }
+
+/* ---------- stat bar ---------- */
+.bar {
+  display: flex; flex-wrap: wrap; gap: 10px; margin: 0 0 20px;
+}
+.stat {
+  flex: 1 1 150px; background: var(--panel); border: 1px solid var(--line);
+  border-radius: 8px; padding: 12px 14px;
+}
+.stat b { display: block; font-size: 21px; letter-spacing: -0.02em; }
+.stat b small { font-size: 13px; color: var(--muted); font-weight: 500; }
+.stat span { color: var(--muted); font-size: 12px; text-transform: uppercase; letter-spacing: 0.04em; }
+
+/* ---------- sections ---------- */
+section {
+  background: var(--panel); border: 1px solid var(--line); border-radius: 10px;
+  padding: 20px 22px; margin-bottom: 18px;
+}
+h2 {
+  font-size: 18px; margin: 0 0 14px; padding-bottom: 9px;
+  border-bottom: 1px solid var(--line); letter-spacing: -0.01em;
+}
+h2 .n {
+  display: inline-block; min-width: 22px; height: 22px; line-height: 22px;
+  margin-right: 8px; text-align: center; font-size: 12px;
+  background: var(--ink); color: #fff; border-radius: 5px; vertical-align: 2px;
+}
+h3 { font-size: 14px; margin: 20px 0 8px; text-transform: uppercase;
+     letter-spacing: 0.05em; color: var(--muted); }
+h3:first-of-type { margin-top: 4px; }
+h4 { margin: 0 0 5px; font-size: 15px; }
+
+p { margin: 0 0 9px; }
+.muted { color: var(--muted); }
+.small { font-size: 12.5px; }
+.mono { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+.num { text-align: right; font-variant-numeric: tabular-nums; }
+.pos { color: var(--pos); }
+.neg { color: var(--neg); }
+
+/* ---------- tables ---------- */
+table { width: 100%; border-collapse: collapse; margin: 6px 0 10px; font-size: 14px; }
+th {
+  text-align: left; font-size: 11.5px; text-transform: uppercase;
+  letter-spacing: 0.05em; color: var(--muted); font-weight: 600;
+  border-bottom: 1px solid var(--line); padding: 7px 9px;
+}
+td { padding: 8px 9px; border-bottom: 1px solid var(--line); vertical-align: top; }
+tr:last-child td { border-bottom: none; }
+tr.sub td { background: #fafbfc; font-style: italic; }
+tbody tr:target { background: #fff6d9; }
+
+/* ---------- cards / lists ---------- */
+.grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 12px; }
+.card {
+  border: 1px solid var(--line); border-radius: 8px; padding: 13px 15px;
+  background: #fcfcfd;
+}
+.card p:last-child { margin-bottom: 0; }
+ul.claims { margin: 0; padding-left: 18px; }
+ul.claims li { margin-bottom: 8px; }
+.two { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.two ul { margin: 4px 0 0; padding-left: 18px; }
+
+dl.kv { display: grid; grid-template-columns: 190px 1fr; gap: 4px 14px; margin: 0 0 12px; }
+dl.kv dt { color: var(--muted); font-size: 13px; }
+dl.kv dd { margin: 0; }
+
+/* ---------- inline badges ---------- */
+.tag {
+  display: inline-block; font-size: 10.5px; font-weight: 700; letter-spacing: 0.05em;
+  text-transform: uppercase; padding: 1px 6px; border-radius: 4px;
+  vertical-align: 1px; white-space: nowrap;
+}
+.tag.fact { background: #e6f4ec; color: var(--fact); }
+.tag.analysis { background: #fdf3dd; color: var(--analysis); }
+.tag.inference { background: #f7e9f7; color: var(--inference); }
+.tag.disclosed { background: #e6f4ec; color: var(--fact); }
+
+.chip {
+  display: inline-block; font-size: 12px; background: #eef1f5; color: #3c4753;
+  border-radius: 20px; padding: 2px 10px; margin: 0 4px 4px 0;
+}
+.chips { margin: 6px 0; }
+
+a.cid {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 11.5px; color: var(--accent); text-decoration: none;
+  border-bottom: 1px dotted var(--accent);
+}
+a.cid:hover { background: #eaf2fa; }
+.srcs { margin: 7px 0 0; }
+.srcs a.cid { margin-right: 5px; }
+
+/* ---------- callouts ---------- */
+.callout {
+  background: #eef4fa; border-left: 3px solid var(--accent);
+  padding: 11px 14px; border-radius: 0 6px 6px 0; margin: 0 0 18px; font-size: 13.5px;
+}
+.callout.warn { background: #fdf6e6; border-left-color: #c8901c; }
+
+/* ---------- ledger filter ---------- */
+input[type="search"] {
+  width: 100%; padding: 8px 11px; font-size: 14px; margin: 4px 0 10px;
+  border: 1px solid var(--line); border-radius: 7px; background: #fff;
+  font-family: inherit;
+}
+input[type="search"]:focus { outline: 2px solid #b9d4ec; border-color: var(--accent); }
+
+footer { margin-top: 26px; padding-top: 14px; border-top: 1px solid var(--line); }
+
+@media (max-width: 620px) {
+  .two { grid-template-columns: 1fr; }
+  dl.kv { grid-template-columns: 1fr; }
+  dl.kv dt { margin-top: 6px; }
+}
+
+/* Stale-data banner: an issuer whose newest SEC filing is years old must be
+   impossible to mistake for current intelligence. */
+.callout.stale {
+  background: #fdecea;
+  border-left-color: var(--neg);
+  border-left-width: 4px;
+}

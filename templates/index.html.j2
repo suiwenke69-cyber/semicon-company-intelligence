@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Semiconductor Company Intelligence — Reports</title>
+<style>
+{{ shared_css }}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="masthead">
+  <h1>Semiconductor Company Intelligence</h1>
+  <p class="sub">Evidence-grounded company reports · Technology → Product → Market → Customer → Competition → Business</p>
+</header>
+
+<section class="bar">
+  <div class="stat"><b>{{ companies | length }}</b><span>companies</span></div>
+  <div class="stat"><b>{{ total_claims }}</b><span>verified claims</span></div>
+  <div class="stat"><b>{{ total_sources }}</b><span>sources cited</span></div>
+</section>
+
+<div class="callout">
+  <strong>What this is.</strong> Each report is generated from first-party SEC filings
+  (10-K, 10-Q, 8-K earnings releases, XBRL) plus peer-company filings for competitive
+  overlap. Financial figures are extracted deterministically from XBRL, never written
+  by a model. Qualitative claims are extracted by a language model and then
+  <em>discarded unless the cited filing contains the supporting quote verbatim</em>.
+  Adding a company requires configuration only — no code changes.
+</div>
+
+<section>
+<h2>Companies</h2>
+<table>
+  <thead>
+    <tr>
+      <th>Company</th>
+      <th class="num">Revenue</th>
+      <th class="num">YoY</th>
+      <th>Segments</th>
+      <th>Named competitors</th>
+      <th class="num">Claims</th>
+      <th class="num">Sources</th>
+      <th class="num">Coverage</th>
+    </tr>
+  </thead>
+  <tbody>
+  {% for c in companies %}
+    <tr>
+      <td>
+        <a href="{{ c.href }}"><b>{{ c.name }}</b></a>
+        {% if c.ticker %}<div class="muted small">{{ c.ticker }}</div>{% endif %}
+      </td>
+      <td class="num">{{ c.revenue_label or "n/a" }}</td>
+      <td class="num {{ 'pos' if (c.revenue_growth or 0) > 0 else 'neg' if c.revenue_growth is not none else '' }}">{{ c.revenue_growth | signed_pct }}</td>
+      <td class="small">
+        {% for name, rev in c.segments[:3] %}{{ name }} <span class="muted">{{ rev }}</span>{% if not loop.last %}<br>{% endif %}{% endfor %}
+        {% if not c.segments %}<span class="muted">not parsed</span>{% endif %}
+      </td>
+      <td class="small">
+        {% if c.competitors %}{{ c.competitors | join(", ") }}{% else %}<span class="muted">none named in filings</span>{% endif %}
+      </td>
+      <td class="num">{{ c.claims }}</td>
+      <td class="num">{{ c.sources_used }}<small class="muted">/{{ c.sources_attempted }}</small></td>
+      <td class="num">{{ c.coverage_met }}<small class="muted">/{{ c.coverage_total }}</small></td>
+    </tr>
+  {% endfor %}
+  </tbody>
+</table>
+</section>
+
+<section>
+<h2>Reading the reports</h2>
+<div class="two">
+  <div>
+    <h3>Claim tags</h3>
+    <p><span class="tag fact">FACT</span> stated directly in a cited filing.</p>
+    <p><span class="tag analysis">ANALYSIS</span> reasoned across two or more facts.</p>
+    <p><span class="tag inference">INFERENCE</span> reasoned with an explicit chain —
+      this includes all peer-filing evidence, since a competitor describing itself is
+      not a fact about the subject company.</p>
+  </div>
+  <div>
+    <h3>Honest limitations</h3>
+    <p class="small">An issuer's own annual report is often a poor source for
+      competitor detail and product specifics. Applied Materials' Form 10-K contains
+      the word “deposition” once and names no competitor at all.</p>
+    <p class="small">Coverage tables report categories the sources did
+      <em>not</em> support rather than filling them in.</p>
+    <p class="small">No investment recommendation is made or implied.</p>
+  </div>
+</div>
+</section>
+
+<footer>
+  <p class="muted small">
+    Static site generated {{ generated.strftime("%Y-%m-%d %H:%M UTC") }} from
+    <code>data/profiles/*.json</code>. Regenerate with
+    <code>python main.py --web</code>.
+  </p>
+</footer>
+
+</div>
+</body>
+</html>

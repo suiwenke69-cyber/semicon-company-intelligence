@@ -1,0 +1,15 @@
+# Runtime cache: downloaded filings + LLM responses. Never committed.
+cache/
+
+# Generated reports live in data/profiles (committed) but scratch output does not.
+out/
+
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.DS_Store
+*.egg-info/
+
+# Secrets
+.env

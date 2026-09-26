@@ -1,0 +1,1242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ANALOG DEVICES INC (ADI) — Semiconductor Intelligence Report</title>
+<style>
+/* Shared stylesheet for the static report site.
+   Inlined into every page so each HTML file is standalone and can be sent as-is.
+   System fonts only - no network request, works offline. */
+
+:root {
+  --bg: #f6f7f9;
+  --panel: #ffffff;
+  --ink: #14181f;
+  --muted: #5d6875;
+  --line: #e2e5ea;
+  --accent: #1f5f9e;
+  --fact: #1d7a4c;
+  --analysis: #8a6100;
+  --inference: #8a3d8a;
+  --neg: #b3261e;
+  --pos: #1d7a4c;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font: 15px/1.6 -apple-system, BlinkMacSystemFont, &#34;Segoe UI&#34;, Roboto,
+        &#34;Helvetica Neue&#34;, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+.wrap { max-width: 1100px; margin: 0 auto; padding: 32px 20px 80px; }
+
+/* ---------- masthead ---------- */
+.masthead { border-bottom: 2px solid var(--ink); padding-bottom: 14px; margin-bottom: 22px; }
+.masthead h1 { margin: 6px 0 2px; font-size: 27px; letter-spacing: -0.01em; }
+.masthead .sub { margin: 0; color: var(--muted); font-size: 14px; }
+.masthead .ticker {
+  font-size: 14px; font-weight: 600; color: var(--accent);
+  border: 1px solid var(--accent); border-radius: 4px;
+  padding: 1px 7px; vertical-align: 3px;
+}
+a.back { color: var(--accent); text-decoration: none; font-size: 13px; }
+a.back:hover { text-decoration: underline; }
+
+/* ---------- stat bar ---------- */
+.bar {
+  display: flex; flex-wrap: wrap; gap: 10px; margin: 0 0 20px;
+}
+.stat {
+  flex: 1 1 150px; background: var(--panel); border: 1px solid var(--line);
+  border-radius: 8px; padding: 12px 14px;
+}
+.stat b { display: block; font-size: 21px; letter-spacing: -0.02em; }
+.stat b small { font-size: 13px; color: var(--muted); font-weight: 500; }
+.stat span { color: var(--muted); font-size: 12px; text-transform: uppercase; letter-spacing: 0.04em; }
+
+/* ---------- sections ---------- */
+section {
+  background: var(--panel); border: 1px solid var(--line); border-radius: 10px;
+  padding: 20px 22px; margin-bottom: 18px;
+}
+h2 {
+  font-size: 18px; margin: 0 0 14px; padding-bottom: 9px;
+  border-bottom: 1px solid var(--line); letter-spacing: -0.01em;
+}
+h2 .n {
+  display: inline-block; min-width: 22px; height: 22px; line-height: 22px;
+  margin-right: 8px; text-align: center; font-size: 12px;
+  background: var(--ink); color: #fff; border-radius: 5px; vertical-align: 2px;
+}
+h3 { font-size: 14px; margin: 20px 0 8px; text-transform: uppercase;
+     letter-spacing: 0.05em; color: var(--muted); }
+h3:first-of-type { margin-top: 4px; }
+h4 { margin: 0 0 5px; font-size: 15px; }
+
+p { margin: 0 0 9px; }
+.muted { color: var(--muted); }
+.small { font-size: 12.5px; }
+.mono { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+.num { text-align: right; font-variant-numeric: tabular-nums; }
+.pos { color: var(--pos); }
+.neg { color: var(--neg); }
+
+/* ---------- tables ---------- */
+table { width: 100%; border-collapse: collapse; margin: 6px 0 10px; font-size: 14px; }
+th {
+  text-align: left; font-size: 11.5px; text-transform: uppercase;
+  letter-spacing: 0.05em; color: var(--muted); font-weight: 600;
+  border-bottom: 1px solid var(--line); padding: 7px 9px;
+}
+td { padding: 8px 9px; border-bottom: 1px solid var(--line); vertical-align: top; }
+tr:last-child td { border-bottom: none; }
+tr.sub td { background: #fafbfc; font-style: italic; }
+tbody tr:target { background: #fff6d9; }
+
+/* ---------- cards / lists ---------- */
+.grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 12px; }
+.card {
+  border: 1px solid var(--line); border-radius: 8px; padding: 13px 15px;
+  background: #fcfcfd;
+}
+.card p:last-child { margin-bottom: 0; }
+ul.claims { margin: 0; padding-left: 18px; }
+ul.claims li { margin-bottom: 8px; }
+.two { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.two ul { margin: 4px 0 0; padding-left: 18px; }
+
+dl.kv { display: grid; grid-template-columns: 190px 1fr; gap: 4px 14px; margin: 0 0 12px; }
+dl.kv dt { color: var(--muted); font-size: 13px; }
+dl.kv dd { margin: 0; }
+
+/* ---------- inline badges ---------- */
+.tag {
+  display: inline-block; font-size: 10.5px; font-weight: 700; letter-spacing: 0.05em;
+  text-transform: uppercase; padding: 1px 6px; border-radius: 4px;
+  vertical-align: 1px; white-space: nowrap;
+}
+.tag.fact { background: #e6f4ec; color: var(--fact); }
+.tag.analysis { background: #fdf3dd; color: var(--analysis); }
+.tag.inference { background: #f7e9f7; color: var(--inference); }
+.tag.disclosed { background: #e6f4ec; color: var(--fact); }
+
+.chip {
+  display: inline-block; font-size: 12px; background: #eef1f5; color: #3c4753;
+  border-radius: 20px; padding: 2px 10px; margin: 0 4px 4px 0;
+}
+.chips { margin: 6px 0; }
+
+a.cid {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 11.5px; color: var(--accent); text-decoration: none;
+  border-bottom: 1px dotted var(--accent);
+}
+a.cid:hover { background: #eaf2fa; }
+.srcs { margin: 7px 0 0; }
+.srcs a.cid { margin-right: 5px; }
+
+/* ---------- callouts ---------- */
+.callout {
+  background: #eef4fa; border-left: 3px solid var(--accent);
+  padding: 11px 14px; border-radius: 0 6px 6px 0; margin: 0 0 18px; font-size: 13.5px;
+}
+.callout.warn { background: #fdf6e6; border-left-color: #c8901c; }
+
+/* ---------- ledger filter ---------- */
+input[type=&#34;search&#34;] {
+  width: 100%; padding: 8px 11px; font-size: 14px; margin: 4px 0 10px;
+  border: 1px solid var(--line); border-radius: 7px; background: #fff;
+  font-family: inherit;
+}
+input[type=&#34;search&#34;]:focus { outline: 2px solid #b9d4ec; border-color: var(--accent); }
+
+footer { margin-top: 26px; padding-top: 14px; border-top: 1px solid var(--line); }
+
+@media (max-width: 620px) {
+  .two { grid-template-columns: 1fr; }
+  dl.kv { grid-template-columns: 1fr; }
+  dl.kv dt { margin-top: 6px; }
+}
+
+/* Stale-data banner: an issuer whose newest SEC filing is years old must be
+   impossible to mistake for current intelligence. */
+.callout.stale {
+  background: #fdecea;
+  border-left-color: var(--neg);
+  border-left-width: 4px;
+}
+
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="masthead">
+  <a class="back" href="index.html">&larr; All companies</a>
+  <h1>ANALOG DEVICES INC <span class="ticker">ADI</span></h1>
+  <p class="sub">Semiconductor Company Intelligence Report</p>
+</header>
+
+
+
+<section class="bar">
+  <div class="stat"><b>80</b><span>verified claims</span></div>
+  <div class="stat"><b>20<small>/20</small></b><span>sources</span></div>
+  <div class="stat"><b>7<small>/7</small></b><span>categories at target</span></div>
+  <div class="stat"><b>2026-08-01</b><span>data as of</span></div>
+</section>
+
+<div class="callout">
+  <strong>How to read this.</strong> Claims are tagged
+  <span class="tag fact">FACT</span> (stated in a cited filing),
+  <span class="tag analysis">ANALYSIS</span> (reasoned across facts) or
+  <span class="tag inference">INFERENCE</span> (reasoned with a stated chain).
+  Every factual assertion carries a claim ID, resolvable in the Evidence Ledger.
+  No investment recommendation is made.
+</div>
+
+<section>
+<h2><span class="n">1</span> Company Overview</h2>
+<dl class="kv">
+  <dt>Value chain position</dt><dd>Analog Devices Inc is positioned as a semiconductor manufacturer with a focus on analog, digital, and mixed-signal ICs.</dd>
+  <dt>Ticker / CIK</dt><dd>ADI / 0000006281</dd>
+  <dt>Fiscal year end</dt><dd>month 10-31</dd>
+</dl>
+<ul class="claims">
+  <li>We currently source more than half of our wafer requirements annually from third-party wafer fabrication foundries, such as Taiwan Semiconductor Manufacturing Company (TSMC) and others, and the remainder is sourced internally. <a class="cid" href="#c_f22690c219">c_f22690c219</a></li>
+</ul>
+</section>
+
+
+<section>
+<h2><span class="n">2</span> Product &amp; Technology</h2>
+
+<h3>Business segments</h3>
+<table>
+  <thead><tr><th>Segment</th><th class="num">Revenue</th><th class="num">% of total</th><th class="num">YoY</th><th>Basis</th></tr></thead>
+  <tbody>
+    <tr>
+      <td>Integrated Circuits<div class="muted small">The company offers both general-purpose and application-specific integrated circuits.</div></td>
+      <td class="num">n/a</td>
+      <td class="num">n/a</td>
+      <td class="num ">n/a</td>
+      <td class="muted small">No segment revenue row matched</td>
+    </tr>
+  </tbody>
+</table>
+
+
+<h3>Products</h3>
+<div class="grid">
+  <div class="card">
+    <h4>Analog ICs</h4>
+<p class="muted small">Integrated Circuits</p><p>Analog ICs monitor, condition, amplify or transform continuous analog signals associated with physical properties and provide voltage regulation and power control to electronic systems.</p><p class="muted small">Technologies: Analog and mixed signal, Power management</p>    <p class="srcs"><a class="cid" href="#c_583a4da73b">c_583a4da73b</a><a class="cid" href="#c_b9202c49ab">c_b9202c49ab</a></p>
+  </div>
+</div>
+
+<h3>Technologies</h3>
+<ul class="claims">
+  <li><b>Analog and Mixed Signal</b> — Core technology leveraging analog and mixed signal capabilities for high-performance ICs.    <span class="srcs"><a class="cid" href="#c_eb32487890">c_eb32487890</a></span>
+  </li>
+</ul>
+</section>
+
+<section>
+<h2><span class="n">3</span> Market Drivers</h2>
+<div class="grid">
+  <div class="card">
+    <h4>High-performance consumer products <span class="tag fact">FACT</span></h4>
+    <p>The demand for high-performance ICs with specific functionality is driven by the emergence of feature-rich consumer products.</p>
+    <p class="srcs"><a class="cid" href="#c_528b3461f6">c_528b3461f6</a></p>
+  </div>
+</div>
+
+<h3>Growth drivers</h3>
+<ul class="claims">
+  <li>Data Center and Industrial demand <span class="tag fact">FACT</span>
+    <span class="srcs"><a class="cid" href="#c_2bfd961cda">c_2bfd961cda</a></span></li>
+</ul>
+</section>
+
+<section>
+<h2><span class="n">4</span> Customer Analysis</h2>
+<div class="card">
+  <h4>Industrial
+<span class="tag inferred">inferred category</span>  </h4>
+<p><b>Value created:</b> Provides high-performance ICs tailored for industrial applications.</p>  <div class="two">
+<div><b>Requirements</b><ul><li>High-performance ICs</li></ul></div><div><b>Pain points</b><ul><li>Volatile demand</li></ul></div>  </div>
+<p class="muted small">Basis: The company reports significant revenue from the industrial market, indicating a focus on this customer category.</p>  <p class="srcs"><a class="cid" href="#c_451056f5c1">c_451056f5c1</a><a class="cid" href="#c_725ea0b0b3">c_725ea0b0b3</a></p>
+</div>
+</section>
+
+<section>
+<h2><span class="n">5</span> Competitive Landscape</h2>
+<table>
+  <thead><tr><th>Competitor</th><th>Basis</th><th>Product overlap</th><th>Technology positioning</th><th>Market exposure</th></tr></thead>
+  <tbody>
+    <tr>
+      <td><b>Texas Instruments</b></td>
+      <td><span class="tag analysis">industry</span></td>
+      <td>Embedded Processing products</td>
+      <td>Analog Devices&#39; products range from wireless connectivity to specialized devices like radar and vision processing.</td>
+      <td>Industrial and automotive markets</td>
+    </tr>
+  </tbody>
+</table>
+<div class="grid">
+  <div class="card">
+    <h4>Texas Instruments <span class="tag analysis">industry</span></h4>
+<p><b>Strengths:</b> Diverse product portfolio</p><p><b>Potential weaknesses:</b> Intense competition</p>    <p class="srcs"><a class="cid" href="#c_11d98ba64e">c_11d98ba64e</a><a class="cid" href="#c_87930809b2">c_87930809b2</a><a class="cid" href="#c_847f968c6e">c_847f968c6e</a></p>
+  </div>
+</div>
+</section>
+
+<section>
+<h2><span class="n">6</span> Business Analysis</h2>
+<table>
+  <thead><tr><th>Metric</th><th class="num">Latest FY</th><th class="num">YoY</th><th>Period</th><th>Source concept</th></tr></thead>
+  <tbody>
+    <tr>
+      <td>revenue</td>
+      <td class="num">11.0B</td>
+      <td class="num pos">+16.9%</td>
+      <td class="muted small">FY2026</td>
+      <td class="muted small mono">us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax</td>
+    </tr>
+    <tr>
+      <td>cost_of_revenue</td>
+      <td class="num">4.2B</td>
+      <td class="num pos">+5.0%</td>
+      <td class="muted small">FY2026</td>
+      <td class="muted small mono">us-gaap:CostOfGoodsAndServicesSold</td>
+    </tr>
+    <tr>
+      <td>gross_profit</td>
+      <td class="num">6.8B</td>
+      <td class="num pos">+25.9%</td>
+      <td class="muted small">FY2026</td>
+      <td class="muted small mono">us-gaap:GrossProfit</td>
+    </tr>
+    <tr>
+      <td>rd_expense</td>
+      <td class="num">1.8B</td>
+      <td class="num pos">+18.7%</td>
+      <td class="muted small">FY2026</td>
+      <td class="muted small mono">us-gaap:ResearchAndDevelopmentExpense</td>
+    </tr>
+    <tr>
+      <td>sga_expense</td>
+      <td class="num">1.3B</td>
+      <td class="num pos">+17.5%</td>
+      <td class="muted small">FY2026</td>
+      <td class="muted small mono">us-gaap:SellingGeneralAndAdministrativeExpense</td>
+    </tr>
+    <tr>
+      <td>operating_income</td>
+      <td class="num">2.9B</td>
+      <td class="num pos">+44.3%</td>
+      <td class="muted small">FY2026</td>
+      <td class="muted small mono">us-gaap:OperatingIncomeLoss</td>
+    </tr>
+    <tr>
+      <td>net_income</td>
+      <td class="num">2.3B</td>
+      <td class="num pos">+38.7%</td>
+      <td class="muted small">FY2026</td>
+      <td class="muted small mono">us-gaap:NetIncomeLoss</td>
+    </tr>
+    <tr>
+      <td>diluted_eps</td>
+      <td class="num">$4.56</td>
+      <td class="num pos">+39.0%</td>
+      <td class="muted small">FY2026</td>
+      <td class="muted small mono">us-gaap:EarningsPerShareDiluted</td>
+    </tr>
+    <tr>
+      <td>operating_cash_flow</td>
+      <td class="num">4.8B</td>
+      <td class="num pos">+24.9%</td>
+      <td class="muted small">FY2026</td>
+      <td class="muted small mono">us-gaap:NetCashProvidedByUsedInOperatingActivities</td>
+    </tr>
+    <tr>
+      <td>capex</td>
+      <td class="num">533.6M</td>
+      <td class="num neg">-27.0%</td>
+      <td class="muted small">FY2026</td>
+      <td class="muted small mono">us-gaap:PaymentsToAcquirePropertyPlantAndEquipment</td>
+    </tr>
+    <tr>
+      <td>inventory</td>
+      <td class="num">1.9B</td>
+      <td class="num ">n/a</td>
+      <td class="muted small">FY2026 (instant)</td>
+      <td class="muted small mono">us-gaap:InventoryNet</td>
+    </tr>
+    <tr>
+      <td>deferred_revenue</td>
+      <td class="num">-3.3M</td>
+      <td class="num ">n/a</td>
+      <td class="muted small">FY2012 (instant)</td>
+      <td class="muted small mono">us-gaap:BusinessAcquisitionPurchasePriceAllocationDeferredIncomeTaxesAssetLiabilityNet</td>
+    </tr>
+    <tr>
+      <td>shares_diluted</td>
+      <td class="num">496.7M shares</td>
+      <td class="num neg">-0.4%</td>
+      <td class="muted small">FY2026</td>
+      <td class="muted small mono">us-gaap:WeightedAverageNumberOfDilutedSharesOutstanding</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3>Revenue trend</h3>
+<table>
+  <thead><tr><th>Period</th><th class="num">Revenue</th></tr></thead>
+  <tbody>
+    <tr><td>FY2026</td><td class="num">11.0B</td></tr>
+    <tr><td>FY2025</td><td class="num">9.4B</td></tr>
+    <tr><td>FY2023</td><td class="num">12.3B</td></tr>
+    <tr><td>FY2022</td><td class="num">12.0B</td></tr>
+    <tr><td>FY2021</td><td class="num">7.3B</td></tr>
+    <tr><td>FY2020</td><td class="num">5.6B</td></tr>
+    <tr><td>FY2020</td><td class="num">6.0B</td></tr>
+    <tr><td>FY2019</td><td class="num">6.2B</td></tr>
+  </tbody>
+</table>
+
+<h3>Management commentary</h3>
+<ul class="claims">
+<li>The breakdown of our annual revenue by end market is set out in the table below: Industrial 45%, Automotive 30%, Consumer 13%, Communications 13%. <a class="cid" href="#c_451056f5c1">c_451056f5c1</a></li><li>Revenue of $4.02 billion, with year-over-year growth led by Data Center and Industrial <a class="cid" href="#c_2bfd961cda">c_2bfd961cda</a></li><li>Operating cash flow of $5.5 billion and free cash flow of $4.9 billion on a trailing twelve-month basis or 40% and 36% of revenue, respectively <a class="cid" href="#c_97a0689716">c_97a0689716</a></li><li>ADI delivered a strong third quarter, exceeding the midpoint of our revenue, margin, and earnings outlook as we capitalized on broad-based demand <a class="cid" href="#c_2602cea41e">c_2602cea41e</a></li><li>Gross margin percentage 67.3 % 62.1 % 520 bps <a class="cid" href="#c_0c59085a04">c_0c59085a04</a></li><li>Operating income $ 1,613 $ 818 97 % <a class="cid" href="#c_331d2e4801">c_331d2e4801</a></li><li>Adjusted gross margin percentage 72.5 % 69.2 % 330 bps <a class="cid" href="#c_31a232d396">c_31a232d396</a></li><li>Adjusted operating income $ 2,010 $ 1,215 65 % <a class="cid" href="#c_817cb1ef42">c_817cb1ef42</a></li><li>Adjusted diluted earnings per share $ 3.45 $ 2.05 68 % <a class="cid" href="#c_6893a7913b">c_6893a7913b</a></li><li>Total revenue for the three months ended August 1, 2026, was $4,021,899. <a class="cid" href="#c_e5dfc2302d">c_e5dfc2302d</a></li></ul>
+</section>
+
+<section>
+<h2><span class="n">7</span> Commercial Insights</h2>
+<div class="grid">
+  <div class="card">
+    <h4>Technology Opportunity <span class="tag inference">INFERENCE</span></h4>
+    <p>Investment in 300mm capacity provides a cost advantage.</p>
+<p class="muted small">Reasoning: Analog Devices&#39; investment in 300mm wafer capacity reduces manufacturing costs, providing a competitive advantage.</p>    <p class="srcs"><a class="cid" href="#c_457c2dd008">c_457c2dd008</a><a class="cid" href="#c_ed0c408e23">c_ed0c408e23</a></p>
+  </div>
+</div>
+
+<h3>Risks</h3>
+<ul class="claims">
+  <li><b>Cyclical nature of the semiconductor industry</b> <span class="muted small">(cyclical)</span>    <span class="tag fact">FACT</span>
+    <span class="srcs"><a class="cid" href="#c_07f62e77bf">c_07f62e77bf</a></span>
+  </li>
+</ul>
+</section>
+
+<section>
+<h2>Evidence Coverage</h2>
+<p class="muted">Measured against advisory targets. A category below target means the reviewed sources did not support it - it is not filled in to reach the target.</p>
+<table>
+  <thead><tr><th>Category</th><th class="num">Claims</th><th class="num">Target</th><th>Status</th></tr></thead>
+  <tbody>
+    <tr>
+      <td>Products</td>
+      <td class="num">7</td>
+      <td class="num">3</td>
+      <td><span class="tag fact">at target</span></td>
+    </tr>
+    <tr>
+      <td>Process Steps</td>
+      <td class="num">2</td>
+      <td class="num">2</td>
+      <td><span class="tag fact">at target</span></td>
+    </tr>
+    <tr>
+      <td>Technologies</td>
+      <td class="num">2</td>
+      <td class="num">2</td>
+      <td><span class="tag fact">at target</span></td>
+    </tr>
+    <tr>
+      <td>Customer Needs</td>
+      <td class="num">6</td>
+      <td class="num">2</td>
+      <td><span class="tag fact">at target</span></td>
+    </tr>
+    <tr>
+      <td>Market Drivers</td>
+      <td class="num">14</td>
+      <td class="num">2</td>
+      <td><span class="tag fact">at target</span></td>
+    </tr>
+    <tr>
+      <td>Competitors</td>
+      <td class="num">11</td>
+      <td class="num">1</td>
+      <td><span class="tag fact">at target</span></td>
+    </tr>
+    <tr>
+      <td>Commercial Implications</td>
+      <td class="num">27</td>
+      <td class="num">2</td>
+      <td><span class="tag fact">at target</span></td>
+    </tr>
+  </tbody>
+</table>
+</section>
+
+<section>
+<h2>Sources</h2>
+<table>
+  <thead><tr><th>Source ID</th><th>Type</th><th>Title</th><th>Published</th><th>SHA-256</th></tr></thead>
+  <tbody>
+    <tr>
+      <td class="mono small">sec_8_k_2026-09-17</td>
+      <td>8-K</td>
+      <td>Analog Devices 8-K filed 2026-09-17</td>
+      <td class="muted small">2026-09-17</td>
+      <td class="mono small">d38325cf53eb</td>
+    </tr>
+    <tr>
+      <td class="mono small">sec_8_k_2026-09-09</td>
+      <td>8-K</td>
+      <td>Analog Devices 8-K filed 2026-09-09</td>
+      <td class="muted small">2026-09-09</td>
+      <td class="mono small">b8c0a2d6155a</td>
+    </tr>
+    <tr>
+      <td class="mono small">sec_10_q_2026-08-19</td>
+      <td>10-Q</td>
+      <td>Analog Devices 10-Q filed 2026-08-19</td>
+      <td class="muted small">2026-08-19</td>
+      <td class="mono small">7e57c2244f31</td>
+    </tr>
+    <tr>
+      <td class="mono small">sec_8_k_2026-08-19</td>
+      <td>8-K</td>
+      <td>Analog Devices 8-K filed 2026-08-19</td>
+      <td class="muted small">2026-08-19</td>
+      <td class="mono small">908509be0114</td>
+    </tr>
+    <tr>
+      <td class="mono small">sec_8k_2026-08-19_ex991</td>
+      <td>Press Release</td>
+      <td>Analog Devices earnings release 2026-08-19</td>
+      <td class="muted small">2026-08-19</td>
+      <td class="mono small">dd56a1b072d3</td>
+    </tr>
+    <tr>
+      <td class="mono small">sec_8_k_2026-07-29</td>
+      <td>8-K</td>
+      <td>Analog Devices 8-K filed 2026-07-29</td>
+      <td class="muted small">2026-07-29</td>
+      <td class="mono small">7a4ef2313f81</td>
+    </tr>
+    <tr>
+      <td class="mono small">sec_8_k_2026-07-02</td>
+      <td>8-K</td>
+      <td>Analog Devices 8-K filed 2026-07-02</td>
+      <td class="muted small">2026-07-02</td>
+      <td class="mono small">a456f3596f75</td>
+    </tr>
+    <tr>
+      <td class="mono small">sec_10_q_2026-05-20</td>
+      <td>10-Q</td>
+      <td>Analog Devices 10-Q filed 2026-05-20</td>
+      <td class="muted small">2026-05-20</td>
+      <td class="mono small">a9da700565dd</td>
+    </tr>
+    <tr>
+      <td class="mono small">sec_8_k_2026-05-20</td>
+      <td>8-K</td>
+      <td>Analog Devices 8-K filed 2026-05-20</td>
+      <td class="muted small">2026-05-20</td>
+      <td class="mono small">03b8ee2ec8fd</td>
+    </tr>
+    <tr>
+      <td class="mono small">sec_8k_2026-05-20_ex991</td>
+      <td>Press Release</td>
+      <td>Analog Devices earnings release 2026-05-20</td>
+      <td class="muted small">2026-05-20</td>
+      <td class="mono small">2bcbd8a398f7</td>
+    </tr>
+    <tr>
+      <td class="mono small">sec_8_k_2026-05-19</td>
+      <td>8-K</td>
+      <td>Analog Devices 8-K filed 2026-05-19</td>
+      <td class="muted small">2026-05-19</td>
+      <td class="mono small">c304e4ddee9b</td>
+    </tr>
+    <tr>
+      <td class="mono small">sec_8_k_2026-03-12</td>
+      <td>8-K</td>
+      <td>Analog Devices 8-K filed 2026-03-12</td>
+      <td class="muted small">2026-03-12</td>
+      <td class="mono small">fa25d72aa42a</td>
+    </tr>
+    <tr>
+      <td class="mono small">sec_10_q_2026-02-18</td>
+      <td>10-Q</td>
+      <td>Analog Devices 10-Q filed 2026-02-18</td>
+      <td class="muted small">2026-02-18</td>
+      <td class="mono small">2fc696ef74c6</td>
+    </tr>
+    <tr>
+      <td class="mono small">sec_10_k_2025</td>
+      <td>10-K</td>
+      <td>Analog Devices 10-K filed 2025-11-25</td>
+      <td class="muted small">2025-11-25</td>
+      <td class="mono small">dc3580afb73d</td>
+    </tr>
+    <tr>
+      <td class="mono small">sec_10_q_2025-08-20</td>
+      <td>10-Q</td>
+      <td>Analog Devices 10-Q filed 2025-08-20</td>
+      <td class="muted small">2025-08-20</td>
+      <td class="mono small">e5e31eccd09b</td>
+    </tr>
+    <tr>
+      <td class="mono small">sec_10_k_2024</td>
+      <td>10-K</td>
+      <td>Analog Devices 10-K filed 2024-11-26</td>
+      <td class="muted small">2024-11-26</td>
+      <td class="mono small">2d8680d5a051</td>
+    </tr>
+    <tr>
+      <td class="mono small">sec_10_k_2023</td>
+      <td>10-K</td>
+      <td>Analog Devices 10-K filed 2023-11-21</td>
+      <td class="muted small">2023-11-21</td>
+      <td class="mono small">91fd7e484966</td>
+    </tr>
+    <tr>
+      <td class="mono small">sec_xbrl_facts</td>
+      <td>SEC-XBRL</td>
+      <td>ANALOG DEVICES INC XBRL company facts</td>
+      <td class="muted small"></td>
+      <td class="mono small">f468425da294</td>
+    </tr>
+    <tr>
+      <td class="mono small">sec_peer_texas_instruments_2025</td>
+      <td>10-K</td>
+      <td>Texas Instruments 10-K (peer filing, competitive overlap)</td>
+      <td class="muted small">2026-02-06</td>
+      <td class="mono small">02f46dcd04bc</td>
+    </tr>
+    <tr>
+      <td class="mono small">sec_peer_nxp_2025</td>
+      <td>10-K</td>
+      <td>NXP 10-K (peer filing, competitive overlap)</td>
+      <td class="muted small">2026-02-19</td>
+      <td class="mono small">3c9801786240</td>
+    </tr>
+  </tbody>
+</table>
+<p class="muted small">First-party filings only: annual reports, quarterly reports, 8-K earnings releases (Exhibit 99.1), SEC XBRL company facts, and peer-company filings for competitive overlap.</p>
+</section>
+
+<section>
+<h2>Evidence Ledger</h2>
+<p class="muted">80 verified claims. Each was extracted from the cited filing and checked to contain a verbatim supporting quote.</p>
+<input type="search" id="ledgerFilter" placeholder="Filter claims by text, topic or source…" autocomplete="off">
+<table id="ledger">
+  <thead><tr><th>Claim ID</th><th>Topic</th><th>Claim</th><th>Source</th><th>Verbatim quote</th></tr></thead>
+  <tbody>
+    <tr id="c_6f20e40db9">
+      <td class="mono small">c_6f20e40db9</td>
+      <td><span class="chip">product</span></td>
+      <td>Semiconductor components are classified as either discrete devices or as ICs.</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“These components are classified as either discrete devices, such as individual transistors, or as ICs, in which a number of transistors and other elements are combined to form a more complicated electronic circuit.”</td>
+    </tr>
+    <tr id="c_583a4da73b">
+      <td class="mono small">c_583a4da73b</td>
+      <td><span class="chip">product</span></td>
+      <td>Analog ICs monitor, condition, amplify or transform continuous analog signals associated with physical properties.</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“Our analog ICs monitor, condition, amplify or transform continuous analog signals associated with physical properties, such as temperature, pressure, weight, light, sound or motion, and play an important role in bridging real world phenomena to a variety of electronic systems.”</td>
+    </tr>
+    <tr id="c_b9202c49ab">
+      <td class="mono small">c_b9202c49ab</td>
+      <td><span class="chip">product</span></td>
+      <td>Analog ICs provide voltage regulation and power control to electronic systems.</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“Our analog ICs also provide voltage regulation and power control to electronic systems.”</td>
+    </tr>
+    <tr id="c_63c7624d17">
+      <td class="mono small">c_63c7624d17</td>
+      <td><span class="chip">customer</span></td>
+      <td>The company sells its ICs to customers worldwide.</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“We sell our ICs to customers worldwide, many of whom use products spanning our core technologies in a wide range of applications.”</td>
+    </tr>
+    <tr id="c_a2e4725715">
+      <td class="mono small">c_a2e4725715</td>
+      <td><span class="chip">product</span></td>
+      <td>The company offers both general-purpose products and application-specific products.</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“Our IC product portfolio includes both general-purpose products used by a broad range of customers and applications, as well as application-specific products designed for specific target markets.”</td>
+    </tr>
+    <tr id="c_8c88514564">
+      <td class="mono small">c_8c88514564</td>
+      <td><span class="chip">customer</span></td>
+      <td>Standard products often provide a cost-effective solution for many low to medium volume applications.</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“Given the high cost of developing more customized ICs, our standard products often provide a cost-effective solution for many low to medium volume applications.”</td>
+    </tr>
+    <tr id="c_d538e87bc1">
+      <td class="mono small">c_d538e87bc1</td>
+      <td><span class="chip">customer</span></td>
+      <td>The company works with customers to design application-specific solutions.</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“We also work with customers to design application-specific solutions.”</td>
+    </tr>
+    <tr id="c_eb32487890">
+      <td class="mono small">c_eb32487890</td>
+      <td><span class="chip">technology</span></td>
+      <td>The company leverages its analog and mixed signal, power management, RF and microwave, edge processors and other sensors to devise solutions.</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“We begin with our existing core technologies, which leverage our analog and mixed signal, power management, RF and microwave, edge processors and other sensors, and devise solutions that more closely meet the needs of a specific customer or group of customers.”</td>
+    </tr>
+    <tr id="c_f970362fc7">
+      <td class="mono small">c_f970362fc7</td>
+      <td><span class="chip">product</span></td>
+      <td>We offer a variety of web-based tools that ease product selection and aid in the design process for our customers.</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“In addition, we offer a variety of web-based tools that ease product selection and aid in the design process for our customers.”</td>
+    </tr>
+    <tr id="c_8911f44f37">
+      <td class="mono small">c_8911f44f37</td>
+      <td><span class="chip">customer</span></td>
+      <td>Distributors provide a cost-effective means of reaching a broad range of customers while providing efficient logistics services.</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“We believe distributors provide a cost-effective means of reaching a broad range of customers while providing efficient logistics services.”</td>
+    </tr>
+    <tr id="c_d7c9b118ed">
+      <td class="mono small">c_d7c9b118ed</td>
+      <td><span class="chip">competitor</span></td>
+      <td>Some distributors also sell products that compete with our products, including those for which we are an alternate source.</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“Some of them also sell products that compete with our products, including those for which we are an alternate source.”</td>
+    </tr>
+    <tr id="c_787b7f1971">
+      <td class="mono small">c_787b7f1971</td>
+      <td><span class="chip">customer</span></td>
+      <td>We typically do not have long-term sales contracts with our customers.</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“We typically do not have long-term sales contracts with our customers.”</td>
+    </tr>
+    <tr id="c_151b8ee5f9">
+      <td class="mono small">c_151b8ee5f9</td>
+      <td><span class="chip">customer</span></td>
+      <td>In some of our markets where end-user demand may be particularly volatile and difficult to predict, some customers place orders that require us to manufacture product and have it available for shipment, even though the customer is unwilling to make a binding commitment to purchase all, or even any, of the product.</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“In some of our markets where end-user demand may be particularly volatile and difficult to predict, some customers place orders that require us to manufacture product and have it available for shipment, even though the customer is unwilling to make a binding commitment to purchase all, or even any, ”</td>
+    </tr>
+    <tr id="c_433a12b2aa">
+      <td class="mono small">c_433a12b2aa</td>
+      <td><span class="chip">risk</span></td>
+      <td>We may incur inventory and manufacturing costs in advance of anticipated sales and are subject to the risk of cancellation of orders leading to a sharp reduction of sales and backlog.</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“As a result, we may incur inventory and manufacturing costs in advance of anticipated sales and are subject to the risk of cancellation of orders leading to a sharp reduction of sales and backlog.”</td>
+    </tr>
+    <tr id="c_451056f5c1">
+      <td class="mono small">c_451056f5c1</td>
+      <td><span class="chip">financial_commentary</span></td>
+      <td>The breakdown of our annual revenue by end market is set out in the table below: Industrial 45%, Automotive 30%, Consumer 13%, Communications 13%.</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“The breakdown of our annual revenue by end market is set out in the table below: End Market* Percent of Fiscal 2025 Revenue Percent of Fiscal 2024 Revenue Percent of Fiscal 2023 Revenue Industrial 45% 46% 53% Automotive 30% 30% 24% Consumer 13% 13% 10% Communications 13% 12% 13%.”</td>
+    </tr>
+    <tr id="c_f597ccb659">
+      <td class="mono small">c_f597ccb659</td>
+      <td><span class="chip">product</span></td>
+      <td>Analog Devices has developed analog, digital and mixed-signal and power solutions that meet the rigorous cost and time-to-market requirements of the consumer electronics market.</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“we have developed analog, digital and mixed-signal and power solutions that meet the rigorous cost and time-to-market requirements of the consumer electronics market.”</td>
+    </tr>
+    <tr id="c_528b3461f6">
+      <td class="mono small">c_528b3461f6</td>
+      <td><span class="chip">market_driver</span></td>
+      <td>The emergence of high-performance, feature-rich consumer products has created a market for high-performance ICs with a high level of specific functionality.</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“The emergence of high-performance, feature-rich consumer products has created a market for our high-performance ICs with a high level of specific functionality that enables best in class user experience and battery management.”</td>
+    </tr>
+    <tr id="c_73a3780ddd">
+      <td class="mono small">c_73a3780ddd</td>
+      <td><span class="chip">product</span></td>
+      <td>The products include portable devices for media and vital signs monitoring applications.</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“These products include: • Portable devices (smartphones, tablets, handheld gaming and wearable technology) for media and vital signs monitoring applications”</td>
+    </tr>
+    <tr id="c_dcc5a27601">
+      <td class="mono small">c_dcc5a27601</td>
+      <td><span class="chip">competitor</span></td>
+      <td>We believe that competitive performance in the marketplace for integrated circuits depends upon multiple factors, including technological innovation, strength of brand, diversity of product portfolio, product performance, technical support, delivery capabilities, customer service quality, reliability and price, with the relative importance of these factors varying among products, markets and customers.</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“We believe that competitive performance in the marketplace for integrated circuits depends upon multiple factors, including technological innovation, strength of brand, diversity of product portfolio, product performance, technical support, delivery capabilities, customer service quality, reliabilit”</td>
+    </tr>
+    <tr id="c_ecd89666f6">
+      <td class="mono small">c_ecd89666f6</td>
+      <td><span class="chip">competitor</span></td>
+      <td>We compete with a number of semiconductor companies in markets that are highly competitive.</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“We compete with a number of semiconductor companies in markets that are highly competitive.”</td>
+    </tr>
+    <tr id="c_96f5e01899">
+      <td class="mono small">c_96f5e01899</td>
+      <td><span class="chip">competitor</span></td>
+      <td>Some of our competitors may have more advantageous supply or development relationships with our current and potential customers or suppliers.</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“Some of our competitors may have more advantageous supply or development relationships with our current and potential customers or suppliers.”</td>
+    </tr>
+    <tr id="c_00c030ca2e">
+      <td class="mono small">c_00c030ca2e</td>
+      <td><span class="chip">competitor</span></td>
+      <td>Our competitors also include both emerging companies selling specialized products in markets we serve and companies outside of the U.S., including entities associated with well-funded efforts by foreign governments to create indigenous semiconductor industries.</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“Our competitors also include both emerging companies selling specialized products in markets we serve and companies outside of the U.S., including entities associated with well-funded efforts by foreign governments to create indigenous semiconductor industries.”</td>
+    </tr>
+    <tr id="c_3043ec4fa3">
+      <td class="mono small">c_3043ec4fa3</td>
+      <td><span class="chip">technology</span></td>
+      <td>We believe that our technical innovation emphasizing product performance and reliability, supported by our commitment to strong customer service and technical support, enables us to make a fundamental difference to our customers’ competitiveness in our chosen markets.</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“We believe that our technical innovation emphasizing product performance and reliability, supported by our commitment to strong customer service and technical support, enables us to make a fundamental difference to our customers’ competitiveness in our chosen markets.”</td>
+    </tr>
+    <tr id="c_ae17cefd2d">
+      <td class="mono small">c_ae17cefd2d</td>
+      <td><span class="chip">market_driver</span></td>
+      <td>Historically, sales to customers during our first fiscal quarter have been lower than other quarters due to plant shutdowns at some of our customers.</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“Historically, sales to customers during our first fiscal quarter have been lower than other quarters due to plant shutdowns at some of our customers.”</td>
+    </tr>
+    <tr id="c_07f62e77bf">
+      <td class="mono small">c_07f62e77bf</td>
+      <td><span class="chip">risk</span></td>
+      <td>Our revenue is more likely to be influenced on a quarter-to-quarter basis by cyclicality in the semiconductor industry.</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“our revenue is more likely to be influenced on a quarter-to-quarter basis by cyclicality in the semiconductor industry.”</td>
+    </tr>
+    <tr id="c_99876ae855">
+      <td class="mono small">c_99876ae855</td>
+      <td><span class="chip">market_driver</span></td>
+      <td>We believe that a number of factors should be used to assess future customer demand, including backlog, macroeconomic trends, customer insights and current customer bookings as compared to billings (book-to-bill) ratio.</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“We believe that a number of factors should be used to assess future customer demand, including backlog, macroeconomic trends, customer insights and current customer bookings as compared to billings (book-to-bill) ratio.”</td>
+    </tr>
+    <tr id="c_d1e52e5514">
+      <td class="mono small">c_d1e52e5514</td>
+      <td><span class="chip">market_driver</span></td>
+      <td>We define backlog to mean firm orders from a customer or distributor with a requested delivery date within thirteen weeks.</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“We define backlog to mean firm orders from a customer or distributor with a requested delivery date within thirteen weeks.”</td>
+    </tr>
+    <tr id="c_28fba3a9aa">
+      <td class="mono small">c_28fba3a9aa</td>
+      <td><span class="chip">process_step</span></td>
+      <td>We utilize, develop and employ a wide variety of manufacturing processes, primarily based on bipolar and complementary metal-oxide semiconductor (CMOS) transistors, which are specifically tailored for use in fabricating high-performance analog, DSP and mixed-signal ICs.</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“We utilize, develop and employ a wide variety of manufacturing processes, primarily based on bipolar and complementary metal-oxide semiconductor (CMOS) transistors, which are specifically tailored for use in fabricating high-performance analog, DSP and mixed-signal ICs.”</td>
+    </tr>
+    <tr id="c_cdf7d342c0">
+      <td class="mono small">c_cdf7d342c0</td>
+      <td><span class="chip">process_step</span></td>
+      <td>Devices such as MEMS, iCoupler® isolators and various sensors are fabricated using specialized processes, which typically use substantially similar equipment as bipolar and CMOS processes.</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“Devices such as MEMS, iCoupler® isolators and various sensors are fabricated using specialized processes, which typically use substantially similar equipment as bipolar and CMOS processes.”</td>
+    </tr>
+    <tr id="c_f22690c219">
+      <td class="mono small">c_f22690c219</td>
+      <td><span class="chip">company_overview</span></td>
+      <td>We currently source more than half of our wafer requirements annually from third-party wafer fabrication foundries, such as Taiwan Semiconductor Manufacturing Company (TSMC) and others, and the remainder is sourced internally.</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“We currently source more than half of our wafer requirements annually from third-party wafer fabrication foundries, such as Taiwan Semiconductor Manufacturing Company (TSMC) and others, and the remainder is sourced internally.”</td>
+    </tr>
+    <tr id="c_e7aaf6c98e">
+      <td class="mono small">c_e7aaf6c98e</td>
+      <td><span class="chip">geography</span></td>
+      <td>In addition, we operate an assembly, wafer sort and testing facility in Penang, Malaysia and wafer sort and test facilities in the Philippines and Thailand.</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“In addition, we operate an assembly, wafer sort and testing facility in Penang, Malaysia and wafer sort and test facilities in the Philippines and Thailand.”</td>
+    </tr>
+    <tr id="c_adb5dc516f">
+      <td class="mono small">c_adb5dc516f</td>
+      <td><span class="chip">competitor</span></td>
+      <td>We face intense competition in the semiconductor industry, and we expect this competition to increase in the future, including from companies located outside of the United States.</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“We face intense competition in the semiconductor industry, and we expect this competition to increase in the future, including from companies located outside of the United States.”</td>
+    </tr>
+    <tr id="c_4b8b4fe3c6">
+      <td class="mono small">c_4b8b4fe3c6</td>
+      <td><span class="chip">competitor</span></td>
+      <td>Competition is generally based on innovation, design, quality and reliability of products, product performance, features and functionality, product pricing, availability and capacity, technological service and support and the availability of integrated system solutions.</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“Competition is generally based on innovation, design, quality and reliability of products, product performance, features and functionality, product pricing, availability and capacity, technological service and support and the availability of integrated system solutions.”</td>
+    </tr>
+    <tr id="c_4d304e9211">
+      <td class="mono small">c_4d304e9211</td>
+      <td><span class="chip">competitor</span></td>
+      <td>Many companies have sufficient financial, manufacturing, technical, sales and marketing resources to develop and market products that compete with our products.</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“Many companies have sufficient financial, manufacturing, technical, sales and marketing resources to develop and market products that compete with our products.”</td>
+    </tr>
+    <tr id="c_23fa807d13">
+      <td class="mono small">c_23fa807d13</td>
+      <td><span class="chip">competitor</span></td>
+      <td>Our competitors also include both emerging companies selling specialized products in markets we serve and companies outside of the United States, including entities associated with well-funded efforts by foreign governments to create indigenous semiconductor industries.</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“Our competitors also include both emerging companies selling specialized products in markets we serve and companies outside of the United States, including entities associated with well-funded efforts by foreign governments to create indigenous semiconductor industries.”</td>
+    </tr>
+    <tr id="c_27e5718481">
+      <td class="mono small">c_27e5718481</td>
+      <td><span class="chip">competitor</span></td>
+      <td>From time to time, governments around the world may provide incentives or make other investments that could benefit and give competitive advantages to our competitors.</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“From time to time, governments around the world may provide incentives or make other investments that could benefit and give competitive advantages to our competitors.”</td>
+    </tr>
+    <tr id="c_1dd82f7ec3">
+      <td class="mono small">c_1dd82f7ec3</td>
+      <td><span class="chip">risk</span></td>
+      <td>Government incentives, including any that may be offered in connection with the CHIPS Act, may not be available to us on acceptable terms or at all.</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“Government incentives, including any that may be offered in connection with the CHIPS Act, may not be available to us on acceptable terms or at all.”</td>
+    </tr>
+    <tr id="c_adf8cd999b">
+      <td class="mono small">c_adf8cd999b</td>
+      <td><span class="chip">risk</span></td>
+      <td>If our competitors can benefit from such government incentives and we cannot, it could strengthen our competitors’ relative position and have a material adverse effect on our reputation and business.</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“If our competitors can benefit from such government incentives and we cannot, it could strengthen our competitors’ relative position and have a material adverse effect on our reputation and business.”</td>
+    </tr>
+    <tr id="c_0d497f79e3">
+      <td class="mono small">c_0d497f79e3</td>
+      <td><span class="chip">competitor</span></td>
+      <td>Existing or new competitors may develop products or technologies that more effectively address the demands of our customers and markets with enhanced performance, features and functionality, lower power requirements, greater levels of integration or lower cost.</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“Existing or new competitors may develop products or technologies that more effectively address the demands of our customers and markets with enhanced performance, features and functionality, lower power requirements, greater levels of integration or lower cost.”</td>
+    </tr>
+    <tr id="c_40925213dc">
+      <td class="mono small">c_40925213dc</td>
+      <td><span class="chip">risk</span></td>
+      <td>Increased competition in certain markets has resulted in and may continue to result in declining average selling prices, reduced gross margins and loss of market share in those markets.</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“Increased competition in certain markets has resulted in and may continue to result in declining average selling prices, reduced gross margins and loss of market share in those markets.”</td>
+    </tr>
+    <tr id="c_d29a1a4a59">
+      <td class="mono small">c_d29a1a4a59</td>
+      <td><span class="chip">risk</span></td>
+      <td>The United States government is entitled after final payment on certain negotiated contracts to examine all of our cost records with respect to such contracts and to seek a downward adjustment to the price of the contract if it determines that we failed to furnish complete, accurate and current cost or pricing data in connection with the negotiation of the price of the contract.</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“The United States government is entitled after final payment on certain negotiated contracts to examine all of our cost records with respect to such contracts and to seek a downward adjustment to the price of the contract if it determines that we failed to furnish complete, accurate and current cost”</td>
+    </tr>
+    <tr id="c_53a7f7cba6">
+      <td class="mono small">c_53a7f7cba6</td>
+      <td><span class="chip">risk</span></td>
+      <td>In certain circumstances, if we do not comply with the terms of a government contract or with regulations or statutes, we could be subject to downward contract price adjustments or refund obligations or could in extreme circumstances be assessed civil and criminal penalties or be debarred or suspended from obtaining future contracts for a specified period of time.</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“In certain circumstances, if we do not comply with the terms of a government contract or with regulations or statutes, we could be subject to downward contract price adjustments or refund obligations or could in extreme circumstances be assessed civil and criminal penalties or be debarred or suspend”</td>
+    </tr>
+    <tr id="c_a715e9cce5">
+      <td class="mono small">c_a715e9cce5</td>
+      <td><span class="chip">risk</span></td>
+      <td>Under some of our government subcontracts, we are required to maintain secure facilities and to obtain security clearances for personnel involved in performance of the contract, which can be time-consuming and costly.</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“Under some of our government subcontracts, we are required to maintain secure facilities and to obtain security clearances for personnel involved in performance of the contract, which can be time-consuming and costly.”</td>
+    </tr>
+    <tr id="c_aa843342a8">
+      <td class="mono small">c_aa843342a8</td>
+      <td><span class="chip">risk</span></td>
+      <td>If we are unable to comply with these requirements, or if personnel critical to our performance of these contracts are unable to obtain or maintain their security clearances, we may be unable to perform these contracts or compete for other projects of this nature, which could adversely affect our revenue.</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“If we are unable to comply with these requirements, or if personnel critical to our performance of these contracts are unable to obtain or maintain their security clearances, we may be unable to perform these contracts or compete for other projects of this nature, which could adversely affect our re”</td>
+    </tr>
+    <tr id="c_2bfd961cda">
+      <td class="mono small">c_2bfd961cda</td>
+      <td><span class="chip">financial_commentary</span></td>
+      <td>Revenue of $4.02 billion, with year-over-year growth led by Data Center and Industrial</td>
+      <td class="mono small">sec_8k_2026-08-19_ex991</td>
+      <td class="muted small">“Revenue of $4.02 billion, with year-over-year growth led by Data Center and Industrial”</td>
+    </tr>
+    <tr id="c_97a0689716">
+      <td class="mono small">c_97a0689716</td>
+      <td><span class="chip">financial_commentary</span></td>
+      <td>Operating cash flow of $5.5 billion and free cash flow of $4.9 billion on a trailing twelve-month basis or 40% and 36% of revenue, respectively</td>
+      <td class="mono small">sec_8k_2026-08-19_ex991</td>
+      <td class="muted small">“Operating cash flow of $5.5 billion and free cash flow of $4.9 billion on a trailing twelve-month basis or 40% and 36% of revenue, respectively”</td>
+    </tr>
+    <tr id="c_2602cea41e">
+      <td class="mono small">c_2602cea41e</td>
+      <td><span class="chip">financial_commentary</span></td>
+      <td>ADI delivered a strong third quarter, exceeding the midpoint of our revenue, margin, and earnings outlook as we capitalized on broad-based demand</td>
+      <td class="mono small">sec_8k_2026-08-19_ex991</td>
+      <td class="muted small">“ADI delivered a strong third quarter, exceeding the midpoint of our revenue, margin, and earnings outlook as we capitalized on broad-based demand”</td>
+    </tr>
+    <tr id="c_a79e6974aa">
+      <td class="mono small">c_a79e6974aa</td>
+      <td><span class="chip">market_driver</span></td>
+      <td>Demand continued to strengthen across our product portfolio and regions throughout the third quarter</td>
+      <td class="mono small">sec_8k_2026-08-19_ex991</td>
+      <td class="muted small">“Demand continued to strengthen across our product portfolio and regions throughout the third quarter”</td>
+    </tr>
+    <tr id="c_fc605f3081">
+      <td class="mono small">c_fc605f3081</td>
+      <td><span class="chip">strategy</span></td>
+      <td>We believe our balance of disciplined execution and targeted growth investments will enable us to finish the year strongly and carry that momentum into fiscal 2027</td>
+      <td class="mono small">sec_8k_2026-08-19_ex991</td>
+      <td class="muted small">“We believe our balance of disciplined execution and targeted growth investments will enable us to finish the year strongly and carry that momentum into fiscal 2027”</td>
+    </tr>
+    <tr id="c_0c59085a04">
+      <td class="mono small">c_0c59085a04</td>
+      <td><span class="chip">financial_commentary</span></td>
+      <td>Gross margin percentage 67.3 % 62.1 % 520 bps</td>
+      <td class="mono small">sec_8k_2026-08-19_ex991</td>
+      <td class="muted small">“Gross margin percentage 67.3 % 62.1 % 520 bps”</td>
+    </tr>
+    <tr id="c_331d2e4801">
+      <td class="mono small">c_331d2e4801</td>
+      <td><span class="chip">financial_commentary</span></td>
+      <td>Operating income $ 1,613 $ 818 97 %</td>
+      <td class="mono small">sec_8k_2026-08-19_ex991</td>
+      <td class="muted small">“Operating income $ 1,613 $ 818 97 %”</td>
+    </tr>
+    <tr id="c_31a232d396">
+      <td class="mono small">c_31a232d396</td>
+      <td><span class="chip">financial_commentary</span></td>
+      <td>Adjusted gross margin percentage 72.5 % 69.2 % 330 bps</td>
+      <td class="mono small">sec_8k_2026-08-19_ex991</td>
+      <td class="muted small">“Adjusted gross margin percentage 72.5 % 69.2 % 330 bps”</td>
+    </tr>
+    <tr id="c_817cb1ef42">
+      <td class="mono small">c_817cb1ef42</td>
+      <td><span class="chip">financial_commentary</span></td>
+      <td>Adjusted operating income $ 2,010 $ 1,215 65 %</td>
+      <td class="mono small">sec_8k_2026-08-19_ex991</td>
+      <td class="muted small">“Adjusted operating income $ 2,010 $ 1,215 65 %”</td>
+    </tr>
+    <tr id="c_6893a7913b">
+      <td class="mono small">c_6893a7913b</td>
+      <td><span class="chip">financial_commentary</span></td>
+      <td>Adjusted diluted earnings per share $ 3.45 $ 2.05 68 %</td>
+      <td class="mono small">sec_8k_2026-08-19_ex991</td>
+      <td class="muted small">“Adjusted diluted earnings per share $ 3.45 $ 2.05 68 %”</td>
+    </tr>
+    <tr id="c_725ea0b0b3">
+      <td class="mono small">c_725ea0b0b3</td>
+      <td><span class="chip">market_driver</span></td>
+      <td>Revenue from the Industrial end market for the three months ended August 1, 2026, was $1,971,926, which is 49% of total revenue.</td>
+      <td class="mono small">sec_8k_2026-08-19_ex991</td>
+      <td class="muted small">“Industrial $ 1,971,926 49% 53% $ 1,292,988 45%”</td>
+    </tr>
+    <tr id="c_51332799f9">
+      <td class="mono small">c_51332799f9</td>
+      <td><span class="chip">market_driver</span></td>
+      <td>Revenue from the Automotive end market for the three months ended August 1, 2026, was $998,227, which is 25% of total revenue.</td>
+      <td class="mono small">sec_8k_2026-08-19_ex991</td>
+      <td class="muted small">“Automotive 998,227 25% 16% 857,146 30%”</td>
+    </tr>
+    <tr id="c_cbc65a5f6b">
+      <td class="mono small">c_cbc65a5f6b</td>
+      <td><span class="chip">market_driver</span></td>
+      <td>Revenue from the Communications end market for the three months ended August 1, 2026, was $654,515, which is 16% of total revenue.</td>
+      <td class="mono small">sec_8k_2026-08-19_ex991</td>
+      <td class="muted small">“Communications 654,515 16% 84% 354,768 12%”</td>
+    </tr>
+    <tr id="c_0e70ffc36b">
+      <td class="mono small">c_0e70ffc36b</td>
+      <td><span class="chip">market_driver</span></td>
+      <td>Revenue from the Consumer end market for the three months ended August 1, 2026, was $397,231, which is 10% of total revenue.</td>
+      <td class="mono small">sec_8k_2026-08-19_ex991</td>
+      <td class="muted small">“Consumer 397,231 10% 6% 375,446 13%”</td>
+    </tr>
+    <tr id="c_e5dfc2302d">
+      <td class="mono small">c_e5dfc2302d</td>
+      <td><span class="chip">financial_commentary</span></td>
+      <td>Total revenue for the three months ended August 1, 2026, was $4,021,899.</td>
+      <td class="mono small">sec_8k_2026-08-19_ex991</td>
+      <td class="muted small">“Total revenue $ 4,021,899 100% 40% $ 2,880,348 100%”</td>
+    </tr>
+    <tr id="c_7f24cebed2">
+      <td class="mono small">c_7f24cebed2</td>
+      <td><span class="chip">financial_commentary</span></td>
+      <td>Gross margin for the three months ended August 1, 2026, was $2,707,544, which is 67.3% of total revenue.</td>
+      <td class="mono small">sec_8k_2026-08-19_ex991</td>
+      <td class="muted small">“Gross margin $ 2,707,544 $ 1,789,748 $ 7,192,318 $ 4,831,661 Gross margin percentage 67.3 % 62.1 % 66.6 % 60.8 %”</td>
+    </tr>
+    <tr id="c_2afd81e7b9">
+      <td class="mono small">c_2afd81e7b9</td>
+      <td><span class="chip">financial_commentary</span></td>
+      <td>Adjusted gross margin for the three months ended August 1, 2026, was $2,916,736, which is 72.5% of total revenue.</td>
+      <td class="mono small">sec_8k_2026-08-19_ex991</td>
+      <td class="muted small">“Adjusted gross margin $ 2,916,736 $ 1,994,504 $ 7,811,722 $ 5,494,526 Adjusted gross margin percentage 72.5 % 69.2 % 72.3 % 69.2 %”</td>
+    </tr>
+    <tr id="c_8678558140">
+      <td class="mono small">c_8678558140</td>
+      <td><span class="chip">financial_commentary</span></td>
+      <td>Operating income for the three months ended August 1, 2026, was $1,612,969, which is 40.1% of total revenue.</td>
+      <td class="mono small">sec_8k_2026-08-19_ex991</td>
+      <td class="muted small">“Operating income $ 1,612,969 $ 818,028 $ 3,989,675 $ 1,987,285 Operating margin 40.1 % 28.4 % 36.9 % 25.0 %”</td>
+    </tr>
+    <tr id="c_a285bfa7e1">
+      <td class="mono small">c_a285bfa7e1</td>
+      <td><span class="chip">financial_commentary</span></td>
+      <td>Adjusted operating income for the three months ended August 1, 2026, was $2,009,930, which is 50.0% of total revenue.</td>
+      <td class="mono small">sec_8k_2026-08-19_ex991</td>
+      <td class="muted small">“Adjusted operating income $ 2,009,930 $ 1,215,147 $ 5,221,325 $ 3,284,175 Adjusted operating margin 50.0 % 42.2 % 48.3 % 41.3 %”</td>
+    </tr>
+    <tr id="c_6e2af50024">
+      <td class="mono small">c_6e2af50024</td>
+      <td><span class="chip">financial_commentary</span></td>
+      <td>Revenue of $3.62 billion, with year-over-year growth across all end markets, led by Industrial and Communications</td>
+      <td class="mono small">sec_8k_2026-05-20_ex991</td>
+      <td class="muted small">“Revenue of $3.62 billion, with year-over-year growth across all end markets, led by Industrial and Communications”</td>
+    </tr>
+    <tr id="c_43fef405bc">
+      <td class="mono small">c_43fef405bc</td>
+      <td><span class="chip">financial_commentary</span></td>
+      <td>Operating cash flow of $5.1 billion and free cash flow of $4.6 billion on a trailing twelve-month basis or 40% and 36% of revenue, respectively</td>
+      <td class="mono small">sec_8k_2026-05-20_ex991</td>
+      <td class="muted small">“Operating cash flow of $5.1 billion and free cash flow of $4.6 billion on a trailing twelve-month basis or 40% and 36% of revenue, respectively”</td>
+    </tr>
+    <tr id="c_674c905bd2">
+      <td class="mono small">c_674c905bd2</td>
+      <td><span class="chip">financial_commentary</span></td>
+      <td>ADI’s second quarter revenue and earnings were above the high end of our outlook, reflecting the combination of record demand and sharp operational discipline</td>
+      <td class="mono small">sec_8k_2026-05-20_ex991</td>
+      <td class="muted small">“ADI’s second quarter revenue and earnings were above the high end of our outlook, reflecting the combination of record demand and sharp operational discipline”</td>
+    </tr>
+    <tr id="c_ebe0d2ee42">
+      <td class="mono small">c_ebe0d2ee42</td>
+      <td><span class="chip">market_driver</span></td>
+      <td>We continued to see growing demand in the second quarter with record bookings across our B2B markets of Industrial, Automotive, and Communications</td>
+      <td class="mono small">sec_8k_2026-05-20_ex991</td>
+      <td class="muted small">“We continued to see growing demand in the second quarter with record bookings across our B2B markets of Industrial, Automotive, and Communications”</td>
+    </tr>
+    <tr id="c_b3a7366adb">
+      <td class="mono small">c_b3a7366adb</td>
+      <td><span class="chip">financial_commentary</span></td>
+      <td>These positive demand signals are reflected in our outlook for continued strong growth in the third quarter</td>
+      <td class="mono small">sec_8k_2026-05-20_ex991</td>
+      <td class="muted small">“These positive demand signals are reflected in our outlook for continued strong growth in the third quarter”</td>
+    </tr>
+    <tr id="c_bb94b0cd50">
+      <td class="mono small">c_bb94b0cd50</td>
+      <td><span class="chip">financial_commentary</span></td>
+      <td>Diluted earnings per share $ 2.40 $ 1.14 111 %</td>
+      <td class="mono small">sec_8k_2026-05-20_ex991</td>
+      <td class="muted small">“Diluted earnings per share $ 2.40 $ 1.14 111 %”</td>
+    </tr>
+    <tr id="c_a632b9cd37">
+      <td class="mono small">c_a632b9cd37</td>
+      <td><span class="chip">financial_commentary</span></td>
+      <td>Adjusted diluted earnings per share $ 3.09 $ 1.85 67 %</td>
+      <td class="mono small">sec_8k_2026-05-20_ex991</td>
+      <td class="muted small">“Adjusted diluted earnings per share $ 3.09 $ 1.85 67 %”</td>
+    </tr>
+    <tr id="c_5fd3be878d">
+      <td class="mono small">c_5fd3be878d</td>
+      <td><span class="chip">market_driver</span></td>
+      <td>Revenue from the Industrial end market for the three months ended May 2, 2026, was $1,799,413, which is 50% of total revenue.</td>
+      <td class="mono small">sec_8k_2026-05-20_ex991</td>
+      <td class="muted small">“$ 1,799,413 50% 56% $ 1,150,315 44%”</td>
+    </tr>
+    <tr id="c_044ad5dac7">
+      <td class="mono small">c_044ad5dac7</td>
+      <td><span class="chip">market_driver</span></td>
+      <td>Revenue from the Automotive end market for the three months ended May 2, 2026, was $871,565, which is 24% of total revenue.</td>
+      <td class="mono small">sec_8k_2026-05-20_ex991</td>
+      <td class="muted small">“Automotive
+871,565 24% 2% 856,090 32%”</td>
+    </tr>
+    <tr id="c_e4671ac5a5">
+      <td class="mono small">c_e4671ac5a5</td>
+      <td><span class="chip">market_driver</span></td>
+      <td>Revenue from the Communications end market for the three months ended May 2, 2026, was $554,728, which is 15% of total revenue.</td>
+      <td class="mono small">sec_8k_2026-05-20_ex991</td>
+      <td class="muted small">“Communications 554,728 15% 79% 310,604 12%”</td>
+    </tr>
+    <tr id="c_6fb0f97e03">
+      <td class="mono small">c_6fb0f97e03</td>
+      <td><span class="chip">market_driver</span></td>
+      <td>Revenue from the Consumer end market for the three months ended May 2, 2026, was $397,759, which is 11% of total revenue.</td>
+      <td class="mono small">sec_8k_2026-05-20_ex991</td>
+      <td class="muted small">“Consumer 397,759 11% 23% 323,059 12%”</td>
+    </tr>
+    <tr id="c_5c94178a1f">
+      <td class="mono small">c_5c94178a1f</td>
+      <td><span class="chip">financial_commentary</span></td>
+      <td>Total revenue for the three months ended May 2, 2026, was $3,623,465.</td>
+      <td class="mono small">sec_8k_2026-05-20_ex991</td>
+      <td class="muted small">“Total revenue $ 3,623,465 100% 37% $ 2,640,068 100%”</td>
+    </tr>
+    <tr id="c_17731b4510">
+      <td class="mono small">c_17731b4510</td>
+      <td><span class="chip">financial_commentary</span></td>
+      <td>Gross margin for the three months ended May 2, 2026, was $2,439,798, which is 67.3% of total revenue.</td>
+      <td class="mono small">sec_8k_2026-05-20_ex991</td>
+      <td class="muted small">“Gross margin $ 2,439,798 $ 1,611,610 $ 4,484,773 $ 3,041,913
+Gross margin percentage 67.3 % 61.0 % 66.1 % 60.1 %”</td>
+    </tr>
+    <tr id="c_36e35a3b4d">
+      <td class="mono small">c_36e35a3b4d</td>
+      <td><span class="chip">financial_commentary</span></td>
+      <td>Operating income for the three months ended May 2, 2026, was $1,379,680, with an operating margin of 38.1%.</td>
+      <td class="mono small">sec_8k_2026-05-20_ex991</td>
+      <td class="muted small">“Operating income $ 1,379,680 $ 677,944 $ 2,376,705 $ 1,169,257
+Operating margin 38.1 % 25.7 % 35.0 % 23.1 %”</td>
+    </tr>
+    <tr id="c_f6830dee0a">
+      <td class="mono small">c_f6830dee0a</td>
+      <td><span class="chip">financial_commentary</span></td>
+      <td>Adjusted operating income for the three months ended May 2, 2026, was $1,773,726, with an adjusted operating margin of 49.0%.</td>
+      <td class="mono small">sec_8k_2026-05-20_ex991</td>
+      <td class="muted small">“Adjusted operating income $ 1,773,726 $ 1,087,981 $ 3,211,394 $ 2,069,028
+Adjusted operating margin 49.0 % 41.2 % 47.3 % 40.9 %”</td>
+    </tr>
+    <tr id="c_337e4357cb">
+      <td class="mono small">c_337e4357cb</td>
+      <td><span class="chip">financial_commentary</span></td>
+      <td>Income before income taxes for the three months ended May 2, 2026, was $1,324,828.</td>
+      <td class="mono small">sec_8k_2026-05-20_ex991</td>
+      <td class="muted small">“Income before income taxes $ 1,324,828 $ 625,928 $ 2,270,699 $ 1,061,504”</td>
+    </tr>
+    <tr id="c_d9d74d4501">
+      <td class="mono small">c_d9d74d4501</td>
+      <td><span class="chip">financial_commentary</span></td>
+      <td>The effective income tax rate for the three months ended May 2, 2026, was 11.2%.</td>
+      <td class="mono small">sec_8k_2026-05-20_ex991</td>
+      <td class="muted small">“Effective income tax rate 11.2 % 9.0 % 11.6 % 9.5 %”</td>
+    </tr>
+  </tbody>
+</table>
+</section>
+
+<footer>
+  <p class="muted small">
+    Generated 2026-09-26 15:10 UTC.
+    Deterministic financials from SEC XBRL; qualitative claims from language models,
+    each gated on a verbatim source quote. Peer-filing claims are typed INFERENCE
+    and kept in a separate ledger.
+  </p>
+</footer>
+
+</div>
+<script>
+// Ledger filter. Tiny and dependency-free: the ledger is the audit trail, so being
+// able to search it matters more than any interactive flourish.
+(function () {
+  var input = document.getElementById('ledgerFilter');
+  if (!input) return;
+  var rows = Array.prototype.slice.call(
+    document.querySelectorAll('#ledger tbody tr')
+  );
+  input.addEventListener('input', function () {
+    var q = input.value.trim().toLowerCase();
+    rows.forEach(function (r) {
+      r.style.display = !q || r.textContent.toLowerCase().indexOf(q) !== -1 ? '' : 'none';
+    });
+  });
+})();
+</script>
+</body>
+</html>

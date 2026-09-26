@@ -1,0 +1,1300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ADVANCED MICRO DEVICES INC (AMD) — Semiconductor Intelligence Report</title>
+<style>
+/* Shared stylesheet for the static report site.
+   Inlined into every page so each HTML file is standalone and can be sent as-is.
+   System fonts only - no network request, works offline. */
+
+:root {
+  --bg: #f6f7f9;
+  --panel: #ffffff;
+  --ink: #14181f;
+  --muted: #5d6875;
+  --line: #e2e5ea;
+  --accent: #1f5f9e;
+  --fact: #1d7a4c;
+  --analysis: #8a6100;
+  --inference: #8a3d8a;
+  --neg: #b3261e;
+  --pos: #1d7a4c;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font: 15px/1.6 -apple-system, BlinkMacSystemFont, &#34;Segoe UI&#34;, Roboto,
+        &#34;Helvetica Neue&#34;, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+.wrap { max-width: 1100px; margin: 0 auto; padding: 32px 20px 80px; }
+
+/* ---------- masthead ---------- */
+.masthead { border-bottom: 2px solid var(--ink); padding-bottom: 14px; margin-bottom: 22px; }
+.masthead h1 { margin: 6px 0 2px; font-size: 27px; letter-spacing: -0.01em; }
+.masthead .sub { margin: 0; color: var(--muted); font-size: 14px; }
+.masthead .ticker {
+  font-size: 14px; font-weight: 600; color: var(--accent);
+  border: 1px solid var(--accent); border-radius: 4px;
+  padding: 1px 7px; vertical-align: 3px;
+}
+a.back { color: var(--accent); text-decoration: none; font-size: 13px; }
+a.back:hover { text-decoration: underline; }
+
+/* ---------- stat bar ---------- */
+.bar {
+  display: flex; flex-wrap: wrap; gap: 10px; margin: 0 0 20px;
+}
+.stat {
+  flex: 1 1 150px; background: var(--panel); border: 1px solid var(--line);
+  border-radius: 8px; padding: 12px 14px;
+}
+.stat b { display: block; font-size: 21px; letter-spacing: -0.02em; }
+.stat b small { font-size: 13px; color: var(--muted); font-weight: 500; }
+.stat span { color: var(--muted); font-size: 12px; text-transform: uppercase; letter-spacing: 0.04em; }
+
+/* ---------- sections ---------- */
+section {
+  background: var(--panel); border: 1px solid var(--line); border-radius: 10px;
+  padding: 20px 22px; margin-bottom: 18px;
+}
+h2 {
+  font-size: 18px; margin: 0 0 14px; padding-bottom: 9px;
+  border-bottom: 1px solid var(--line); letter-spacing: -0.01em;
+}
+h2 .n {
+  display: inline-block; min-width: 22px; height: 22px; line-height: 22px;
+  margin-right: 8px; text-align: center; font-size: 12px;
+  background: var(--ink); color: #fff; border-radius: 5px; vertical-align: 2px;
+}
+h3 { font-size: 14px; margin: 20px 0 8px; text-transform: uppercase;
+     letter-spacing: 0.05em; color: var(--muted); }
+h3:first-of-type { margin-top: 4px; }
+h4 { margin: 0 0 5px; font-size: 15px; }
+
+p { margin: 0 0 9px; }
+.muted { color: var(--muted); }
+.small { font-size: 12.5px; }
+.mono { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+.num { text-align: right; font-variant-numeric: tabular-nums; }
+.pos { color: var(--pos); }
+.neg { color: var(--neg); }
+
+/* ---------- tables ---------- */
+table { width: 100%; border-collapse: collapse; margin: 6px 0 10px; font-size: 14px; }
+th {
+  text-align: left; font-size: 11.5px; text-transform: uppercase;
+  letter-spacing: 0.05em; color: var(--muted); font-weight: 600;
+  border-bottom: 1px solid var(--line); padding: 7px 9px;
+}
+td { padding: 8px 9px; border-bottom: 1px solid var(--line); vertical-align: top; }
+tr:last-child td { border-bottom: none; }
+tr.sub td { background: #fafbfc; font-style: italic; }
+tbody tr:target { background: #fff6d9; }
+
+/* ---------- cards / lists ---------- */
+.grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 12px; }
+.card {
+  border: 1px solid var(--line); border-radius: 8px; padding: 13px 15px;
+  background: #fcfcfd;
+}
+.card p:last-child { margin-bottom: 0; }
+ul.claims { margin: 0; padding-left: 18px; }
+ul.claims li { margin-bottom: 8px; }
+.two { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.two ul { margin: 4px 0 0; padding-left: 18px; }
+
+dl.kv { display: grid; grid-template-columns: 190px 1fr; gap: 4px 14px; margin: 0 0 12px; }
+dl.kv dt { color: var(--muted); font-size: 13px; }
+dl.kv dd { margin: 0; }
+
+/* ---------- inline badges ---------- */
+.tag {
+  display: inline-block; font-size: 10.5px; font-weight: 700; letter-spacing: 0.05em;
+  text-transform: uppercase; padding: 1px 6px; border-radius: 4px;
+  vertical-align: 1px; white-space: nowrap;
+}
+.tag.fact { background: #e6f4ec; color: var(--fact); }
+.tag.analysis { background: #fdf3dd; color: var(--analysis); }
+.tag.inference { background: #f7e9f7; color: var(--inference); }
+.tag.disclosed { background: #e6f4ec; color: var(--fact); }
+
+.chip {
+  display: inline-block; font-size: 12px; background: #eef1f5; color: #3c4753;
+  border-radius: 20px; padding: 2px 10px; margin: 0 4px 4px 0;
+}
+.chips { margin: 6px 0; }
+
+a.cid {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 11.5px; color: var(--accent); text-decoration: none;
+  border-bottom: 1px dotted var(--accent);
+}
+a.cid:hover { background: #eaf2fa; }
+.srcs { margin: 7px 0 0; }
+.srcs a.cid { margin-right: 5px; }
+
+/* ---------- callouts ---------- */
+.callout {
+  background: #eef4fa; border-left: 3px solid var(--accent);
+  padding: 11px 14px; border-radius: 0 6px 6px 0; margin: 0 0 18px; font-size: 13.5px;
+}
+.callout.warn { background: #fdf6e6; border-left-color: #c8901c; }
+
+/* ---------- ledger filter ---------- */
+input[type=&#34;search&#34;] {
+  width: 100%; padding: 8px 11px; font-size: 14px; margin: 4px 0 10px;
+  border: 1px solid var(--line); border-radius: 7px; background: #fff;
+  font-family: inherit;
+}
+input[type=&#34;search&#34;]:focus { outline: 2px solid #b9d4ec; border-color: var(--accent); }
+
+footer { margin-top: 26px; padding-top: 14px; border-top: 1px solid var(--line); }
+
+@media (max-width: 620px) {
+  .two { grid-template-columns: 1fr; }
+  dl.kv { grid-template-columns: 1fr; }
+  dl.kv dt { margin-top: 6px; }
+}
+
+/* Stale-data banner: an issuer whose newest SEC filing is years old must be
+   impossible to mistake for current intelligence. */
+.callout.stale {
+  background: #fdecea;
+  border-left-color: var(--neg);
+  border-left-width: 4px;
+}
+
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="masthead">
+  <a class="back" href="index.html">&larr; All companies</a>
+  <h1>ADVANCED MICRO DEVICES INC <span class="ticker">AMD</span></h1>
+  <p class="sub">Semiconductor Company Intelligence Report</p>
+</header>
+
+
+
+<section class="bar">
+  <div class="stat"><b>84</b><span>verified claims</span></div>
+  <div class="stat"><b>16<small>/16</small></b><span>sources</span></div>
+  <div class="stat"><b>7<small>/7</small></b><span>categories at target</span></div>
+  <div class="stat"><b>2026-06-27</b><span>data as of</span></div>
+</section>
+
+<div class="callout">
+  <strong>How to read this.</strong> Claims are tagged
+  <span class="tag fact">FACT</span> (stated in a cited filing),
+  <span class="tag analysis">ANALYSIS</span> (reasoned across facts) or
+  <span class="tag inference">INFERENCE</span> (reasoned with a stated chain).
+  Every factual assertion carries a claim ID, resolvable in the Evidence Ledger.
+  No investment recommendation is made.
+</div>
+
+<section>
+<h2><span class="n">1</span> Company Overview</h2>
+<dl class="kv">
+  <dt>Value chain position</dt><dd>AMD is positioned as a designer and provider of high-performance computing and AI solutions, including CPUs, GPUs, and SoCs, with a focus on innovation in AI and high-performance computing.</dd>
+  <dt>Ticker / CIK</dt><dd>AMD / 0000002488</dd>
+  <dt>Fiscal year end</dt><dd>month 12-26</dd>
+</dl>
+<ul class="claims">
+  <li>AMD drives innovation in high performance and AI computing to solve the world’s most important challenges. <a class="cid" href="#c_dd0d47733d">c_dd0d47733d</a></li>
+  <li>AMD technology powers billions of experiences across cloud and AI infrastructure, embedded systems, AI PCs and gaming. <a class="cid" href="#c_6ec83eca4d">c_6ec83eca4d</a></li>
+</ul>
+</section>
+
+
+<section>
+<h2><span class="n">2</span> Product &amp; Technology</h2>
+
+<h3>Business segments</h3>
+<table>
+  <thead><tr><th>Segment</th><th class="num">Revenue</th><th class="num">% of total</th><th class="num">YoY</th><th>Basis</th></tr></thead>
+  <tbody>
+    <tr>
+      <td>Data Center<div class="muted small">Provides AI accelerators, CPUs, GPUs, DPUs, AI NICs, and FPGAs for data centers.</div></td>
+      <td class="num">n/a</td>
+      <td class="num">n/a</td>
+      <td class="num ">n/a</td>
+      <td class="muted small">No segment revenue row matched</td>
+    </tr>
+    <tr>
+      <td>Client and Gaming<div class="muted small">Offers CPUs, APUs, and chipsets for desktops and notebooks, focusing on performance, efficiency, AI capabilities, and security.</div></td>
+      <td class="num">n/a</td>
+      <td class="num">n/a</td>
+      <td class="num ">n/a</td>
+      <td class="muted small">No segment revenue row matched</td>
+    </tr>
+    <tr>
+      <td>Embedded<div class="muted small">Delivers high-performance, scalable solutions across CPUs, APUs, FPGAs, SOMs, and adaptive SoCs for various markets.</div></td>
+      <td class="num">n/a</td>
+      <td class="num">n/a</td>
+      <td class="num ">n/a</td>
+      <td class="muted small">No segment revenue row matched</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3>Process steps</h3>
+<p class="chips"><span class="chip">Lithography</span><span class="chip">Process Control</span><span class="chip">Materials Engineering</span></p>
+
+<h3>Products</h3>
+<div class="grid">
+  <div class="card">
+    <h4>AMD EPYC™ Processors</h4>
+<p class="muted small">Microprocessors</p><p>High-performance processors for data centers.</p><p class="chips"><span class="chip">Lithography</span><span class="chip">Process Control</span><span class="chip">Materials Engineering</span></p><p class="muted small">Technologies: AMD Infinity Fabric™</p>    <p class="srcs"><a class="cid" href="#c_209d974441">c_209d974441</a></p>
+  </div>
+  <div class="card">
+    <h4>AMD Radeon™ GPUs</h4>
+<p class="muted small">Graphics Processing Units</p><p>GPUs for gaming and AI workloads.</p><p class="chips"><span class="chip">Lithography</span><span class="chip">Process Control</span><span class="chip">Materials Engineering</span></p><p class="muted small">Technologies: AMD RDNA 4</p>    <p class="srcs"><a class="cid" href="#c_a91cb79cbb">c_a91cb79cbb</a></p>
+  </div>
+  <div class="card">
+    <h4>AMD Instinct™ GPU Accelerators</h4>
+<p class="muted small">AI Accelerators</p><p>GPU accelerators for AI and machine learning workloads.</p><p class="chips"><span class="chip">Lithography</span><span class="chip">Process Control</span><span class="chip">Materials Engineering</span></p><p class="muted small">Technologies: AMD Infinity Fabric™</p>    <p class="srcs"><a class="cid" href="#c_209d974441">c_209d974441</a></p>
+  </div>
+</div>
+
+<h3>Technologies</h3>
+<ul class="claims">
+  <li><b>Neural Processing Unit (NPU)</b> — Integrated NPU on x86 SoC for AI PCs.<div class="muted small">Differentiator: First to integrate NPU on x86 SoC.</div>    <span class="srcs"><a class="cid" href="#c_3469e7e382">c_3469e7e382</a></span>
+  </li>
+  <li><b>AMD Infinity Fabric™</b> — A high-bandwidth, low-latency interconnect technology.<div class="muted small">Differentiator: Supports custom-design silicon.</div>    <span class="srcs"><a class="cid" href="#c_66899e8993">c_66899e8993</a></span>
+  </li>
+</ul>
+</section>
+
+<section>
+<h2><span class="n">3</span> Market Drivers</h2>
+<div class="grid">
+  <div class="card">
+    <h4>AI infrastructure <span class="tag fact">FACT</span></h4>
+    <p>AMD provides AI-optimized CPUs, GPUs, and accelerators for AI workloads.</p>
+<p class="muted small">Exposure: High</p>    <p class="srcs"><a class="cid" href="#c_c3ef243a8d">c_c3ef243a8d</a><a class="cid" href="#c_5d1ca8db53">c_5d1ca8db53</a></p>
+  </div>
+  <div class="card">
+    <h4>Gaming <span class="tag fact">FACT</span></h4>
+    <p>AMD is a market leader in semi-custom game console products.</p>
+<p class="muted small">Exposure: High</p>    <p class="srcs"><a class="cid" href="#c_7460672b6d">c_7460672b6d</a></p>
+  </div>
+</div>
+
+<h3>Growth drivers</h3>
+<ul class="claims">
+  <li>Demand for AI and high-performance computing <span class="tag fact">FACT</span>
+    <span class="srcs"><a class="cid" href="#c_c3ef243a8d">c_c3ef243a8d</a><a class="cid" href="#c_5d1ca8db53">c_5d1ca8db53</a></span></li>
+  <li>Gaming market expansion <span class="tag fact">FACT</span>
+    <span class="srcs"><a class="cid" href="#c_7460672b6d">c_7460672b6d</a></span></li>
+</ul>
+</section>
+
+<section>
+<h2><span class="n">4</span> Customer Analysis</h2>
+<div class="card">
+  <h4>Hyperscale data centers
+<span class="tag disclosed">disclosed</span>
+  </h4>
+<p><b>Value created:</b> Customized solutions for AI and data processing.</p>  <div class="two">
+<div><b>Requirements</b><ul><li>High-performance computing</li><li>AI capabilities</li></ul></div><div><b>Pain points</b><ul><li>Scalability</li><li>Energy efficiency</li></ul></div>  </div>
+  <p class="srcs"><a class="cid" href="#c_ed23f75d8d">c_ed23f75d8d</a></p>
+</div>
+<div class="card">
+  <h4>PC OEMs
+<span class="tag disclosed">disclosed</span>
+  </h4>
+<p><b>Value created:</b> High-performance CPUs and APUs for desktops and notebooks.</p>  <div class="two">
+<div><b>Requirements</b><ul><li>Performance</li><li>Efficiency</li><li>Security</li></ul></div><div><b>Pain points</b><ul><li>Cost</li><li>Integration</li></ul></div>  </div>
+  <p class="srcs"><a class="cid" href="#c_42015679cb">c_42015679cb</a></p>
+</div>
+</section>
+
+<section>
+<h2><span class="n">5</span> Competitive Landscape</h2>
+<table>
+  <thead><tr><th>Competitor</th><th>Basis</th><th>Product overlap</th><th>Technology positioning</th><th>Market exposure</th></tr></thead>
+  <tbody>
+    <tr>
+      <td><b>Nvidia</b></td>
+      <td><span class="tag analysis">industry</span></td>
+      <td>Discrete GPUs</td>
+      <td>Market share leader in discrete GPUs</td>
+      <td>High in graphics and AI</td>
+    </tr>
+    <tr>
+      <td><b>Intel</b></td>
+      <td><span class="tag analysis">industry</span></td>
+      <td>Embedded CPUs</td>
+      <td>Main competitor in embedded CPUs</td>
+      <td>High in CPUs and integrated graphics</td>
+    </tr>
+  </tbody>
+</table>
+<div class="grid">
+  <div class="card">
+    <h4>Nvidia <span class="tag analysis">industry</span></h4>
+<p><b>Strengths:</b> Performance; Market share</p><p><b>Potential weaknesses:</b> Integration with CPUs</p>    <p class="srcs"><a class="cid" href="#c_7875d47828">c_7875d47828</a></p>
+  </div>
+  <div class="card">
+    <h4>Intel <span class="tag analysis">industry</span></h4>
+<p><b>Strengths:</b> Brand recognition; Integration</p><p><b>Potential weaknesses:</b> Discrete GPU market share</p>    <p class="srcs"><a class="cid" href="#c_1ede0633bb">c_1ede0633bb</a></p>
+  </div>
+</div>
+</section>
+
+<section>
+<h2><span class="n">6</span> Business Analysis</h2>
+<table>
+  <thead><tr><th>Metric</th><th class="num">Latest FY</th><th class="num">YoY</th><th>Period</th><th>Source concept</th></tr></thead>
+  <tbody>
+    <tr>
+      <td>revenue</td>
+      <td class="num">34.6B</td>
+      <td class="num pos">+34.3%</td>
+      <td class="muted small">FY2025</td>
+      <td class="muted small mono">us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax</td>
+    </tr>
+    <tr>
+      <td>cost_of_revenue</td>
+      <td class="num">17.5B</td>
+      <td class="num pos">+33.9%</td>
+      <td class="muted small">FY2025</td>
+      <td class="muted small mono">us-gaap:CostOfGoodsAndServicesSold</td>
+    </tr>
+    <tr>
+      <td>gross_profit</td>
+      <td class="num">17.2B</td>
+      <td class="num pos">+34.8%</td>
+      <td class="muted small">FY2025</td>
+      <td class="muted small mono">us-gaap:GrossProfit</td>
+    </tr>
+    <tr>
+      <td>rd_expense</td>
+      <td class="num">8.1B</td>
+      <td class="num pos">+25.3%</td>
+      <td class="muted small">FY2025</td>
+      <td class="muted small mono">us-gaap:ResearchAndDevelopmentExpense</td>
+    </tr>
+    <tr>
+      <td>sga_expense</td>
+      <td class="num">4.1B</td>
+      <td class="num pos">+48.9%</td>
+      <td class="muted small">FY2025</td>
+      <td class="muted small mono">us-gaap:SellingGeneralAndAdministrativeExpense</td>
+    </tr>
+    <tr>
+      <td>operating_income</td>
+      <td class="num">3.7B</td>
+      <td class="num pos">+94.4%</td>
+      <td class="muted small">FY2025</td>
+      <td class="muted small mono">us-gaap:OperatingIncomeLoss</td>
+    </tr>
+    <tr>
+      <td>net_income</td>
+      <td class="num">4.3B</td>
+      <td class="num pos">+164.2%</td>
+      <td class="muted small">FY2025</td>
+      <td class="muted small mono">us-gaap:NetIncomeLoss</td>
+    </tr>
+    <tr>
+      <td>diluted_eps</td>
+      <td class="num">$2.65</td>
+      <td class="num pos">+165.0%</td>
+      <td class="muted small">FY2025</td>
+      <td class="muted small mono">us-gaap:EarningsPerShareDiluted</td>
+    </tr>
+    <tr>
+      <td>operating_cash_flow</td>
+      <td class="num">7.7B</td>
+      <td class="num pos">+153.5%</td>
+      <td class="muted small">FY2025</td>
+      <td class="muted small mono">us-gaap:NetCashProvidedByUsedInOperatingActivities</td>
+    </tr>
+    <tr>
+      <td>capex</td>
+      <td class="num">974.0M</td>
+      <td class="num pos">+53.1%</td>
+      <td class="muted small">FY2025</td>
+      <td class="muted small mono">us-gaap:PaymentsToAcquirePropertyPlantAndEquipment</td>
+    </tr>
+    <tr>
+      <td>inventory</td>
+      <td class="num">8.5B</td>
+      <td class="num ">n/a</td>
+      <td class="muted small">FY2026 (instant)</td>
+      <td class="muted small mono">us-gaap:InventoryNet</td>
+    </tr>
+    <tr>
+      <td>deferred_revenue</td>
+      <td class="num">2.0M</td>
+      <td class="num ">n/a</td>
+      <td class="muted small">FY2019 (instant)</td>
+      <td class="muted small mono">us-gaap:ContractWithCustomerLiabilityCurrent</td>
+    </tr>
+    <tr>
+      <td>shares_diluted</td>
+      <td class="num">1,636.0M shares</td>
+      <td class="num neg">-0.1%</td>
+      <td class="muted small">FY2025</td>
+      <td class="muted small mono">us-gaap:WeightedAverageNumberOfDilutedSharesOutstanding</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3>Revenue trend</h3>
+<table>
+  <thead><tr><th>Period</th><th class="num">Revenue</th></tr></thead>
+  <tbody>
+    <tr><td>FY2025</td><td class="num">34.6B</td></tr>
+    <tr><td>FY2024</td><td class="num">25.8B</td></tr>
+    <tr><td>FY2023</td><td class="num">22.7B</td></tr>
+    <tr><td>FY2022</td><td class="num">23.6B</td></tr>
+    <tr><td>FY2021</td><td class="num">16.4B</td></tr>
+    <tr><td>FY2020</td><td class="num">9.8B</td></tr>
+    <tr><td>FY2019</td><td class="num">6.7B</td></tr>
+    <tr><td>FY2018</td><td class="num">6.5B</td></tr>
+  </tbody>
+</table>
+
+<h3>Management commentary</h3>
+<ul class="claims">
+<li>Through our R&amp;D efforts, we were able to introduce a number of new products and enhance our IP core offerings and software. <a class="cid" href="#c_d969b4f6f9">c_d969b4f6f9</a></li><li>In 2025, net revenue increased 34% to $34.6 billion, compared to $25.8 billion in 2024. <a class="cid" href="#c_58f5ee8e51">c_58f5ee8e51</a></li><li>Data Center net revenue of $16.6 billion increased by 32% compared to $12.6 billion in 2024. <a class="cid" href="#c_c4e5bc94ff">c_c4e5bc94ff</a></li><li>Client and Gaming segment net revenue of $14.6 billion in 2025 increased by 51% compared to $9.6 billion in 2024. <a class="cid" href="#c_0596028038">c_0596028038</a></li><li>Embedded net revenue of $3.5 billion decreased by 3% compared to net revenue of $3.6 billion in 2024. <a class="cid" href="#c_25049d1e7c">c_25049d1e7c</a></li><li>Gross margin of 50% increased by 1% compared to 49% in 2024. <a class="cid" href="#c_a676462f8e">c_a676462f8e</a></li><li>Cash, cash equivalents and short-term investments as of December 27, 2025 were $10.6 billion, compared to $5.1 billion at the end of 2024. <a class="cid" href="#c_8fc0b41616">c_8fc0b41616</a></li><li>The aggregate principal amount of total debt as of December 27, 2025 was $3.3 billion, compared to $1.8 billion as of December 28, 2024. <a class="cid" href="#c_cb945e180c">c_cb945e180c</a></li><li>In 2025, we returned a total of $1.3 billion to shareholders through the repurchase of 12.4 million shares of common stock under our stock repurchase program. <a class="cid" href="#c_fc3ba3d3f6">c_fc3ba3d3f6</a></li><li>AMD completed the acquisition of ZT Systems for $3.2 billion in cash and 8.3 million shares of its common stock. <a class="cid" href="#c_d441753d7d">c_d441753d7d</a></li></ul>
+</section>
+
+<section>
+<h2><span class="n">7</span> Commercial Insights</h2>
+<div class="grid">
+  <div class="card">
+    <h4>Growth Opportunity <span class="tag analysis">ANALYSIS</span></h4>
+    <p>Strong demand for AI and high-performance computing solutions is driving revenue growth.</p>
+<p class="muted small">Reasoning: Increased demand for AMD&#39;s AI-optimized products is contributing to revenue growth.</p>    <p class="srcs"><a class="cid" href="#c_209d974441">c_209d974441</a><a class="cid" href="#c_58f5ee8e51">c_58f5ee8e51</a></p>
+  </div>
+  <div class="card">
+    <h4>Competitive Threat <span class="tag analysis">ANALYSIS</span></h4>
+    <p>AMD&#39;s leadership in gaming consoles provides a competitive advantage in the gaming market.</p>
+<p class="muted small">Reasoning: AMD&#39;s market share leadership in semi-custom game console products strengthens its position.</p>    <p class="srcs"><a class="cid" href="#c_7460672b6d">c_7460672b6d</a><a class="cid" href="#c_b45d47619d">c_b45d47619d</a></p>
+  </div>
+</div>
+
+<h3>Risks</h3>
+<ul class="claims">
+  <li><b>Supply chain disruptions</b> <span class="muted small">(supply chain)</span>    <span class="tag fact">FACT</span>
+<div class="muted small">Mitigation: Reliance on third-party manufacturers like TSMC.</div>    <span class="srcs"><a class="cid" href="#c_8396c66081">c_8396c66081</a><a class="cid" href="#c_ad3c7c5ac8">c_ad3c7c5ac8</a></span>
+  </li>
+  <li><b>Manufacturing yield issues</b> <span class="muted small">(competitive)</span>    <span class="tag fact">FACT</span>
+<div class="muted small">Mitigation: Focus on process control and quality assurance.</div>    <span class="srcs"><a class="cid" href="#c_8996178303">c_8996178303</a><a class="cid" href="#c_f4bf7632fe">c_f4bf7632fe</a></span>
+  </li>
+</ul>
+</section>
+
+<section>
+<h2>Evidence Coverage</h2>
+<p class="muted">Measured against advisory targets. A category below target means the reviewed sources did not support it - it is not filled in to reach the target.</p>
+<table>
+  <thead><tr><th>Category</th><th class="num">Claims</th><th class="num">Target</th><th>Status</th></tr></thead>
+  <tbody>
+    <tr>
+      <td>Products</td>
+      <td class="num">20</td>
+      <td class="num">3</td>
+      <td><span class="tag fact">at target</span></td>
+    </tr>
+    <tr>
+      <td>Process Steps</td>
+      <td class="num">3</td>
+      <td class="num">2</td>
+      <td><span class="tag fact">at target</span></td>
+    </tr>
+    <tr>
+      <td>Technologies</td>
+      <td class="num">4</td>
+      <td class="num">2</td>
+      <td><span class="tag fact">at target</span></td>
+    </tr>
+    <tr>
+      <td>Customer Needs</td>
+      <td class="num">12</td>
+      <td class="num">2</td>
+      <td><span class="tag fact">at target</span></td>
+    </tr>
+    <tr>
+      <td>Market Drivers</td>
+      <td class="num">4</td>
+      <td class="num">2</td>
+      <td><span class="tag fact">at target</span></td>
+    </tr>
+    <tr>
+      <td>Competitors</td>
+      <td class="num">5</td>
+      <td class="num">1</td>
+      <td><span class="tag fact">at target</span></td>
+    </tr>
+    <tr>
+      <td>Commercial Implications</td>
+      <td class="num">19</td>
+      <td class="num">2</td>
+      <td><span class="tag fact">at target</span></td>
+    </tr>
+  </tbody>
+</table>
+</section>
+
+<section>
+<h2>Sources</h2>
+<table>
+  <thead><tr><th>Source ID</th><th>Type</th><th>Title</th><th>Published</th><th>SHA-256</th></tr></thead>
+  <tbody>
+    <tr>
+      <td class="mono small">sec_8_k_2026-08-19</td>
+      <td>8-K</td>
+      <td>ADVANCED MICRO DEVICES INC 8-K filed 2026-08-19</td>
+      <td class="muted small">2026-08-19</td>
+      <td class="mono small">15f8ccd6805d</td>
+    </tr>
+    <tr>
+      <td class="mono small">sec_8_k_2026-08-17</td>
+      <td>8-K</td>
+      <td>ADVANCED MICRO DEVICES INC 8-K filed 2026-08-17</td>
+      <td class="muted small">2026-08-17</td>
+      <td class="mono small">389d3be21a05</td>
+    </tr>
+    <tr>
+      <td class="mono small">sec_10_q_2026-08-05</td>
+      <td>10-Q</td>
+      <td>ADVANCED MICRO DEVICES INC 10-Q filed 2026-08-05</td>
+      <td class="muted small">2026-08-05</td>
+      <td class="mono small">5b887c4302ce</td>
+    </tr>
+    <tr>
+      <td class="mono small">sec_8_k_2026-08-04</td>
+      <td>8-K</td>
+      <td>ADVANCED MICRO DEVICES INC 8-K filed 2026-08-04</td>
+      <td class="muted small">2026-08-04</td>
+      <td class="mono small">9d952dec9a73</td>
+    </tr>
+    <tr>
+      <td class="mono small">sec_8_k_2026-07-01</td>
+      <td>8-K</td>
+      <td>ADVANCED MICRO DEVICES INC 8-K filed 2026-07-01</td>
+      <td class="muted small">2026-07-01</td>
+      <td class="mono small">9ba9bed7ac1d</td>
+    </tr>
+    <tr>
+      <td class="mono small">sec_8_k_2026-05-15</td>
+      <td>8-K</td>
+      <td>ADVANCED MICRO DEVICES INC 8-K filed 2026-05-15</td>
+      <td class="muted small">2026-05-15</td>
+      <td class="mono small">5d3319ce17a4</td>
+    </tr>
+    <tr>
+      <td class="mono small">sec_10_q_2026-05-06</td>
+      <td>10-Q</td>
+      <td>ADVANCED MICRO DEVICES INC 10-Q filed 2026-05-06</td>
+      <td class="muted small">2026-05-06</td>
+      <td class="mono small">96e104ec58fe</td>
+    </tr>
+    <tr>
+      <td class="mono small">sec_8_k_2026-05-05</td>
+      <td>8-K</td>
+      <td>ADVANCED MICRO DEVICES INC 8-K filed 2026-05-05</td>
+      <td class="muted small">2026-05-05</td>
+      <td class="mono small">3e389d0fdf15</td>
+    </tr>
+    <tr>
+      <td class="mono small">sec_8_k_2026-02-24</td>
+      <td>8-K</td>
+      <td>ADVANCED MICRO DEVICES INC 8-K filed 2026-02-24</td>
+      <td class="muted small">2026-02-24</td>
+      <td class="mono small">89135cdaa858</td>
+    </tr>
+    <tr>
+      <td class="mono small">sec_8_k_2026-02-17</td>
+      <td>8-K</td>
+      <td>ADVANCED MICRO DEVICES INC 8-K filed 2026-02-17</td>
+      <td class="muted small">2026-02-17</td>
+      <td class="mono small">492903390f74</td>
+    </tr>
+    <tr>
+      <td class="mono small">sec_10_k_2025</td>
+      <td>10-K</td>
+      <td>ADVANCED MICRO DEVICES INC 10-K filed 2026-02-04</td>
+      <td class="muted small">2026-02-04</td>
+      <td class="mono small">ac3f9be07786</td>
+    </tr>
+    <tr>
+      <td class="mono small">sec_10_q_2025-11-05</td>
+      <td>10-Q</td>
+      <td>ADVANCED MICRO DEVICES INC 10-Q filed 2025-11-05</td>
+      <td class="muted small">2025-11-05</td>
+      <td class="mono small">449c42ab1880</td>
+    </tr>
+    <tr>
+      <td class="mono small">sec_10_q_2025-08-06</td>
+      <td>10-Q</td>
+      <td>ADVANCED MICRO DEVICES INC 10-Q filed 2025-08-06</td>
+      <td class="muted small">2025-08-06</td>
+      <td class="mono small">414e78574e7e</td>
+    </tr>
+    <tr>
+      <td class="mono small">sec_10_k_2024</td>
+      <td>10-K</td>
+      <td>ADVANCED MICRO DEVICES INC 10-K filed 2025-02-05</td>
+      <td class="muted small">2025-02-05</td>
+      <td class="mono small">88e3bb6c0720</td>
+    </tr>
+    <tr>
+      <td class="mono small">sec_10_k_2023</td>
+      <td>10-K</td>
+      <td>ADVANCED MICRO DEVICES INC 10-K filed 2024-01-31</td>
+      <td class="muted small">2024-01-31</td>
+      <td class="mono small">32704124bbf8</td>
+    </tr>
+    <tr>
+      <td class="mono small">sec_xbrl_facts</td>
+      <td>SEC-XBRL</td>
+      <td>ADVANCED MICRO DEVICES INC XBRL company facts</td>
+      <td class="muted small"></td>
+      <td class="mono small">21a29c75076d</td>
+    </tr>
+  </tbody>
+</table>
+<p class="muted small">First-party filings only: annual reports, quarterly reports, 8-K earnings releases (Exhibit 99.1), SEC XBRL company facts, and peer-company filings for competitive overlap.</p>
+</section>
+
+<section>
+<h2>Evidence Ledger</h2>
+<p class="muted">84 verified claims. Each was extracted from the cited filing and checked to contain a verbatim supporting quote.</p>
+<input type="search" id="ledgerFilter" placeholder="Filter claims by text, topic or source…" autocomplete="off">
+<table id="ledger">
+  <thead><tr><th>Claim ID</th><th>Topic</th><th>Claim</th><th>Source</th><th>Verbatim quote</th></tr></thead>
+  <tbody>
+    <tr id="c_dd0d47733d">
+      <td class="mono small">c_dd0d47733d</td>
+      <td><span class="chip">company_overview</span></td>
+      <td>AMD drives innovation in high performance and AI computing to solve the world’s most important challenges.</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“AMD drives innovation in high performance and AI computing to solve the world’s most important challenges.”</td>
+    </tr>
+    <tr id="c_6ec83eca4d">
+      <td class="mono small">c_6ec83eca4d</td>
+      <td><span class="chip">company_overview</span></td>
+      <td>AMD technology powers billions of experiences across cloud and AI infrastructure, embedded systems, AI PCs and gaming.</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“AMD technology powers billions of experiences across cloud and AI infrastructure, embedded systems, AI PCs and gaming.”</td>
+    </tr>
+    <tr id="c_c3ef243a8d">
+      <td class="mono small">c_c3ef243a8d</td>
+      <td><span class="chip">product</span></td>
+      <td>With a broad portfolio of AI-optimized CPUs, GPUs, networking and software, AMD delivers full-stack solutions that help customers turn data into breakthroughs.</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“With a broad portfolio of AI-optimized CPUs, GPUs, networking and software, AMD delivers full-stack solutions that help customers turn data into breakthroughs.”</td>
+    </tr>
+    <tr id="c_dc36a6b833">
+      <td class="mono small">c_dc36a6b833</td>
+      <td><span class="chip">product</span></td>
+      <td>Our high-performance product portfolios provide differentiated solutions, including semi-custom System-on-Chip (SoCs), adaptive SoCs and accelerated processing units (APUs).</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“Our high-performance product portfolios provide differentiated solutions, including semi-custom System-on-Chip (SoCs), adaptive SoCs and accelerated processing units (APUs).”</td>
+    </tr>
+    <tr id="c_5d1ca8db53">
+      <td class="mono small">c_5d1ca8db53</td>
+      <td><span class="chip">product</span></td>
+      <td>For data centers, we offer AI accelerators, microprocessors (CPUs), graphic processing units (GPUs), data processing units (DPUs), AI Network Interface Cards (AI NICs) and field programmable gate arrays (FPGAs).</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“For data centers, we offer AI accelerators, microprocessors (CPUs), graphic processing units (GPUs), data processing units (DPUs), AI Network Interface Cards (AI NICs) and field programmable gate arrays (FPGAs).”</td>
+    </tr>
+    <tr id="c_cdacf3043c">
+      <td class="mono small">c_cdacf3043c</td>
+      <td><span class="chip">product</span></td>
+      <td>We also offer data center rack-scale platform designs that incorporate AMD data center products to meet the growing performance demands of AI supercomputers and machine learning workloads.</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“We also offer data center rack-scale platform designs that incorporate AMD data center products to meet the growing performance demands of AI supercomputers and machine learning workloads.”</td>
+    </tr>
+    <tr id="c_daf1601ec3">
+      <td class="mono small">c_daf1601ec3</td>
+      <td><span class="chip">product</span></td>
+      <td>In client computing, our CPUs, APUs and chipsets for desktops and notebooks deliver performance, efficiency, AI capabilities and modern security features for gamers, creators, consumers and enterprises.</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“In client computing, our CPUs, APUs and chipsets for desktops and notebooks deliver performance, efficiency, AI capabilities and modern security features for gamers, creators, consumers and enterprises.”</td>
+    </tr>
+    <tr id="c_3469e7e382">
+      <td class="mono small">c_3469e7e382</td>
+      <td><span class="chip">technology</span></td>
+      <td>AMD was the first company to integrate a dedicated neural processing unit (NPU) on the same SoC as an x86 CPU for AI PCs.</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“AMD was the first company to integrate a dedicated neural processing unit (NPU) on the same SoC as an x86 CPU for AI PCs.”</td>
+    </tr>
+    <tr id="c_7478467ff8">
+      <td class="mono small">c_7478467ff8</td>
+      <td><span class="chip">technology</span></td>
+      <td>By bringing NPU‑accelerated AI capabilities directly into mainstream x86 platforms, we established a differentiated technology footprint that supports a growing ecosystem of AI‑enabled applications.</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“By bringing NPU‑accelerated AI capabilities directly into mainstream x86 platforms, we established a differentiated technology footprint that supports a growing ecosystem of AI‑enabled applications.”</td>
+    </tr>
+    <tr id="c_88c3a6d67c">
+      <td class="mono small">c_88c3a6d67c</td>
+      <td><span class="chip">product</span></td>
+      <td>Our embedded computing portfolio delivers high-performance, scalable solutions across CPUs, APUs, FPGAs, System-on-Modules (SOMs) and adaptive SoCs for markets such as automotive, industrial, healthcare, storage and networking with integrated AI processing capabilities.</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“Our embedded computing portfolio delivers high-performance, scalable solutions across CPUs, APUs, FPGAs, System-on-Modules (SOMs) and adaptive SoCs for markets such as automotive, industrial, healthcare, storage and networking with integrated AI processing capabilities.”</td>
+    </tr>
+    <tr id="c_6c4c181d50">
+      <td class="mono small">c_6c4c181d50</td>
+      <td><span class="chip">product</span></td>
+      <td>We develop comprehensive software stacks that include development tools, compilers and drivers to enable our high-performance CPUs, APUs, GPUs and FPGAs.</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“We develop comprehensive software stacks that include development tools, compilers and drivers to enable our high-performance CPUs, APUs, GPUs and FPGAs.”</td>
+    </tr>
+    <tr id="c_d78d965731">
+      <td class="mono small">c_d78d965731</td>
+      <td><span class="chip">product</span></td>
+      <td>We have a comprehensive and open AI software stack to support the diverse set of AI ecosystems across frameworks, large and small language models and applications.</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“We have a comprehensive and open AI software stack to support the diverse set of AI ecosystems across frameworks, large and small language models and applications.”</td>
+    </tr>
+    <tr id="c_b74de11fd8">
+      <td class="mono small">c_b74de11fd8</td>
+      <td><span class="chip">customer</span></td>
+      <td>By working closely with customers, we deliver customized solutions that meet their evolving needs, leveraging our broad IP portfolio and leadership in design, integration and advanced packaging.</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“By working closely with customers, we deliver customized solutions that meet their evolving needs, leveraging our broad IP portfolio and leadership in design, integration and advanced packaging.”</td>
+    </tr>
+    <tr id="c_66899e8993">
+      <td class="mono small">c_66899e8993</td>
+      <td><span class="chip">technology</span></td>
+      <td>Our investments in technologies such as our custom-ready chiplet platform and AMD Infinity Fabric™ switch position us to maintain our leadership as a custom-design silicon provider of choice.</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“Our investments in technologies such as our custom-ready chiplet platform and AMD Infinity Fabric™ switch position us to maintain our leadership as a custom-design silicon provider of choice.”</td>
+    </tr>
+    <tr id="c_4ac0a80087">
+      <td class="mono small">c_4ac0a80087</td>
+      <td><span class="chip">product</span></td>
+      <td>The product brands for adaptive SoCs include Zynq™ 7000, Zynq UltraScale+™ MPSoC, Zynq UltraScale+ RFSoCs, Versal™ HBM, Versal Premium, Versal Prime, Versal™ AI Core and Versal AI Edge.</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“Our product brands for adaptive SoCs are Zynq™ 7000, Zynq UltraScale+™ MPSoC, Zynq UltraScale+ RFSoCs, Versal™ HBM, Versal Premium, Versal Prime, Versal™ AI Core and Versal AI Edge.”</td>
+    </tr>
+    <tr id="c_a502fa1304">
+      <td class="mono small">c_a502fa1304</td>
+      <td><span class="chip">product</span></td>
+      <td>The software tools for programmable devices are Vitis™, Vitis AI™, and Vivado™ tools.</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“The software tools for our programmable devices are Vitis™, Vitis AI™, and Vivado™ tools.”</td>
+    </tr>
+    <tr id="c_22e6bc429a">
+      <td class="mono small">c_22e6bc429a</td>
+      <td><span class="chip">product</span></td>
+      <td>The System-on-Module (SOM) product is the Kria™ brand.</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“Our System-on-Module (SOM) product is the Kria™ brand.”</td>
+    </tr>
+    <tr id="c_c34e91778a">
+      <td class="mono small">c_c34e91778a</td>
+      <td><span class="chip">product</span></td>
+      <td>AMD sells low-power versions of AMD Athlon™, AMD Geode™, AMD Ryzen™, AMD EPYC™, AMD R Series and G Series processors as embedded processor solutions.</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“We also sell low-power versions of our AMD Athlon™, as well as AMD Geode™, AMD Ryzen™, AMD EPYC™, AMD R Series and G Series processors as embedded processor solutions.”</td>
+    </tr>
+    <tr id="c_7ba1db306d">
+      <td class="mono small">c_7ba1db306d</td>
+      <td><span class="chip">product</span></td>
+      <td>Compute and network acceleration board products are sold under the Alveo™ and Pensando™ brands.</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“Our compute and network acceleration board products are sold under the Alveo™ and Pensando™ brands.”</td>
+    </tr>
+    <tr id="c_ed23f75d8d">
+      <td class="mono small">c_ed23f75d8d</td>
+      <td><span class="chip">customer</span></td>
+      <td>Data Center Segment customers consist primarily of hyperscale data centers, original equipment manufacturers (OEMs), original design manufacturers (ODMs), system integrators and independent distributors.</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“Our Data Center Segment customers consist primarily of hyperscale data centers, original equipment manufacturers (OEMs), original design manufacturers (ODMs), system integrators and independent distributors in both domestic and international markets.”</td>
+    </tr>
+    <tr id="c_42015679cb">
+      <td class="mono small">c_42015679cb</td>
+      <td><span class="chip">customer</span></td>
+      <td>Client and Gaming Segment customers consist primarily of PC OEMs, independent distributors, and ODMs that manufacture motherboards.</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“Our Client and Gaming Segment customers consist primarily of PC OEMs, a network of independent distributors and, for chipset products, ODMs that manufacture motherboards.”</td>
+    </tr>
+    <tr id="c_4f504cfc15">
+      <td class="mono small">c_4f504cfc15</td>
+      <td><span class="chip">customer</span></td>
+      <td>Embedded Segment products are sold to customers in markets such as aerospace and defense, automotive, industrial, vision and healthcare, communications infrastructure, test and measurement, emulation and prototyping, audio, video and broadcasting and data center.</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“Our Embedded Segment products are sold to customers in a very wide range of markets such as aerospace and defense, automotive, industrial, vision and healthcare, communications infrastructure, test and measurement, emulation and prototyping, audio, video and broadcasting and data center.”</td>
+    </tr>
+    <tr id="c_f57c151a08">
+      <td class="mono small">c_f57c151a08</td>
+      <td><span class="chip">customer</span></td>
+      <td>AMD works closely with customers to define product features, performance and timing of new products.</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“We work closely with our customers to define product features, performance and timing of new products so that the products we are developing meet our customers’ needs.”</td>
+    </tr>
+    <tr id="c_8d6423d8cf">
+      <td class="mono small">c_8d6423d8cf</td>
+      <td><span class="chip">customer</span></td>
+      <td>Certain customers pay AMD non-recurring engineering fees for design and development.</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“Certain customers pay us non-recurring engineering fees for design and develop.”</td>
+    </tr>
+    <tr id="c_5165788c3f">
+      <td class="mono small">c_5165788c3f</td>
+      <td><span class="chip">customer</span></td>
+      <td>Large multi-national public cloud service providers and hyperscale private data centers directly and indirectly purchase a substantial portion of our data center-focused products.</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“Large multi-national public cloud service providers and hyperscale private data centers directly and indirectly purchase a substantial portion of our data center-focused products.”</td>
+    </tr>
+    <tr id="c_5002e7055b">
+      <td class="mono small">c_5002e7055b</td>
+      <td><span class="chip">product</span></td>
+      <td>These products are incorporated into servers and other data center appliances sold by OEMs to the hyperscale customers or into custom servers or hardware designed by or for these customers and manufactured by ODMs or contract manufacturers.</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“These products are incorporated into servers and other data center appliances sold by OEMs to the hyperscale customers or into custom servers or hardware designed by or for these customers and manufactured by ODMs or contract manufacturers.”</td>
+    </tr>
+    <tr id="c_bbeba879f3">
+      <td class="mono small">c_bbeba879f3</td>
+      <td><span class="chip">market_driver</span></td>
+      <td>Hyperscale data centers use these products to operate web-based applications or to support public cloud computing and storage service offerings, including but not limited to AI workloads such as generative AI models.</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“Hyperscale data centers use these products to operate web-based applications or to support public cloud computing and storage service offerings, including but not limited to AI workloads such as generative AI models.”</td>
+    </tr>
+    <tr id="c_772ce3c6e4">
+      <td class="mono small">c_772ce3c6e4</td>
+      <td><span class="chip">customer</span></td>
+      <td>Our authorized channel distributors resell to sub-distributors, OEMs, ODMs and other customers.</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“Our authorized channel distributors resell to sub-distributors, OEMs, ODMs and other customers.”</td>
+    </tr>
+    <tr id="c_2b1d7c1564">
+      <td class="mono small">c_2b1d7c1564</td>
+      <td><span class="chip">customer</span></td>
+      <td>Distributors typically maintain an inventory of our products.</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“Distributors typically maintain an inventory of our products.”</td>
+    </tr>
+    <tr id="c_9c27cb94db">
+      <td class="mono small">c_9c27cb94db</td>
+      <td><span class="chip">customer</span></td>
+      <td>In most instances, our agreements with distributors protect their inventory of our products against price reductions and provide certain return rights with respect to any product that we have removed from our price book or are otherwise subject to discontinuation.</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“In most instances, our agreements with distributors protect their inventory of our products against price reductions and provide certain return rights with respect to any product that we have removed from our price book or are otherwise subject to discontinuation.”</td>
+    </tr>
+    <tr id="c_a3b1ace275">
+      <td class="mono small">c_a3b1ace275</td>
+      <td><span class="chip">product</span></td>
+      <td>We offer component-level graphics and chipset products to AIB manufacturers who in turn build and sell board-level products using our technology to system integrators (SIs), retailers and sub distributors.</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“We offer component-level graphics and chipset products to AIB manufacturers who in turn build and sell board-level products using our technology to system integrators (SIs), retailers and sub distributors.”</td>
+    </tr>
+    <tr id="c_f17cfb3027">
+      <td class="mono small">c_f17cfb3027</td>
+      <td><span class="chip">customer</span></td>
+      <td>SIs typically sell from positions of regional or product-based strength in the market.</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“SIs typically sell from positions of regional or product-based strength in the market.”</td>
+    </tr>
+    <tr id="c_c97a994a97">
+      <td class="mono small">c_c97a994a97</td>
+      <td><span class="chip">competitor</span></td>
+      <td>The markets in which our products are sold are highly competitive and rapidly evolving and delivering the latest and best products to market on time is critical to revenue growth.</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“The markets in which our products are sold are highly competitive and rapidly evolving and delivering the latest and best products to market on time is critical to revenue growth.”</td>
+    </tr>
+    <tr id="c_19926b9edf">
+      <td class="mono small">c_19926b9edf</td>
+      <td><span class="chip">competitor</span></td>
+      <td>The competitiveness of our products depends on a number of factors including, performance, total cost of ownership, timely product introductions, product quality and reliability, product features and capabilities, energy efficiency (including power consumption and battery life, given their impact on total cost of ownership), size (or form factor), selling price, cost, adherence to industry standards (and the creation of open industry standards), level of integration, software and hardware compatibility, ease of use and functionality of software design tools, completeness of applicable software solutions, security and stability, brand recognition and availability.</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“The competitiveness of our products depends on a number of factors including, performance, total cost of ownership, timely product introductions, product quality and reliability, product features and capabilities, energy efficiency (including power consumption and battery life, given their impact on”</td>
+    </tr>
+    <tr id="c_7875d47828">
+      <td class="mono small">c_7875d47828</td>
+      <td><span class="chip">competitor</span></td>
+      <td>Our principal competitor in the supply of discrete graphics is Nvidia, who is the discrete GPU market share leader, and Intel, who manufactures and sells integrated graphics processors and gaming-focused discrete GPUs.</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“Our principal competitor in the supply of discrete graphics is Nvidia, who is the discrete GPU market share leader, and Intel, who manufactures and sells integrated graphics processors and gaming-focused discrete GPUs.”</td>
+    </tr>
+    <tr id="c_7460672b6d">
+      <td class="mono small">c_7460672b6d</td>
+      <td><span class="chip">market_driver</span></td>
+      <td>We are the market share leader in semi-custom game console products, where graphics performance is critical.</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“We are the market share leader in semi-custom game console products, where graphics performance is critical.”</td>
+    </tr>
+    <tr id="c_a6a78323bc">
+      <td class="mono small">c_a6a78323bc</td>
+      <td><span class="chip">competitor</span></td>
+      <td>We expect continued competition from our primary FPGA competitors such as Altera, Lattice Semiconductor Corporation and Microsemi Corporation, and from ASSP vendors such as Broadcom Corporation, Marvell Technology Group, Ltd., Analog Devices, Texas Instruments Incorporated, NXP Semiconductors N.V., Qualcomm Incorporated and NVIDIA.</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“We expect continued competition from our primary FPGA competitors such as Altera, Lattice Semiconductor Corporation and Microsemi Corporation, and from ASSP vendors such as Broadcom Corporation, Marvell Technology Group, Ltd., Analog Devices, Texas Instruments Incorporated, NXP Semiconductors N.V., ”</td>
+    </tr>
+    <tr id="c_1ede0633bb">
+      <td class="mono small">c_1ede0633bb</td>
+      <td><span class="chip">competitor</span></td>
+      <td>Intel is our main competitor for embedded CPUs.</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“Intel is our main competitor for embedded CPUs.”</td>
+    </tr>
+    <tr id="c_2f01541f19">
+      <td class="mono small">c_2f01541f19</td>
+      <td><span class="chip">strategy</span></td>
+      <td>We focus our research and development (R&amp;D) activities on designing and developing products.</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“We focus our research and development (R&amp;D) activities on designing and developing products.”</td>
+    </tr>
+    <tr id="c_a0546785ab">
+      <td class="mono small">c_a0546785ab</td>
+      <td><span class="chip">product</span></td>
+      <td>Our main area of focus is on delivering the next generation of processors (CPU and GPU), FPGAs and adaptive SoCs, accelerators (adaptive, graphics and DPU), SOMs and AI NICs, and the associated software for these products.</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“Our main area of focus is on delivering the next generation of processors (CPU and GPU), FPGAs and adaptive SoCs, accelerators (adaptive, graphics and DPU), SOMs and AI NICs, and the associated software for these products.”</td>
+    </tr>
+    <tr id="c_876e2d017c">
+      <td class="mono small">c_876e2d017c</td>
+      <td><span class="chip">technology</span></td>
+      <td>We focus on designing, with security in mind, new integrated circuits (ICs) with improved performance and performance-per-watt in advanced semiconductor manufacturing processes.</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“We focus on designing, with security in mind, new integrated circuits (ICs) with improved performance and performance-per-watt in advanced semiconductor manufacturing processes.”</td>
+    </tr>
+    <tr id="c_a6c433b298">
+      <td class="mono small">c_a6c433b298</td>
+      <td><span class="chip">product</span></td>
+      <td>We also focus on software as part of the development of our products, including design automation tools for hardware, embedded software, AI stack, and optimized software tools and libraries that extend the reach of our platforms to software and AI developers.</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“We also focus on software as part of the development of our products, including design automation tools for hardware, embedded software, AI stack, and optimized software tools and libraries that extend the reach of our platforms to software and AI developers.”</td>
+    </tr>
+    <tr id="c_d969b4f6f9">
+      <td class="mono small">c_d969b4f6f9</td>
+      <td><span class="chip">financial_commentary</span></td>
+      <td>Through our R&amp;D efforts, we were able to introduce a number of new products and enhance our IP core offerings and software.</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“Through our R&amp;D efforts, we were able to introduce a number of new products and enhance our IP core offerings and software.”</td>
+    </tr>
+    <tr id="c_b3b529f7ea">
+      <td class="mono small">c_b3b529f7ea</td>
+      <td><span class="chip">geography</span></td>
+      <td>We conduct product and system R&amp;D activities for our products in the United States.</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“We conduct product and system R&amp;D activities for our products in the United States.”</td>
+    </tr>
+    <tr id="c_58f5ee8e51">
+      <td class="mono small">c_58f5ee8e51</td>
+      <td><span class="chip">financial_commentary</span></td>
+      <td>In 2025, net revenue increased 34% to $34.6 billion, compared to $25.8 billion in 2024.</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“In 2025, we delivered strong annual revenue growth with net revenue increasing 34% to $34.6 billion, compared to $25.8 billion in 2024.”</td>
+    </tr>
+    <tr id="c_c4e5bc94ff">
+      <td class="mono small">c_c4e5bc94ff</td>
+      <td><span class="chip">financial_commentary</span></td>
+      <td>Data Center net revenue of $16.6 billion increased by 32% compared to $12.6 billion in 2024.</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“Data Center net revenue of $16.6 billion increased by 32% compared to $12.6 billion in 2024, primarily driven by strong demand for our 5th generation AMD EPYC™ processors and AMD Instinct™ MI350 Series GPUs.”</td>
+    </tr>
+    <tr id="c_0596028038">
+      <td class="mono small">c_0596028038</td>
+      <td><span class="chip">financial_commentary</span></td>
+      <td>Client and Gaming segment net revenue of $14.6 billion in 2025 increased by 51% compared to $9.6 billion in 2024.</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“Client and Gaming segment net revenue of $14.6 billion in 2025 increased by 51% compared to $9.6 billion in 2024, primarily driven by strong demand for our AMD Ryzen™ processors, semi-custom game consoles SoCs and Radeon™ gaming GPUs.”</td>
+    </tr>
+    <tr id="c_25049d1e7c">
+      <td class="mono small">c_25049d1e7c</td>
+      <td><span class="chip">financial_commentary</span></td>
+      <td>Embedded net revenue of $3.5 billion decreased by 3% compared to net revenue of $3.6 billion in 2024.</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“Embedded net revenue of $3.5 billion decreased by 3% compared to net revenue of $3.6 billion in 2024, as certain end market demand remained mixed.”</td>
+    </tr>
+    <tr id="c_a676462f8e">
+      <td class="mono small">c_a676462f8e</td>
+      <td><span class="chip">financial_commentary</span></td>
+      <td>Gross margin of 50% increased by 1% compared to 49% in 2024.</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“Gross margin of 50% increased by 1% compared to 49% in 2024, primarily due to product mix partially offset by approximately $440 million of net inventory and related charges associated with the U.S. government export control on AMD Instinct™ MI308 Data Center GPU products.”</td>
+    </tr>
+    <tr id="c_8fc0b41616">
+      <td class="mono small">c_8fc0b41616</td>
+      <td><span class="chip">financial_commentary</span></td>
+      <td>Cash, cash equivalents and short-term investments as of December 27, 2025 were $10.6 billion, compared to $5.1 billion at the end of 2024.</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“Cash, cash equivalents and short-term investments as of December 27, 2025 were $10.6 billion, compared to $5.1 billion at the end of 2024.”</td>
+    </tr>
+    <tr id="c_cb945e180c">
+      <td class="mono small">c_cb945e180c</td>
+      <td><span class="chip">financial_commentary</span></td>
+      <td>The aggregate principal amount of total debt as of December 27, 2025 was $3.3 billion, compared to $1.8 billion as of December 28, 2024.</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“Our aggregate principal amount of total debt as of December 27, 2025 was $3.3 billion, compared to $1.8 billion as of December 28, 2024.”</td>
+    </tr>
+    <tr id="c_fc3ba3d3f6">
+      <td class="mono small">c_fc3ba3d3f6</td>
+      <td><span class="chip">financial_commentary</span></td>
+      <td>In 2025, we returned a total of $1.3 billion to shareholders through the repurchase of 12.4 million shares of common stock under our stock repurchase program.</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“In 2025, we returned a total of $1.3 billion to shareholders through the repurchase of 12.4 million shares of common stock under our stock repurchase program.”</td>
+    </tr>
+    <tr id="c_a91cb79cbb">
+      <td class="mono small">c_a91cb79cbb</td>
+      <td><span class="chip">product</span></td>
+      <td>AMD brought to market AMD Radeon 9000 Series GPUs and Radeon AI PRO 9700 GPUs based on the AMD RDNA 4 graphics architecture.</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“For gamers, creators and developers, we brought to market AMD Radeon 9000 Series GPUs and Radeon AI PRO 9700 GPUs based on the AMD RDNA 4 graphics architecture to market along new high-performance Ryzen Threadripper™ 9000 Series processors.”</td>
+    </tr>
+    <tr id="c_43cc54da60">
+      <td class="mono small">c_43cc54da60</td>
+      <td><span class="chip">product</span></td>
+      <td>AMD&#39;s x86 Embedded portfolio expanded in 2025 with the introduction of three new AMD EPYC embedded processor series.</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“Our x86 Embedded portfolio continued to expand in 2025 with the introduction of three new AMD EPYC embedded processor series: AMD EPYC Embedded 9005 Series, EPYC Embedded 4005 Series and EPYC Embedded 2005 Series.”</td>
+    </tr>
+    <tr id="c_d441753d7d">
+      <td class="mono small">c_d441753d7d</td>
+      <td><span class="chip">financial_commentary</span></td>
+      <td>AMD completed the acquisition of ZT Systems for $3.2 billion in cash and 8.3 million shares of its common stock.</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“In March 2025, we completed the acquisition of ZT Systems for $3.2 billion in cash and 8.3 million shares of our common stock.”</td>
+    </tr>
+    <tr id="c_278a3fb9ab">
+      <td class="mono small">c_278a3fb9ab</td>
+      <td><span class="chip">financial_commentary</span></td>
+      <td>AMD sold the ZT data center infrastructure manufacturing business to Sanmina Corporation for $2.4 billion in cash and 1.2 million shares of Sanmina common stock.</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“we sold the ZT data center infrastructure manufacturing business (ZT Manufacturing Business) to Sanmina Corporation (Sanmina) for $2.4 billion in cash, subject to certain purchase price adjustments, and 1.2 million shares of Sanmina common stock.”</td>
+    </tr>
+    <tr id="c_3f13571116">
+      <td class="mono small">c_3f13571116</td>
+      <td><span class="chip">financial_commentary</span></td>
+      <td>AMD is eligible to receive additional contingent cash consideration of up to $450 million from Sanmina.</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“We are eligible to receive additional contingent cash consideration of up to $450 million from Sanmina to the extent certain conditions are met.”</td>
+    </tr>
+    <tr id="c_0dd02c6ea3">
+      <td class="mono small">c_0dd02c6ea3</td>
+      <td><span class="chip">customer</span></td>
+      <td>AMD entered into a product purchase agreement with OpenAI OpCo, LLC to deploy 6 gigawatts of AMD GPUs.</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“In October 2025, we entered into a product purchase agreement with OpenAI OpCo, LLC, (OpenAI) to deploy 6 gigawatts of AMD GPUs.”</td>
+    </tr>
+    <tr id="c_eefb89e736">
+      <td class="mono small">c_eefb89e736</td>
+      <td><span class="chip">product</span></td>
+      <td>The deployment of the first gigawatt of capacity is powered by AMD Instinct MI450 series products.</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“the deployment of the first gigawatt of capacity powered by our AMD Instinct MI450 series products.”</td>
+    </tr>
+    <tr id="c_767ab79f20">
+      <td class="mono small">c_767ab79f20</td>
+      <td><span class="chip">financial_commentary</span></td>
+      <td>Data Center net revenue of $16.6 billion in 2025 increased by 32%, compared to net revenue of $12.6 billion in 2024.</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“Data Center net revenue of $16.6 billion in 2025 increased by 32%, compared to net revenue of $12.6 billion in 2024.”</td>
+    </tr>
+    <tr id="c_209d974441">
+      <td class="mono small">c_209d974441</td>
+      <td><span class="chip">market_driver</span></td>
+      <td>The increase was primarily driven by strong demand for our AMD EPYC™ processors and AMD Instinct™ GPU accelerators.</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“The increase was primarily driven by strong demand for our AMD EPYC™ processors and AMD Instinct™ GPU accelerators.”</td>
+    </tr>
+    <tr id="c_a221a31bc2">
+      <td class="mono small">c_a221a31bc2</td>
+      <td><span class="chip">financial_commentary</span></td>
+      <td>Client and Gaming net revenue of $14.6 billion in 2025 increased by 51%, compared to net revenue of $9.6 billion in 2024.</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“Client and Gaming net revenue of $14.6 billion in 2025 increased by 51%, compared to net revenue of $9.6 billion in 2024.”</td>
+    </tr>
+    <tr id="c_3c45f7cc56">
+      <td class="mono small">c_3c45f7cc56</td>
+      <td><span class="chip">financial_commentary</span></td>
+      <td>Client net revenue of $10.6 billion in 2025 increased by 51%, compared to net revenue of $7.1 billion in 2024.</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“Client net revenue of $10.6 billion in 2025 increased by 51%, compared to net revenue of $7.1 billion in 2024.”</td>
+    </tr>
+    <tr id="c_cad7dbcb6d">
+      <td class="mono small">c_cad7dbcb6d</td>
+      <td><span class="chip">financial_commentary</span></td>
+      <td>Gaming net revenue of $3.9 billion in 2025 increased by 51%, compared to net revenue of $2.6 billion in 2024.</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“Gaming net revenue of $3.9 billion in 2025 increased by 51%, compared to net revenue of $2.6 billion in 2024.”</td>
+    </tr>
+    <tr id="c_b45d47619d">
+      <td class="mono small">c_b45d47619d</td>
+      <td><span class="chip">market_driver</span></td>
+      <td>The increase was primarily driven by higher semi-custom revenue and strong demand of our Radeon™ gaming GPUs.</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“The increase was primarily driven by higher semi-custom revenue and strong demand of our Radeon™ gaming GPUs.”</td>
+    </tr>
+    <tr id="c_c9c269fe0c">
+      <td class="mono small">c_c9c269fe0c</td>
+      <td><span class="chip">financial_commentary</span></td>
+      <td>Data Center operating income was $3.6 billion in 2025, compared to operating income of $3.5 billion in 2024.</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“Data Center operating income was $3.6 billion in 2025, compared to operating income of $3.5 billion in 2024.”</td>
+    </tr>
+    <tr id="c_835e11ef1d">
+      <td class="mono small">c_835e11ef1d</td>
+      <td><span class="chip">financial_commentary</span></td>
+      <td>Client and Gaming operating income was $2.9 billion in 2025, compared to operating income of $1.2 billion in 2024.</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“Client and Gaming operating income was $2.9 billion in 2025, compared to operating income of $1.2 billion in 2024.”</td>
+    </tr>
+    <tr id="c_0aa342aaca">
+      <td class="mono small">c_0aa342aaca</td>
+      <td><span class="chip">geography</span></td>
+      <td>As of December 27, 2025, we have approximately 6.8 million square feet of space for research and development, engineering, administrative and warehouse use throughout the world.</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“As of December 27, 2025, we have approximately 6.8 million square feet of space for research and development, engineering, administrative and warehouse use throughout the world.”</td>
+    </tr>
+    <tr id="c_223ec30c25">
+      <td class="mono small">c_223ec30c25</td>
+      <td><span class="chip">geography</span></td>
+      <td>These facilities include approximately 5.4 million square feet of leased space and approximately 1.4 million square feet of owned space.</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“These facilities include approximately 5.4 million square feet of leased space and approximately 1.4 million square feet of owned space.”</td>
+    </tr>
+    <tr id="c_9beaaceacd">
+      <td class="mono small">c_9beaaceacd</td>
+      <td><span class="chip">geography</span></td>
+      <td>Our headquarters are located in Santa Clara, California, and we have significant operations in Austin, Texas; San Jose, California; Shanghai, China; Markham, Ontario, Canada; Longmont, Colorado; Dublin, Ireland; Singapore; and Bengaluru and Hyderabad, India.</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“Our headquarters are located in Santa Clara, California, and we have significant operations in Austin, Texas; San Jose, California; Shanghai, China; Markham, Ontario, Canada; Longmont, Colorado; Dublin, Ireland; Singapore; and Bengaluru and Hyderabad, India.”</td>
+    </tr>
+    <tr id="c_bbfde0a7f9">
+      <td class="mono small">c_bbfde0a7f9</td>
+      <td><span class="chip">geography</span></td>
+      <td>We also have a number of regional sales offices located in commercial centers near customers, principally in the United States, Europe, Asia and Latin America.</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“We also have a number of regional sales offices located in commercial centers near customers, principally in the United States, Europe, Asia and Latin America.”</td>
+    </tr>
+    <tr id="c_d4b62c1b33">
+      <td class="mono small">c_d4b62c1b33</td>
+      <td><span class="chip">risk</span></td>
+      <td>We currently do not anticipate difficulty in either retaining occupancy of any of our facilities through lease renewals prior to expiration or through month-to-month occupancy or replacing them with equivalent facilities.</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“We currently do not anticipate difficulty in either retaining occupancy of any of our facilities through lease renewals prior to expiration or through month-to-month occupancy or replacing them with equivalent facilities.”</td>
+    </tr>
+    <tr id="c_be6a67da8e">
+      <td class="mono small">c_be6a67da8e</td>
+      <td><span class="chip">risk</span></td>
+      <td>We believe that our existing facilities are suitable and adequate for our present purposes and that the productive capacity of such facilities is substantially being utilized or we have plans to utilize such capacity.</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“We believe that our existing facilities are suitable and adequate for our present purposes and that the productive capacity of such facilities is substantially being utilized or we have plans to utilize such capacity.”</td>
+    </tr>
+    <tr id="c_c97fb298de">
+      <td class="mono small">c_c97fb298de</td>
+      <td><span class="chip">risk</span></td>
+      <td>If we are unable to procure certain of these materials for our back-end manufacturing operations, or our third-party manufacturers are unable to procure materials for manufacturing our products, our business would be materially adversely affected.</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“If we are unable to procure certain of these materials for our back-end manufacturing operations, or our third-party manufacturers are unable to procure materials for manufacturing our products, our business would be materially adversely affected.”</td>
+    </tr>
+    <tr id="c_8996178303">
+      <td class="mono small">c_8996178303</td>
+      <td><span class="chip">risk</span></td>
+      <td>Failure to achieve expected manufacturing yields for our products could negatively impact our results of operations.</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“Failure to achieve expected manufacturing yields for our products could negatively impact our results of operations.”</td>
+    </tr>
+    <tr id="c_206db26e41">
+      <td class="mono small">c_206db26e41</td>
+      <td><span class="chip">process_step</span></td>
+      <td>Our third-party manufacturers are responsible for the process technologies used to fabricate silicon wafers.</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“Our third-party manufacturers are responsible for the process technologies used to fabricate silicon wafers.”</td>
+    </tr>
+    <tr id="c_2c84ce774e">
+      <td class="mono small">c_2c84ce774e</td>
+      <td><span class="chip">risk</span></td>
+      <td>If our third-party manufacturers experience manufacturing inefficiencies or encounter disruptions, errors or difficulties during production, we may fail to achieve acceptable yields or we may experience product delivery delays.</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“If our third-party manufacturers experience manufacturing inefficiencies or encounter disruptions, errors or difficulties during production, we may fail to achieve acceptable yields or we may experience product delivery delays.”</td>
+    </tr>
+    <tr id="c_c30bacda76">
+      <td class="mono small">c_c30bacda76</td>
+      <td><span class="chip">risk</span></td>
+      <td>We cannot be certain that our third-party manufacturers will be able to develop, expand, obtain or successfully implement leading-edge manufacturing process or packaging technologies needed to manufacture future generations of our products profitably or on a timely basis or that our competitors will not develop new technologies, products or processes earlier.</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“We cannot be certain that our third-party manufacturers will be able to develop, expand, obtain or successfully implement leading-edge manufacturing process or packaging technologies needed to manufacture future generations of our products profitably or on a timely basis or that our competitors will”</td>
+    </tr>
+    <tr id="c_bff2c3b705">
+      <td class="mono small">c_bff2c3b705</td>
+      <td><span class="chip">risk</span></td>
+      <td>A substantial delay in the technology transitions to smaller process technologies could have a material adverse effect on us, particularly if our competitors transition to more cost effective technologies before us.</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“A substantial delay in the technology transitions to smaller process technologies could have a material adverse effect on us, particularly if our competitors transition to more cost effective technologies before us.”</td>
+    </tr>
+    <tr id="c_7e60a181c1">
+      <td class="mono small">c_7e60a181c1</td>
+      <td><span class="chip">process_step</span></td>
+      <td>We are presently focusing our 7 nm and lower product microprocessor and GPU portfolio on TSMC’s processes.</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“For example, we are presently focusing our 7 nm and lower product microprocessor and GPU portfolio on TSMC’s processes.”</td>
+    </tr>
+    <tr id="c_8396c66081">
+      <td class="mono small">c_8396c66081</td>
+      <td><span class="chip">risk</span></td>
+      <td>If TSMC is not able to manufacture wafers for our products at 7 nm or smaller nodes in sufficient quantities to meet customer demand, it could have a material adverse effect on our business.</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“If TSMC is not able to manufacture wafers for our products at 7 nm or smaller nodes in sufficient quantities to meet customer demand, it could have a material adverse effect on our business.”</td>
+    </tr>
+    <tr id="c_abf4c11d18">
+      <td class="mono small">c_abf4c11d18</td>
+      <td><span class="chip">process_step</span></td>
+      <td>We rely on TSMC, UMC and our other foundries to produce wafers with competitive performance attributes for our IC products.</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“we rely on TSMC, UMC and our other foundries to produce wafers with competitive performance attributes for our IC products.”</td>
+    </tr>
+    <tr id="c_ad3c7c5ac8">
+      <td class="mono small">c_ad3c7c5ac8</td>
+      <td><span class="chip">risk</span></td>
+      <td>The foundries, particularly TSMC which manufactures our newest IC products, must be able to transition to advanced manufacturing process technologies and increased wafer sizes, produce wafers at acceptable yields and deliver them in a timely manner.</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“the foundries, particularly TSMC which manufactures our newest IC products, must be able to transition to advanced manufacturing process technologies and increased wafer sizes, produce wafers at acceptable yields and deliver them in a timely manner.”</td>
+    </tr>
+    <tr id="c_f4bf7632fe">
+      <td class="mono small">c_f4bf7632fe</td>
+      <td><span class="chip">risk</span></td>
+      <td>Any decrease in manufacturing yields could result in an increase in per unit costs, which would adversely impact our gross margin and/or force us to allocate our reduced product supply amongst our customers, which could harm our relationships and reputation with our customers and materially adversely affect our business.</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“Any decrease in manufacturing yields could result in an increase in per unit costs, which would adversely impact our gross margin and/or force us to allocate our reduced product supply amongst our customers, which could harm our relationships and reputation with our customers and materially adversel”</td>
+    </tr>
+  </tbody>
+</table>
+</section>
+
+<footer>
+  <p class="muted small">
+    Generated 2026-09-26 15:10 UTC.
+    Deterministic financials from SEC XBRL; qualitative claims from language models,
+    each gated on a verbatim source quote. Peer-filing claims are typed INFERENCE
+    and kept in a separate ledger.
+  </p>
+</footer>
+
+</div>
+<script>
+// Ledger filter. Tiny and dependency-free: the ledger is the audit trail, so being
+// able to search it matters more than any interactive flourish.
+(function () {
+  var input = document.getElementById('ledgerFilter');
+  if (!input) return;
+  var rows = Array.prototype.slice.call(
+    document.querySelectorAll('#ledger tbody tr')
+  );
+  input.addEventListener('input', function () {
+    var q = input.value.trim().toLowerCase();
+    rows.forEach(function (r) {
+      r.style.display = !q || r.textContent.toLowerCase().indexOf(q) !== -1 ? '' : 'none';
+    });
+  });
+})();
+</script>
+</body>
+</html>

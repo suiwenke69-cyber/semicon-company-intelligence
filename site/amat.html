@@ -1,0 +1,1633 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>APPLIED MATERIALS INC /DE (AMAT) — Semiconductor Intelligence Report</title>
+<style>
+/* Shared stylesheet for the static report site.
+   Inlined into every page so each HTML file is standalone and can be sent as-is.
+   System fonts only - no network request, works offline. */
+
+:root {
+  --bg: #f6f7f9;
+  --panel: #ffffff;
+  --ink: #14181f;
+  --muted: #5d6875;
+  --line: #e2e5ea;
+  --accent: #1f5f9e;
+  --fact: #1d7a4c;
+  --analysis: #8a6100;
+  --inference: #8a3d8a;
+  --neg: #b3261e;
+  --pos: #1d7a4c;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font: 15px/1.6 -apple-system, BlinkMacSystemFont, &#34;Segoe UI&#34;, Roboto,
+        &#34;Helvetica Neue&#34;, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+.wrap { max-width: 1100px; margin: 0 auto; padding: 32px 20px 80px; }
+
+/* ---------- masthead ---------- */
+.masthead { border-bottom: 2px solid var(--ink); padding-bottom: 14px; margin-bottom: 22px; }
+.masthead h1 { margin: 6px 0 2px; font-size: 27px; letter-spacing: -0.01em; }
+.masthead .sub { margin: 0; color: var(--muted); font-size: 14px; }
+.masthead .ticker {
+  font-size: 14px; font-weight: 600; color: var(--accent);
+  border: 1px solid var(--accent); border-radius: 4px;
+  padding: 1px 7px; vertical-align: 3px;
+}
+a.back { color: var(--accent); text-decoration: none; font-size: 13px; }
+a.back:hover { text-decoration: underline; }
+
+/* ---------- stat bar ---------- */
+.bar {
+  display: flex; flex-wrap: wrap; gap: 10px; margin: 0 0 20px;
+}
+.stat {
+  flex: 1 1 150px; background: var(--panel); border: 1px solid var(--line);
+  border-radius: 8px; padding: 12px 14px;
+}
+.stat b { display: block; font-size: 21px; letter-spacing: -0.02em; }
+.stat b small { font-size: 13px; color: var(--muted); font-weight: 500; }
+.stat span { color: var(--muted); font-size: 12px; text-transform: uppercase; letter-spacing: 0.04em; }
+
+/* ---------- sections ---------- */
+section {
+  background: var(--panel); border: 1px solid var(--line); border-radius: 10px;
+  padding: 20px 22px; margin-bottom: 18px;
+}
+h2 {
+  font-size: 18px; margin: 0 0 14px; padding-bottom: 9px;
+  border-bottom: 1px solid var(--line); letter-spacing: -0.01em;
+}
+h2 .n {
+  display: inline-block; min-width: 22px; height: 22px; line-height: 22px;
+  margin-right: 8px; text-align: center; font-size: 12px;
+  background: var(--ink); color: #fff; border-radius: 5px; vertical-align: 2px;
+}
+h3 { font-size: 14px; margin: 20px 0 8px; text-transform: uppercase;
+     letter-spacing: 0.05em; color: var(--muted); }
+h3:first-of-type { margin-top: 4px; }
+h4 { margin: 0 0 5px; font-size: 15px; }
+
+p { margin: 0 0 9px; }
+.muted { color: var(--muted); }
+.small { font-size: 12.5px; }
+.mono { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+.num { text-align: right; font-variant-numeric: tabular-nums; }
+.pos { color: var(--pos); }
+.neg { color: var(--neg); }
+
+/* ---------- tables ---------- */
+table { width: 100%; border-collapse: collapse; margin: 6px 0 10px; font-size: 14px; }
+th {
+  text-align: left; font-size: 11.5px; text-transform: uppercase;
+  letter-spacing: 0.05em; color: var(--muted); font-weight: 600;
+  border-bottom: 1px solid var(--line); padding: 7px 9px;
+}
+td { padding: 8px 9px; border-bottom: 1px solid var(--line); vertical-align: top; }
+tr:last-child td { border-bottom: none; }
+tr.sub td { background: #fafbfc; font-style: italic; }
+tbody tr:target { background: #fff6d9; }
+
+/* ---------- cards / lists ---------- */
+.grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 12px; }
+.card {
+  border: 1px solid var(--line); border-radius: 8px; padding: 13px 15px;
+  background: #fcfcfd;
+}
+.card p:last-child { margin-bottom: 0; }
+ul.claims { margin: 0; padding-left: 18px; }
+ul.claims li { margin-bottom: 8px; }
+.two { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.two ul { margin: 4px 0 0; padding-left: 18px; }
+
+dl.kv { display: grid; grid-template-columns: 190px 1fr; gap: 4px 14px; margin: 0 0 12px; }
+dl.kv dt { color: var(--muted); font-size: 13px; }
+dl.kv dd { margin: 0; }
+
+/* ---------- inline badges ---------- */
+.tag {
+  display: inline-block; font-size: 10.5px; font-weight: 700; letter-spacing: 0.05em;
+  text-transform: uppercase; padding: 1px 6px; border-radius: 4px;
+  vertical-align: 1px; white-space: nowrap;
+}
+.tag.fact { background: #e6f4ec; color: var(--fact); }
+.tag.analysis { background: #fdf3dd; color: var(--analysis); }
+.tag.inference { background: #f7e9f7; color: var(--inference); }
+.tag.disclosed { background: #e6f4ec; color: var(--fact); }
+
+.chip {
+  display: inline-block; font-size: 12px; background: #eef1f5; color: #3c4753;
+  border-radius: 20px; padding: 2px 10px; margin: 0 4px 4px 0;
+}
+.chips { margin: 6px 0; }
+
+a.cid {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 11.5px; color: var(--accent); text-decoration: none;
+  border-bottom: 1px dotted var(--accent);
+}
+a.cid:hover { background: #eaf2fa; }
+.srcs { margin: 7px 0 0; }
+.srcs a.cid { margin-right: 5px; }
+
+/* ---------- callouts ---------- */
+.callout {
+  background: #eef4fa; border-left: 3px solid var(--accent);
+  padding: 11px 14px; border-radius: 0 6px 6px 0; margin: 0 0 18px; font-size: 13.5px;
+}
+.callout.warn { background: #fdf6e6; border-left-color: #c8901c; }
+
+/* ---------- ledger filter ---------- */
+input[type=&#34;search&#34;] {
+  width: 100%; padding: 8px 11px; font-size: 14px; margin: 4px 0 10px;
+  border: 1px solid var(--line); border-radius: 7px; background: #fff;
+  font-family: inherit;
+}
+input[type=&#34;search&#34;]:focus { outline: 2px solid #b9d4ec; border-color: var(--accent); }
+
+footer { margin-top: 26px; padding-top: 14px; border-top: 1px solid var(--line); }
+
+@media (max-width: 620px) {
+  .two { grid-template-columns: 1fr; }
+  dl.kv { grid-template-columns: 1fr; }
+  dl.kv dt { margin-top: 6px; }
+}
+
+/* Stale-data banner: an issuer whose newest SEC filing is years old must be
+   impossible to mistake for current intelligence. */
+.callout.stale {
+  background: #fdecea;
+  border-left-color: var(--neg);
+  border-left-width: 4px;
+}
+
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="masthead">
+  <a class="back" href="index.html">&larr; All companies</a>
+  <h1>APPLIED MATERIALS INC /DE <span class="ticker">AMAT</span></h1>
+  <p class="sub">Semiconductor Company Intelligence Report</p>
+</header>
+
+
+
+<section class="bar">
+  <div class="stat"><b>112</b><span>verified claims</span></div>
+  <div class="stat"><b>22<small>/22</small></b><span>sources</span></div>
+  <div class="stat"><b>7<small>/7</small></b><span>categories at target</span></div>
+  <div class="stat"><b>2026-07-26</b><span>data as of</span></div>
+</section>
+
+<div class="callout">
+  <strong>How to read this.</strong> Claims are tagged
+  <span class="tag fact">FACT</span> (stated in a cited filing),
+  <span class="tag analysis">ANALYSIS</span> (reasoned across facts) or
+  <span class="tag inference">INFERENCE</span> (reasoned with a stated chain).
+  Every factual assertion carries a claim ID, resolvable in the Evidence Ledger.
+  No investment recommendation is made.
+</div>
+
+<section>
+<h2><span class="n">1</span> Company Overview</h2>
+<dl class="kv">
+  <dt>Value chain position</dt><dd>Applied Materials, Inc. is positioned as a leader in materials engineering solutions, providing equipment, services, and software to the semiconductor and related industries.</dd>
+  <dt>Ticker / CIK</dt><dd>AMAT / 0000006951</dd>
+  <dt>Fiscal year end</dt><dd>month 10-26</dd>
+</dl>
+<ul class="claims">
+  <li>Applied Materials, Inc. is the leader in the materials engineering solutions used to produce virtually every semiconductor in the world. <a class="cid" href="#c_5bdff19d7d">c_5bdff19d7d</a></li>
+  <li>Our AGS segment provides services, spares and factory automation software to customer fabrication plants globally. <a class="cid" href="#c_5bdfc4b3cb">c_5bdfc4b3cb</a></li>
+  <li>Through October 26, 2025, our AGS segment also manufactured and sold 200 millimeter (200mm) and other equipment to customers globally that serve non-leading-edge markets. <a class="cid" href="#c_216c92ffe2">c_216c92ffe2</a></li>
+  <li>Effective the first quarter of fiscal 2026, our 200mm equipment business will be moved to our Semiconductor Systems segment. <a class="cid" href="#c_4b1a341e16">c_4b1a341e16</a></li>
+  <li>We provide equipment, services and software to the semiconductor and related industries. <a class="cid" href="#c_fd15c73527">c_fd15c73527</a></li>
+  <li>We operate in two reportable segments: Semiconductor Systems and Applied Global Services® (AGS). <a class="cid" href="#c_c5ab115772">c_c5ab115772</a></li>
+  <li>The Semiconductor Systems segment is comprised primarily of capital equipment used to fabricate semiconductor chips. <a class="cid" href="#c_4879d8cb23">c_4879d8cb23</a></li>
+  <li>The AGS segment provides services, spares and factory automation software to customer fabrication plants globally to help customers optimize performance of our large, global installed base of semiconductor and other equipment. <a class="cid" href="#c_2cb666f7de">c_2cb666f7de</a></li>
+  <li>Precision™ Selective Nitride PECVD preserves integrity of shallow trench isolation, reducing parasitic capacitance and boosting chip performance-per-watt. <a class="cid" href="#c_10069afef9">c_10069afef9</a></li>
+  <li>Trillium™ ALD wraps silicon nanosheets with complex metal gate stacks that optimize transistors for a wide range of AI computing applications. <a class="cid" href="#c_24842c5d55">c_24842c5d55</a></li>
+</ul>
+</section>
+
+<section>
+<h2><span class="n">1b</span> Geographic Exposure</h2>
+<p class="muted">Revenue by customer location, parsed from the 10-K MD&amp;A table.</p>
+<table>
+  <thead><tr><th>Region</th><th class="num">Revenue</th><th class="num">% of total</th><th class="num">YoY</th></tr></thead>
+  <tbody>
+    <tr>
+      <td>China</td>
+      <td class="num">8,529M</td>
+      <td class="num">30%</td>
+      <td class="num neg">-15.7%</td>
+    </tr>
+    <tr>
+      <td>Korea</td>
+      <td class="num">5,608M</td>
+      <td class="num">20%</td>
+      <td class="num pos">+24.8%</td>
+    </tr>
+    <tr>
+      <td>Taiwan</td>
+      <td class="num">6,857M</td>
+      <td class="num">24%</td>
+      <td class="num pos">+71.0%</td>
+    </tr>
+    <tr>
+      <td>Japan</td>
+      <td class="num">2,273M</td>
+      <td class="num">8%</td>
+      <td class="num pos">+5.5%</td>
+    </tr>
+    <tr>
+      <td>Southeast Asia</td>
+      <td class="num">1,076M</td>
+      <td class="num">4%</td>
+      <td class="num neg">-5.7%</td>
+    </tr>
+    <tr class="sub">
+      <td>Asia Pacific <span class="muted">(subtotal)</span></td>
+      <td class="num">24,343M</td>
+      <td class="num">86%</td>
+      <td class="num pos">+11.1%</td>
+    </tr>
+    <tr>
+      <td>United States</td>
+      <td class="num">3,063M</td>
+      <td class="num">11%</td>
+      <td class="num neg">-19.8%</td>
+    </tr>
+    <tr>
+      <td>Europe</td>
+      <td class="num">962M</td>
+      <td class="num">3%</td>
+      <td class="num neg">-33.3%</td>
+    </tr>
+  </tbody>
+</table>
+</section>
+
+<section>
+<h2><span class="n">2</span> Product &amp; Technology</h2>
+
+<h3>Business segments</h3>
+<table>
+  <thead><tr><th>Segment</th><th class="num">Revenue</th><th class="num">% of total</th><th class="num">YoY</th><th>Basis</th></tr></thead>
+  <tbody>
+    <tr>
+      <td>Semiconductor Systems<div class="muted small">This segment designs, develops, manufactures, and sells a wide range of equipment used to fabricate semiconductor chips.</div></td>
+      <td class="num">20,798M</td>
+      <td class="num">73%</td>
+      <td class="num pos">+4.5%</td>
+      <td class="muted small">Revenue as reported in FY2025</td>
+    </tr>
+    <tr>
+      <td>Applied Global Services<div class="muted small">AGS provides services, spares, and factory automation software to customer fabrication plants globally.</div></td>
+      <td class="num">6,385M</td>
+      <td class="num">23%</td>
+      <td class="num pos">+2.6%</td>
+      <td class="muted small">Revenue as reported in FY2025</td>
+    </tr>
+    <tr>
+      <td>Corporate and Other</td>
+      <td class="num">1,185M</td>
+      <td class="num">4%</td>
+      <td class="num pos">+13.9%</td>
+      <td class="muted small">Revenue as reported in FY2025</td>
+    </tr>
+    <tr>
+      <td>Display</td>
+      <td class="num">885M</td>
+      <td class="num">3%</td>
+      <td class="num pos">+2.0%</td>
+      <td class="muted small">Revenue as reported in FY2024</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3>Process steps</h3>
+<p class="chips"><span class="chip">Deposition</span><span class="chip">CMP</span><span class="chip">Metrology</span><span class="chip">Materials Engineering</span><span class="chip">Process Control</span><span class="chip">Advanced Packaging</span><span class="chip">Inspection</span><span class="chip">Etch</span></p>
+
+<h3>Products</h3>
+<div class="grid">
+  <div class="card">
+    <h4>Centura™ Prime™ Epi</h4>
+<p class="muted small">Semiconductor Equipment</p><p>Enhances the selective growth of doped silicon germanium and silicon phosphorous in transistor source/drain regions.</p><p class="chips"><span class="chip">Deposition</span></p><p class="muted small">Technologies: Selective growth</p>    <p class="srcs"><a class="cid" href="#c_d99701fbde">c_d99701fbde</a></p>
+  </div>
+  <div class="card">
+    <h4>Opta™ Quad CMP</h4>
+<p class="muted small">Semiconductor Equipment</p><p>Engineered specifically for advanced packaging, continuously monitors wafer conditions during polish.</p><p class="chips"><span class="chip">CMP</span></p><p class="muted small">Technologies: Advanced packaging</p>    <p class="srcs"><a class="cid" href="#c_c55413e563">c_c55413e563</a></p>
+  </div>
+  <div class="card">
+    <h4>Nokota™ VMax™ 2 ECD</h4>
+<p class="muted small">Semiconductor Equipment</p><p>Provides high-precision copper plating for next-generation packaging applications.</p><p class="chips"><span class="chip">Deposition</span></p><p class="muted small">Technologies: High-precision copper plating</p>    <p class="srcs"><a class="cid" href="#c_734e47797b">c_734e47797b</a></p>
+  </div>
+  <div class="card">
+    <h4>Producer™ Avila™ 2 PECVD</h4>
+<p class="muted small">Semiconductor Equipment</p><p>Improves the mechanical stability of ultra-thin DRAM dies by depositing stress-balanced dielectric films around TSVs.</p><p class="chips"><span class="chip">Deposition</span></p><p class="muted small">Technologies: PECVD</p>    <p class="srcs"><a class="cid" href="#c_39c690a64f">c_39c690a64f</a></p>
+  </div>
+  <div class="card">
+    <h4>VeritySEM™ 7AP Metrology</h4>
+<p class="muted small">Metrology Equipment</p><p>Enables precise measurement of features on thick, heterogeneous and highly warped substrates.</p><p class="chips"><span class="chip">Metrology</span></p><p class="muted small">Technologies: eBeam metrology</p>    <p class="srcs"><a class="cid" href="#c_714151d5a1">c_714151d5a1</a></p>
+  </div>
+</div>
+
+<h3>Technologies</h3>
+<ul class="claims">
+  <li><b>Patterning Systems</b> — Address challenges resulting from shrinking pattern dimensions and the growing complexity in vertical stacking.    <span class="srcs"><a class="cid" href="#c_eff6cf7930">c_eff6cf7930</a></span>
+  </li>
+  <li><b>Transistor and Interconnect Technologies</b> — Enable continued power and performance improvements of 3D transistors.    <span class="srcs"><a class="cid" href="#c_a828a05b3b">c_a828a05b3b</a></span>
+  </li>
+  <li><b>Advanced Packaging Systems</b> — Use materials engineering expertise to connect multiple chips together through heterogeneous integration.    <span class="srcs"><a class="cid" href="#c_4d69905fb6">c_4d69905fb6</a></span>
+  </li>
+</ul>
+</section>
+
+<section>
+<h2><span class="n">3</span> Market Drivers</h2>
+<div class="grid">
+  <div class="card">
+    <h4>AI infrastructure <span class="tag fact">FACT</span></h4>
+    <p>The rapid global build-out of AI computing infrastructure is a demand driver for Applied Materials.</p>
+    <p class="srcs"><a class="cid" href="#c_79612dbb00">c_79612dbb00</a></p>
+  </div>
+  <div class="card">
+    <h4>Advanced packaging <span class="tag fact">FACT</span></h4>
+    <p>Investments by semiconductor equipment customers are expected to remain strong with growth in the adoption of high-bandwidth memory and other forms of advanced packaging.</p>
+    <p class="srcs"><a class="cid" href="#c_9e1b93bc6e">c_9e1b93bc6e</a></p>
+  </div>
+  <div class="card">
+    <h4>Leading-edge logic <span class="tag fact">FACT</span></h4>
+    <p>Foundry and logic customers’ spending increased driven primarily by higher customer investments in leading-edge manufacturing technologies.</p>
+    <p class="srcs"><a class="cid" href="#c_56a066122f">c_56a066122f</a></p>
+  </div>
+</div>
+
+<h3>Growth drivers</h3>
+<ul class="claims">
+  <li>AI and data center infrastructure <span class="tag fact">FACT</span>
+    <span class="srcs"><a class="cid" href="#c_79612dbb00">c_79612dbb00</a></span></li>
+  <li>Advanced packaging <span class="tag fact">FACT</span>
+    <span class="srcs"><a class="cid" href="#c_9e1b93bc6e">c_9e1b93bc6e</a></span></li>
+</ul>
+</section>
+
+<section>
+<h2><span class="n">4</span> Customer Analysis</h2>
+<div class="card">
+  <h4>Foundry, logic and other
+<span class="tag disclosed">disclosed</span>
+  </h4>
+<p><b>Value created:</b> Improved power, performance, yield, and costs of semiconductor devices.</p>  <div class="two">
+<div><b>Requirements</b><ul><li>New capacity and technology transitions</li></ul></div><div><b>Pain points</b><ul><li>Significant changes in customer requirements</li></ul></div>  </div>
+  <p class="srcs"><a class="cid" href="#c_9edf338ce5">c_9edf338ce5</a><a class="cid" href="#c_2ffeacb08d">c_2ffeacb08d</a><a class="cid" href="#c_fb2e2811bc">c_fb2e2811bc</a></p>
+</div>
+<div class="card">
+  <h4>DRAM
+<span class="tag disclosed">disclosed</span>
+  </h4>
+<p><b>Value created:</b> Higher drive current and transistor efficiency, enabling faster, more power-efficient DRAM.</p>  <div class="two">
+<div><b>Requirements</b><ul><li>Investments in NAND fabrication equipment upgrades</li></ul></div>  </div>
+  <p class="srcs"><a class="cid" href="#c_9edf338ce5">c_9edf338ce5</a><a class="cid" href="#c_4f17463bd9">c_4f17463bd9</a><a class="cid" href="#c_c8afd89b58">c_c8afd89b58</a></p>
+</div>
+<div class="card">
+  <h4>NAND
+<span class="tag disclosed">disclosed</span>
+  </h4>
+<p><b>Value created:</b> Enabling 3D NAND scaling.</p>  <div class="two">
+  </div>
+  <p class="srcs"><a class="cid" href="#c_9edf338ce5">c_9edf338ce5</a><a class="cid" href="#c_a70f6f3257">c_a70f6f3257</a></p>
+</div>
+</section>
+
+<section>
+<h2><span class="n">5</span> Competitive Landscape</h2>
+<table>
+  <thead><tr><th>Competitor</th><th>Basis</th><th>Product overlap</th><th>Technology positioning</th><th>Market exposure</th></tr></thead>
+  <tbody>
+    <tr>
+      <td><b>Lam Research</b></td>
+      <td><span class="tag analysis">industry</span></td>
+      <td>Deposition, Etch, Advanced Packaging</td>
+      <td>Lam Research offers a broad range of deposition and etch technologies.</td>
+      <td>Advanced packaging solutions and services to maximize equipment performance.</td>
+    </tr>
+    <tr>
+      <td><b>KLA</b></td>
+      <td><span class="tag analysis">industry</span></td>
+      <td>Inspection, Metrology, Process Control</td>
+      <td>KLA provides inspection and metrology systems for wafer-level packaging.</td>
+      <td>Advanced wafer-level packaging and process control solutions.</td>
+    </tr>
+  </tbody>
+</table>
+<div class="grid">
+  <div class="card">
+    <h4>Lam Research <span class="tag analysis">industry</span></h4>
+<p><b>Strengths:</b> Advanced packaging solutions; Equipment Intelligence® solutions</p><p><b>Potential weaknesses:</b> Focus on non-leading edge products</p>    <p class="srcs"><a class="cid" href="#c_9067a3e47d">c_9067a3e47d</a><a class="cid" href="#c_aff958c1ca">c_aff958c1ca</a><a class="cid" href="#c_7d4185d3ae">c_7d4185d3ae</a><a class="cid" href="#c_b29acbd89a">c_b29acbd89a</a><a class="cid" href="#c_9311a924d0">c_9311a924d0</a><a class="cid" href="#c_eef9563fe5">c_eef9563fe5</a></p>
+  </div>
+  <div class="card">
+    <h4>KLA <span class="tag analysis">industry</span></h4>
+<p><b>Strengths:</b> Comprehensive data analysis solutions; Advanced patterning simulation software</p>    <p class="srcs"><a class="cid" href="#c_376c0d5c17">c_376c0d5c17</a><a class="cid" href="#c_c4ab07bbe9">c_c4ab07bbe9</a><a class="cid" href="#c_56b6e0a1b3">c_56b6e0a1b3</a><a class="cid" href="#c_7f2395e72f">c_7f2395e72f</a><a class="cid" href="#c_bba507e190">c_bba507e190</a></p>
+  </div>
+</div>
+</section>
+
+<section>
+<h2><span class="n">6</span> Business Analysis</h2>
+<table>
+  <thead><tr><th>Metric</th><th class="num">Latest FY</th><th class="num">YoY</th><th>Period</th><th>Source concept</th></tr></thead>
+  <tbody>
+    <tr>
+      <td>revenue</td>
+      <td class="num">28.4B</td>
+      <td class="num pos">+4.4%</td>
+      <td class="muted small">FY2025</td>
+      <td class="muted small mono">us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax</td>
+    </tr>
+    <tr>
+      <td>cost_of_revenue</td>
+      <td class="num">14.6B</td>
+      <td class="num pos">+2.0%</td>
+      <td class="muted small">FY2025</td>
+      <td class="muted small mono">us-gaap:CostOfGoodsAndServicesSold</td>
+    </tr>
+    <tr>
+      <td>gross_profit</td>
+      <td class="num">13.8B</td>
+      <td class="num pos">+7.1%</td>
+      <td class="muted small">FY2025</td>
+      <td class="muted small mono">us-gaap:GrossProfit</td>
+    </tr>
+    <tr>
+      <td>rd_expense</td>
+      <td class="num">3.6B</td>
+      <td class="num pos">+10.4%</td>
+      <td class="muted small">FY2025</td>
+      <td class="muted small mono">us-gaap:ResearchAndDevelopmentExpense</td>
+    </tr>
+    <tr>
+      <td>sga_expense</td>
+      <td class="num">1.8B</td>
+      <td class="num neg">-1.6%</td>
+      <td class="muted small">FY2025</td>
+      <td class="muted small mono">us-gaap:SellingGeneralAndAdministrativeExpense</td>
+    </tr>
+    <tr>
+      <td>operating_income</td>
+      <td class="num">8.3B</td>
+      <td class="num pos">+5.4%</td>
+      <td class="muted small">FY2025</td>
+      <td class="muted small mono">us-gaap:OperatingIncomeLoss</td>
+    </tr>
+    <tr>
+      <td>net_income</td>
+      <td class="num">7.0B</td>
+      <td class="num neg">-2.5%</td>
+      <td class="muted small">FY2025</td>
+      <td class="muted small mono">us-gaap:NetIncomeLoss</td>
+    </tr>
+    <tr>
+      <td>diluted_eps</td>
+      <td class="num">$8.66</td>
+      <td class="num pos">+0.6%</td>
+      <td class="muted small">FY2025</td>
+      <td class="muted small mono">us-gaap:EarningsPerShareDiluted</td>
+    </tr>
+    <tr>
+      <td>operating_cash_flow</td>
+      <td class="num">8.0B</td>
+      <td class="num neg">-8.3%</td>
+      <td class="muted small">FY2025</td>
+      <td class="muted small mono">us-gaap:NetCashProvidedByUsedInOperatingActivities</td>
+    </tr>
+    <tr>
+      <td>capex</td>
+      <td class="num">2.3B</td>
+      <td class="num pos">+89.9%</td>
+      <td class="muted small">FY2025</td>
+      <td class="muted small mono">us-gaap:PaymentsToAcquirePropertyPlantAndEquipment</td>
+    </tr>
+    <tr>
+      <td>inventory</td>
+      <td class="num">6.6B</td>
+      <td class="num ">n/a</td>
+      <td class="muted small">FY2026 (instant)</td>
+      <td class="muted small mono">us-gaap:InventoryNet</td>
+    </tr>
+    <tr>
+      <td>deferred_revenue</td>
+      <td class="num">3.3B</td>
+      <td class="num ">n/a</td>
+      <td class="muted small">FY2026 (instant)</td>
+      <td class="muted small mono">us-gaap:ContractWithCustomerLiabilityCurrent</td>
+    </tr>
+    <tr>
+      <td>shares_diluted</td>
+      <td class="num">808.0M shares</td>
+      <td class="num neg">-3.1%</td>
+      <td class="muted small">FY2025</td>
+      <td class="muted small mono">us-gaap:WeightedAverageNumberOfDilutedSharesOutstanding</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3>Revenue trend</h3>
+<table>
+  <thead><tr><th>Period</th><th class="num">Revenue</th></tr></thead>
+  <tbody>
+    <tr><td>FY2025</td><td class="num">28.4B</td></tr>
+    <tr><td>FY2024</td><td class="num">27.2B</td></tr>
+    <tr><td>FY2023</td><td class="num">26.5B</td></tr>
+    <tr><td>FY2022</td><td class="num">25.8B</td></tr>
+    <tr><td>FY2021</td><td class="num">23.1B</td></tr>
+    <tr><td>FY2020</td><td class="num">17.2B</td></tr>
+    <tr><td>FY2019</td><td class="num">14.6B</td></tr>
+    <tr><td>FY2018</td><td class="num">16.7B</td></tr>
+  </tbody>
+</table>
+
+<h3>Management commentary</h3>
+<ul class="claims">
+<li>The Semiconductor Systems segment represents the largest contributor to our net revenue. <a class="cid" href="#c_81bb845f24">c_81bb845f24</a></li><li>Backlog consisted of: (1) orders for which written authorizations have been accepted, or shipment has occurred but revenue has not been recognized; and (2) contractual service revenue and maintenance fees. <a class="cid" href="#c_6eacfc9717">c_6eacfc9717</a></li><li>Backlog by reportable segment as of October 26, 2025 was as follows: Semiconductor Systems $ 7,105 47 %, Applied Global Services 7,141 48 %, Corporate and Other 756 5 %, Total 15,002 100 %. <a class="cid" href="#c_c8918c051f">c_c8918c051f</a></li><li>We believe that it is critical to make substantial investments in RD&amp;E to assure the availability of innovative technology that meets the current and projected requirements of our customers’ most advanced designs. <a class="cid" href="#c_8f47f3a3ea">c_8f47f3a3ea</a></li><li>We have and continue to invest in RD&amp;E in order to continue to offer new products and technologies. <a class="cid" href="#c_7c8fe71463">c_7c8fe71463</a></li><li>Net revenue for Semiconductor Systems by market for the periods presented were as follows: Foundry, logic and other 67 %, Dynamic random-access memory (DRAM) 26 %, Flash memory (NAND) 7 %. <a class="cid" href="#c_bbb2dab280">c_bbb2dab280</a></li><li>Semiconductor Systems net revenue increased in fiscal 2025 as compared to the prior year as customers continued to make strategic investments in new capacity and new technology transitions. <a class="cid" href="#c_2ffeacb08d">c_2ffeacb08d</a></li><li>Applied Materials generated record revenue of $9.12 billion. <a class="cid" href="#c_165ecbbeca">c_165ecbbeca</a></li><li>The company reported GAAP gross margin of 50.3 percent. <a class="cid" href="#c_949956225c">c_949956225c</a></li><li>The company reported record operating income of $3.08 billion or 33.7 percent of revenue. <a class="cid" href="#c_197df51182">c_197df51182</a></li></ul>
+</section>
+
+<section>
+<h2><span class="n">7</span> Commercial Insights</h2>
+<div class="grid">
+  <div class="card">
+    <h4>Growth Opportunity <span class="tag analysis">ANALYSIS</span></h4>
+    <p>Strong demand for AI infrastructure and advanced packaging presents growth opportunities.</p>
+<p class="muted small">Reasoning: The rapid global build-out of AI computing infrastructure and investments in advanced packaging are expected to drive demand.</p>    <p class="srcs"><a class="cid" href="#c_79612dbb00">c_79612dbb00</a><a class="cid" href="#c_9e1b93bc6e">c_9e1b93bc6e</a></p>
+  </div>
+  <div class="card">
+    <h4>Business Risk <span class="tag analysis">ANALYSIS</span></h4>
+    <p>Customer concentration poses a business risk due to potential financial instability of key customers.</p>
+<p class="muted small">Reasoning: A relatively limited number of customers account for a substantial portion of Applied Materials&#39; business.</p>    <p class="srcs"><a class="cid" href="#c_631c5ad5bb">c_631c5ad5bb</a><a class="cid" href="#c_909f1907cc">c_909f1907cc</a></p>
+  </div>
+</div>
+
+<h3>Risks</h3>
+<ul class="claims">
+  <li><b>Customer concentration</b> <span class="muted small">(customer concentration)</span>    <span class="tag fact">FACT</span>
+    <span class="srcs"><a class="cid" href="#c_631c5ad5bb">c_631c5ad5bb</a></span>
+  </li>
+  <li><b>Supply chain disruptions</b> <span class="muted small">(supply chain)</span>    <span class="tag fact">FACT</span>
+    <span class="srcs"><a class="cid" href="#c_e646cafff0">c_e646cafff0</a><a class="cid" href="#c_2fcd487ab4">c_2fcd487ab4</a></span>
+  </li>
+</ul>
+</section>
+
+<section>
+<h2>Evidence Coverage</h2>
+<p class="muted">Measured against advisory targets. A category below target means the reviewed sources did not support it - it is not filled in to reach the target.</p>
+<table>
+  <thead><tr><th>Category</th><th class="num">Claims</th><th class="num">Target</th><th>Status</th></tr></thead>
+  <tbody>
+    <tr>
+      <td>Products</td>
+      <td class="num">4</td>
+      <td class="num">3</td>
+      <td><span class="tag fact">at target</span></td>
+    </tr>
+    <tr>
+      <td>Process Steps</td>
+      <td class="num">6</td>
+      <td class="num">2</td>
+      <td><span class="tag fact">at target</span></td>
+    </tr>
+    <tr>
+      <td>Technologies</td>
+      <td class="num">17</td>
+      <td class="num">2</td>
+      <td><span class="tag fact">at target</span></td>
+    </tr>
+    <tr>
+      <td>Customer Needs</td>
+      <td class="num">10</td>
+      <td class="num">2</td>
+      <td><span class="tag fact">at target</span></td>
+    </tr>
+    <tr>
+      <td>Market Drivers</td>
+      <td class="num">17</td>
+      <td class="num">2</td>
+      <td><span class="tag fact">at target</span></td>
+    </tr>
+    <tr>
+      <td>Competitors</td>
+      <td class="num">6</td>
+      <td class="num">1</td>
+      <td><span class="tag fact">at target</span></td>
+    </tr>
+    <tr>
+      <td>Commercial Implications</td>
+      <td class="num">34</td>
+      <td class="num">2</td>
+      <td><span class="tag fact">at target</span></td>
+    </tr>
+  </tbody>
+</table>
+</section>
+
+<section>
+<h2>Sources</h2>
+<table>
+  <thead><tr><th>Source ID</th><th>Type</th><th>Title</th><th>Published</th><th>SHA-256</th></tr></thead>
+  <tbody>
+    <tr>
+      <td class="mono small">sec_8_k_2026-08-27</td>
+      <td>8-K</td>
+      <td>Applied Materials 8-K filed 2026-08-27</td>
+      <td class="muted small">2026-08-27</td>
+      <td class="mono small">68375d349b1d</td>
+    </tr>
+    <tr>
+      <td class="mono small">sec_10_q_2026-08-20</td>
+      <td>10-Q</td>
+      <td>Applied Materials 10-Q filed 2026-08-20</td>
+      <td class="muted small">2026-08-20</td>
+      <td class="mono small">ce8397b7ae32</td>
+    </tr>
+    <tr>
+      <td class="mono small">sec_8_k_2026-08-13</td>
+      <td>8-K</td>
+      <td>Applied Materials 8-K filed 2026-08-13</td>
+      <td class="muted small">2026-08-13</td>
+      <td class="mono small">f3c74d24d823</td>
+    </tr>
+    <tr>
+      <td class="mono small">sec_8k_2026-08-13_ex991</td>
+      <td>Press Release</td>
+      <td>Applied Materials earnings release 2026-08-13</td>
+      <td class="muted small">2026-08-13</td>
+      <td class="mono small">0d389afe0bfa</td>
+    </tr>
+    <tr>
+      <td class="mono small">sec_10_q_2026-05-21</td>
+      <td>10-Q</td>
+      <td>Applied Materials 10-Q filed 2026-05-21</td>
+      <td class="muted small">2026-05-21</td>
+      <td class="mono small">bdeadb1d78d8</td>
+    </tr>
+    <tr>
+      <td class="mono small">sec_8_k_2026-05-14</td>
+      <td>8-K</td>
+      <td>Applied Materials 8-K filed 2026-05-14</td>
+      <td class="muted small">2026-05-14</td>
+      <td class="mono small">e84e3da2a6ec</td>
+    </tr>
+    <tr>
+      <td class="mono small">sec_8k_2026-05-14_ex991</td>
+      <td>Press Release</td>
+      <td>Applied Materials earnings release 2026-05-14</td>
+      <td class="muted small">2026-05-14</td>
+      <td class="mono small">e821459abc6a</td>
+    </tr>
+    <tr>
+      <td class="mono small">sec_8_k_2026-03-13</td>
+      <td>8-K</td>
+      <td>Applied Materials 8-K filed 2026-03-13</td>
+      <td class="muted small">2026-03-13</td>
+      <td class="mono small">6f284ee54c40</td>
+    </tr>
+    <tr>
+      <td class="mono small">sec_10_q_2026-02-19</td>
+      <td>10-Q</td>
+      <td>Applied Materials 10-Q filed 2026-02-19</td>
+      <td class="muted small">2026-02-19</td>
+      <td class="mono small">9ca631aa0a2c</td>
+    </tr>
+    <tr>
+      <td class="mono small">sec_8_k_2026-02-12</td>
+      <td>8-K</td>
+      <td>Applied Materials 8-K filed 2026-02-12</td>
+      <td class="muted small">2026-02-12</td>
+      <td class="mono small">569b09bf7de6</td>
+    </tr>
+    <tr>
+      <td class="mono small">sec_8k_2026-02-12_ex991</td>
+      <td>Press Release</td>
+      <td>Applied Materials earnings release 2026-02-12</td>
+      <td class="muted small">2026-02-12</td>
+      <td class="mono small">4961b58a991b</td>
+    </tr>
+    <tr>
+      <td class="mono small">sec_8_k_2026-02-12</td>
+      <td>8-K</td>
+      <td>Applied Materials 8-K filed 2026-02-12</td>
+      <td class="muted small">2026-02-12</td>
+      <td class="mono small">f2f72d3d389e</td>
+    </tr>
+    <tr>
+      <td class="mono small">sec_10_k_2025</td>
+      <td>10-K</td>
+      <td>Applied Materials 10-K filed 2025-12-12</td>
+      <td class="muted small">2025-12-12</td>
+      <td class="mono small">62c59e06e044</td>
+    </tr>
+    <tr>
+      <td class="mono small">sec_8_k_2025-11-13</td>
+      <td>8-K</td>
+      <td>Applied Materials 8-K filed 2025-11-13</td>
+      <td class="muted small">2025-11-13</td>
+      <td class="mono small">89fafb19af21</td>
+    </tr>
+    <tr>
+      <td class="mono small">sec_8k_2025-11-13_ex991</td>
+      <td>Press Release</td>
+      <td>Applied Materials earnings release 2025-11-13</td>
+      <td class="muted small">2025-11-13</td>
+      <td class="mono small">df8278e6ad89</td>
+    </tr>
+    <tr>
+      <td class="mono small">sec_8_k_2025-10-23</td>
+      <td>8-K</td>
+      <td>Applied Materials 8-K filed 2025-10-23</td>
+      <td class="muted small">2025-10-23</td>
+      <td class="mono small">4e3342da4c88</td>
+    </tr>
+    <tr>
+      <td class="mono small">sec_10_q_2025-08-21</td>
+      <td>10-Q</td>
+      <td>Applied Materials 10-Q filed 2025-08-21</td>
+      <td class="muted small">2025-08-21</td>
+      <td class="mono small">57443757eb56</td>
+    </tr>
+    <tr>
+      <td class="mono small">sec_10_k_2024</td>
+      <td>10-K</td>
+      <td>Applied Materials 10-K filed 2024-12-13</td>
+      <td class="muted small">2024-12-13</td>
+      <td class="mono small">351106a22de6</td>
+    </tr>
+    <tr>
+      <td class="mono small">sec_10_k_2023</td>
+      <td>10-K</td>
+      <td>Applied Materials 10-K filed 2023-12-15</td>
+      <td class="muted small">2023-12-15</td>
+      <td class="mono small">9ff2d04bc1e9</td>
+    </tr>
+    <tr>
+      <td class="mono small">sec_xbrl_facts</td>
+      <td>SEC-XBRL</td>
+      <td>APPLIED MATERIALS INC /DE XBRL company facts</td>
+      <td class="muted small"></td>
+      <td class="mono small">65ecfedd5bfd</td>
+    </tr>
+    <tr>
+      <td class="mono small">sec_peer_lam_research_2026</td>
+      <td>10-K</td>
+      <td>Lam Research 10-K (peer filing, competitive overlap)</td>
+      <td class="muted small">2026-08-07</td>
+      <td class="mono small">816b8ef843cd</td>
+    </tr>
+    <tr>
+      <td class="mono small">sec_peer_kla_2026</td>
+      <td>10-K</td>
+      <td>KLA 10-K (peer filing, competitive overlap)</td>
+      <td class="muted small">2026-08-06</td>
+      <td class="mono small">0d1b7c3446c9</td>
+    </tr>
+  </tbody>
+</table>
+<p class="muted small">First-party filings only: annual reports, quarterly reports, 8-K earnings releases (Exhibit 99.1), SEC XBRL company facts, and peer-company filings for competitive overlap.</p>
+</section>
+
+<section>
+<h2>Evidence Ledger</h2>
+<p class="muted">112 verified claims. Each was extracted from the cited filing and checked to contain a verbatim supporting quote.</p>
+<input type="search" id="ledgerFilter" placeholder="Filter claims by text, topic or source…" autocomplete="off">
+<table id="ledger">
+  <thead><tr><th>Claim ID</th><th>Topic</th><th>Claim</th><th>Source</th><th>Verbatim quote</th></tr></thead>
+  <tbody>
+    <tr id="c_5bdff19d7d">
+      <td class="mono small">c_5bdff19d7d</td>
+      <td><span class="chip">company_overview</span></td>
+      <td>Applied Materials, Inc. is the leader in the materials engineering solutions used to produce virtually every semiconductor in the world.</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“Applied Materials, Inc. is the leader in the materials engineering solutions used to produce virtually every semiconductor in the world.”</td>
+    </tr>
+    <tr id="c_3731ed908f">
+      <td class="mono small">c_3731ed908f</td>
+      <td><span class="chip">customer</span></td>
+      <td>Our customers’ products are used across personal computing devices, mobile phones, artificial intelligence (AI) and data center servers, automobiles, connected devices, industrial applications and consumer electronics.</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“Our customers’ products are used across personal computing devices, mobile phones, artificial intelligence (AI) and data center servers, automobiles, connected devices, industrial applications and consumer electronics.”</td>
+    </tr>
+    <tr id="c_81bb845f24">
+      <td class="mono small">c_81bb845f24</td>
+      <td><span class="chip">financial_commentary</span></td>
+      <td>The Semiconductor Systems segment represents the largest contributor to our net revenue.</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“The Semiconductor Systems segment represents the largest contributor to our net revenue.”</td>
+    </tr>
+    <tr id="c_ee8bcbcd6b">
+      <td class="mono small">c_ee8bcbcd6b</td>
+      <td><span class="chip">product</span></td>
+      <td>Our Semiconductor Systems segment designs, develops, manufactures and sells a wide range of equipment used to fabricate semiconductor chips, also referred to as integrated circuits (ICs).</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“Our Semiconductor Systems segment designs, develops, manufactures and sells a wide range of equipment used to fabricate semiconductor chips, also referred to as integrated circuits (ICs).”</td>
+    </tr>
+    <tr id="c_686e96eaed">
+      <td class="mono small">c_686e96eaed</td>
+      <td><span class="chip">process_step</span></td>
+      <td>Our products address steps across materials engineering, process control and advanced packaging, including the conversion of patterns into device structures, transistor and interconnect fabrication, metrology, inspection and review, and packaging technologies for connecting finished IC die.</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“Our products address steps across materials engineering, process control and advanced packaging, including the conversion of patterns into device structures, transistor and interconnect fabrication, metrology, inspection and review, and packaging technologies for connecting finished IC die.”</td>
+    </tr>
+    <tr id="c_5c0c55d124">
+      <td class="mono small">c_5c0c55d124</td>
+      <td><span class="chip">product</span></td>
+      <td>Our equipment helps customers improve the power, performance, yield and costs of semiconductor devices.</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“Our equipment helps customers improve the power, performance, yield and costs of semiconductor devices.”</td>
+    </tr>
+    <tr id="c_eff6cf7930">
+      <td class="mono small">c_eff6cf7930</td>
+      <td><span class="chip">technology</span></td>
+      <td>Our patterning systems and technologies address challenges resulting from shrinking pattern dimensions and the growing complexity in vertical stacking found in today’s most advanced semiconductor devices.</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“Our patterning systems and technologies address challenges resulting from shrinking pattern dimensions and the growing complexity in vertical stacking found in today’s most advanced semiconductor devices.”</td>
+    </tr>
+    <tr id="c_a828a05b3b">
+      <td class="mono small">c_a828a05b3b</td>
+      <td><span class="chip">technology</span></td>
+      <td>Our transistor and interconnect products and technologies enable continued power and performance improvements of 3D transistors.</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“Our transistor and interconnect products and technologies enable continued power and performance improvements of 3D transistors.”</td>
+    </tr>
+    <tr id="c_eea7c9c2d0">
+      <td class="mono small">c_eea7c9c2d0</td>
+      <td><span class="chip">process_step</span></td>
+      <td>Our process control systems employ optical and eBeam technologies that allow customers to inspect and review critical semiconductor architectures throughout the manufacturing process.</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“Our process control systems employ optical and eBeam technologies that allow customers to inspect and review critical semiconductor architectures throughout the manufacturing process.”</td>
+    </tr>
+    <tr id="c_4d69905fb6">
+      <td class="mono small">c_4d69905fb6</td>
+      <td><span class="chip">technology</span></td>
+      <td>Applied Materials&#39; advanced packaging systems use materials engineering expertise to connect multiple chips together through heterogeneous integration.</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“Our advanced packaging systems use our materials engineering expertise to allow customers to connect multiple chips together through heterogeneous integration.”</td>
+    </tr>
+    <tr id="c_9edf338ce5">
+      <td class="mono small">c_9edf338ce5</td>
+      <td><span class="chip">customer</span></td>
+      <td>Applied Materials&#39; Semiconductor Systems sales are to customers that serve the foundry, logic and other; dynamic random access memory (DRAM); and flash memory (NAND) markets.</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“Our Semiconductor Systems sales are to customers that serve the following markets: foundry, logic and other; dynamic random access memory (DRAM); and flash memory (NAND).”</td>
+    </tr>
+    <tr id="c_1e3ac2496f">
+      <td class="mono small">c_1e3ac2496f</td>
+      <td><span class="chip">technology</span></td>
+      <td>Leading-edge technology nodes are defined as 7 nanometers and smaller.</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“Leading-edge represents customers that are producing on the most advanced technology nodes, defined as 7 nanometers and smaller.”</td>
+    </tr>
+    <tr id="c_1c56bd51b7">
+      <td class="mono small">c_1c56bd51b7</td>
+      <td><span class="chip">market_driver</span></td>
+      <td>Non-leading edge technology nodes serve markets such as internet of things, communications, automotive, power and sensors.</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“Non-leading edge technology nodes serve markets such as internet of things, communications, automotive, power and sensors.”</td>
+    </tr>
+    <tr id="c_5bdfc4b3cb">
+      <td class="mono small">c_5bdfc4b3cb</td>
+      <td><span class="chip">company_overview</span></td>
+      <td>Our AGS segment provides services, spares and factory automation software to customer fabrication plants globally.</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“Our AGS segment provides services, spares and factory automation software to customer fabrication plants globally.”</td>
+    </tr>
+    <tr id="c_216c92ffe2">
+      <td class="mono small">c_216c92ffe2</td>
+      <td><span class="chip">company_overview</span></td>
+      <td>Through October 26, 2025, our AGS segment also manufactured and sold 200 millimeter (200mm) and other equipment to customers globally that serve non-leading-edge markets.</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“Through October 26, 2025, our AGS segment also manufactured and sold 200 millimeter (200mm) and other equipment to customers globally that serve non-leading-edge markets.”</td>
+    </tr>
+    <tr id="c_4b1a341e16">
+      <td class="mono small">c_4b1a341e16</td>
+      <td><span class="chip">company_overview</span></td>
+      <td>Effective the first quarter of fiscal 2026, our 200mm equipment business will be moved to our Semiconductor Systems segment.</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“Effective the first quarter of fiscal 2026, our 200mm equipment business will be moved to our Semiconductor Systems segment.”</td>
+    </tr>
+    <tr id="c_6017a377d6">
+      <td class="mono small">c_6017a377d6</td>
+      <td><span class="chip">customer</span></td>
+      <td>AGS’s transactional and subscription service products, spares and factory automation software is purchased by customers to optimize the performance of our large, global installed base of semiconductor and other equipment.</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“AGS’s transactional and subscription service products, spares and factory automation software is purchased by customers to optimize the performance of our large, global installed base of semiconductor and other equipment.”</td>
+    </tr>
+    <tr id="c_5009ea5f69">
+      <td class="mono small">c_5009ea5f69</td>
+      <td><span class="chip">customer</span></td>
+      <td>These solutions are also used to optimize plant performance and productivity.</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“These solutions are also used to optimize plant performance and productivity.”</td>
+    </tr>
+    <tr id="c_c8d49bfd10">
+      <td class="mono small">c_c8d49bfd10</td>
+      <td><span class="chip">customer</span></td>
+      <td>Customer demand is fulfilled through a global distribution system and trained field engineers located near customer sites to support our semiconductor and other equipment worldwide.</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“Customer demand is fulfilled through a global distribution system and trained field engineers located near customer sites to support our semiconductor and other equipment worldwide.”</td>
+    </tr>
+    <tr id="c_6eacfc9717">
+      <td class="mono small">c_6eacfc9717</td>
+      <td><span class="chip">financial_commentary</span></td>
+      <td>Backlog consisted of: (1) orders for which written authorizations have been accepted, or shipment has occurred but revenue has not been recognized; and (2) contractual service revenue and maintenance fees.</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“Backlog consisted of: (1) orders for which written authorizations have been accepted, or shipment has occurred but revenue has not been recognized; and (2) contractual service revenue and maintenance fees.”</td>
+    </tr>
+    <tr id="c_c8918c051f">
+      <td class="mono small">c_c8918c051f</td>
+      <td><span class="chip">financial_commentary</span></td>
+      <td>Backlog by reportable segment as of October 26, 2025 was as follows: Semiconductor Systems $ 7,105 47 %, Applied Global Services 7,141 48 %, Corporate and Other 756 5 %, Total 15,002 100 %.</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“Backlog by reportable segment as of October 26, 2025 was as follows: 2025 (In millions, except percentages) Semiconductor Systems $ 7,105 47 % Applied Global Services 7,141 48 % Corporate and Other 756 5 % Total 15,002 100 %.”</td>
+    </tr>
+    <tr id="c_d523852eed">
+      <td class="mono small">c_d523852eed</td>
+      <td><span class="chip">market_driver</span></td>
+      <td>Our business is based on capital equipment investments by major semiconductor and other manufacturers, and is subject to significant variability in customer demand for our products.</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“Our business is based on capital equipment investments by major semiconductor and other manufacturers, and is subject to significant variability in customer demand for our products.”</td>
+    </tr>
+    <tr id="c_9ad89fc5af">
+      <td class="mono small">c_9ad89fc5af</td>
+      <td><span class="chip">market_driver</span></td>
+      <td>Customers’ expenditures depend on many factors, including: general economic conditions; anticipated market demand and pricing for semiconductors and other electronic devices; the development of new technologies; customers’ factory utilization; capital resources and financing; trade policies and export regulations; and government incentives.</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“Customers’ expenditures depend on many factors, including: general economic conditions; anticipated market demand and pricing for semiconductors and other electronic devices; the development of new technologies; customers’ factory utilization; capital resources and financing; trade policies and expo”</td>
+    </tr>
+    <tr id="c_cd98f0d921">
+      <td class="mono small">c_cd98f0d921</td>
+      <td><span class="chip">competitor</span></td>
+      <td>The industries in which we operate are highly competitive and characterized by rapid technological change.</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“The industries in which we operate are highly competitive and characterized by rapid technological change.”</td>
+    </tr>
+    <tr id="c_8509936f07">
+      <td class="mono small">c_8509936f07</td>
+      <td><span class="chip">competitor</span></td>
+      <td>Our ability to compete generally depends on our ability to commercialize our technology in a timely manner, continually improve our products, and develop new products that meet constantly evolving customer requirements.</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“Our ability to compete generally depends on our ability to commercialize our technology in a timely manner, continually improve our products, and develop new products that meet constantly evolving customer requirements.”</td>
+    </tr>
+    <tr id="c_c107a17e66">
+      <td class="mono small">c_c107a17e66</td>
+      <td><span class="chip">competitor</span></td>
+      <td>Significant competitive factors include technical capability and differentiation, productivity, cost-effectiveness and the ability to support a global customer base.</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“Significant competitive factors include technical capability and differentiation, productivity, cost-effectiveness and the ability to support a global customer base.”</td>
+    </tr>
+    <tr id="c_7a01827fff">
+      <td class="mono small">c_7a01827fff</td>
+      <td><span class="chip">competitor</span></td>
+      <td>We could see increased competition from domestic equipment manufacturers in China resulting from local government incentives and funding as well as export controls established by the United States government to restrict the sale of certain technologies to customers in China.</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“We could see increased competition from domestic equipment manufacturers in China resulting from local government incentives and funding as well as export controls established by the United States government to restrict the sale of certain technologies to customers in China.”</td>
+    </tr>
+    <tr id="c_fef18993bb">
+      <td class="mono small">c_fef18993bb</td>
+      <td><span class="chip">competitor</span></td>
+      <td>Export controls enacted by the United States government that restrict the sale of certain technologies to customers in China may also provide an advantage to our international competitors.</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“Export controls enacted by the United States government that restrict the sale of certain technologies to customers in China may also provide an advantage to our international competitors.”</td>
+    </tr>
+    <tr id="c_3bb17526c1">
+      <td class="mono small">c_3bb17526c1</td>
+      <td><span class="chip">competitor</span></td>
+      <td>Our ability to compete requires a high level of investment in RD&amp;E, marketing and sales, and global customer support activities.</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“Our ability to compete requires a high level of investment in RD&amp;E, marketing and sales, and global customer support activities.”</td>
+    </tr>
+    <tr id="c_cf68b3672d">
+      <td class="mono small">c_cf68b3672d</td>
+      <td><span class="chip">market_driver</span></td>
+      <td>The semiconductor industry is driven by demand for advanced electronic products, including smartphones and other mobile devices, servers, personal computers, automotive electronics, storage, and other products.</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“The semiconductor industry is driven by demand for advanced electronic products, including smartphones and other mobile devices, servers, personal computers, automotive electronics, storage, and other products.”</td>
+    </tr>
+    <tr id="c_fd15c73527">
+      <td class="mono small">c_fd15c73527</td>
+      <td><span class="chip">company_overview</span></td>
+      <td>We provide equipment, services and software to the semiconductor and related industries.</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“We provide equipment, services and software to the semiconductor and related industries.”</td>
+    </tr>
+    <tr id="c_8586661d45">
+      <td class="mono small">c_8586661d45</td>
+      <td><span class="chip">customer</span></td>
+      <td>Our customers include manufacturers of semiconductor wafers and chips and other electronic devices.</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“Our customers include manufacturers of semiconductor wafers and chips and other electronic devices.”</td>
+    </tr>
+    <tr id="c_ed9b537631">
+      <td class="mono small">c_ed9b537631</td>
+      <td><span class="chip">customer</span></td>
+      <td>Our customers’ products are used in a wide variety of products such as personal computing devices, mobile phones, artificial intelligence (AI) and data center servers, automobiles, connected devices, industrial applications and consumer electronics.</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“Our customers’ products are used in a wide variety of products such as personal computing devices, mobile phones, artificial intelligence (AI) and data center servers, automobiles, connected devices, industrial applications and consumer electronics.”</td>
+    </tr>
+    <tr id="c_58bb4eb306">
+      <td class="mono small">c_58bb4eb306</td>
+      <td><span class="chip">strategy</span></td>
+      <td>Our strategic priorities include developing products that help solve customers’ challenges at technology inflections, growing our service business, and expanding our served market opportunities in the semiconductor industry.</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“Our strategic priorities include developing products that help solve customers’ challenges at technology inflections, growing our service business, and expanding our served market opportunities in the semiconductor industry.”</td>
+    </tr>
+    <tr id="c_2d8bdd84c7">
+      <td class="mono small">c_2d8bdd84c7</td>
+      <td><span class="chip">strategy</span></td>
+      <td>Our long-term growth strategy requires continued development of new materials engineering capabilities, including products and platforms that enable expansion into new and adjacent markets.</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“Our long-term growth strategy requires continued development of new materials engineering capabilities, including products and platforms that enable expansion into new and adjacent markets.”</td>
+    </tr>
+    <tr id="c_65cf3bf7eb">
+      <td class="mono small">c_65cf3bf7eb</td>
+      <td><span class="chip">customer</span></td>
+      <td>We collaborate closely with our global customers to design systems and processes to meet their technical and production requirements.</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“We collaborate closely with our global customers to design systems and processes to meet their technical and production requirements.”</td>
+    </tr>
+    <tr id="c_8f47f3a3ea">
+      <td class="mono small">c_8f47f3a3ea</td>
+      <td><span class="chip">financial_commentary</span></td>
+      <td>We believe that it is critical to make substantial investments in RD&amp;E to assure the availability of innovative technology that meets the current and projected requirements of our customers’ most advanced designs.</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“We believe that it is critical to make substantial investments in RD&amp;E to assure the availability of innovative technology that meets the current and projected requirements of our customers’ most advanced designs.”</td>
+    </tr>
+    <tr id="c_7c8fe71463">
+      <td class="mono small">c_7c8fe71463</td>
+      <td><span class="chip">financial_commentary</span></td>
+      <td>We have and continue to invest in RD&amp;E in order to continue to offer new products and technologies.</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“We have and continue to invest in RD&amp;E in order to continue to offer new products and technologies.”</td>
+    </tr>
+    <tr id="c_c5ab115772">
+      <td class="mono small">c_c5ab115772</td>
+      <td><span class="chip">company_overview</span></td>
+      <td>We operate in two reportable segments: Semiconductor Systems and Applied Global Services® (AGS).</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“We operate in two reportable segments: Semiconductor Systems and Applied Global Services® (AGS).”</td>
+    </tr>
+    <tr id="c_4879d8cb23">
+      <td class="mono small">c_4879d8cb23</td>
+      <td><span class="chip">company_overview</span></td>
+      <td>The Semiconductor Systems segment is comprised primarily of capital equipment used to fabricate semiconductor chips.</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“The Semiconductor Systems segment is comprised primarily of capital equipment used to fabricate semiconductor chips.”</td>
+    </tr>
+    <tr id="c_8ec82124f3">
+      <td class="mono small">c_8ec82124f3</td>
+      <td><span class="chip">market_driver</span></td>
+      <td>Spending by semiconductor customers is driven by demand for products such as smartphones, mobile devices, personal computers (PC), servers for artificial intelligence (AI) and data centers, automobiles, clean energy, storage, and other products.</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“Spending by semiconductor customers, which include companies that operate in the foundry, logic, memory, and other semiconductor chip markets, is driven by demand for products such as smartphones, mobile devices, personal computers (PC), servers for artificial intelligence (AI) and data centers, aut”</td>
+    </tr>
+    <tr id="c_56f6802382">
+      <td class="mono small">c_56f6802382</td>
+      <td><span class="chip">market_driver</span></td>
+      <td>The growth of data and emerging end-market drivers such as AI, the internet of things, robotics and smart vehicles are also creating the next wave of growth for the industry.</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“The growth of data and emerging end-market drivers such as AI, the internet of things, robotics and smart vehicles are also creating the next wave of growth for the industry.”</td>
+    </tr>
+    <tr id="c_fb2e2811bc">
+      <td class="mono small">c_fb2e2811bc</td>
+      <td><span class="chip">customer</span></td>
+      <td>Products within the Semiconductor Systems segment are subject to significant changes in customer requirements, including transitions to smaller dimensions, increasingly complex chip architectures, new materials and an increasing number of applications.</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“As a result, products within the Semiconductor Systems segment are subject to significant changes in customer requirements, including transitions to smaller dimensions, increasingly complex chip architectures, new materials and an increasing number of applications.”</td>
+    </tr>
+    <tr id="c_298a73ae13">
+      <td class="mono small">c_298a73ae13</td>
+      <td><span class="chip">technology</span></td>
+      <td>Development efforts are focused on solving customers’ key technical challenges in patterning, transistor, interconnect, process control, and packaging performance.</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“Development efforts are focused on solving customers’ key technical challenges in patterning, transistor, interconnect, process control, and packaging performance.”</td>
+    </tr>
+    <tr id="c_2cb666f7de">
+      <td class="mono small">c_2cb666f7de</td>
+      <td><span class="chip">company_overview</span></td>
+      <td>The AGS segment provides services, spares and factory automation software to customer fabrication plants globally to help customers optimize performance of our large, global installed base of semiconductor and other equipment.</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“The AGS segment provides services, spares and factory automation software to customer fabrication plants globally to help customers optimize performance of our large, global installed base of semiconductor and other equipment.”</td>
+    </tr>
+    <tr id="c_3dfaa2dad3">
+      <td class="mono small">c_3dfaa2dad3</td>
+      <td><span class="chip">market_driver</span></td>
+      <td>Demand for AGS’ service and spares is driven by our large and growing installed base of manufacturing systems, and customers’ needs to shorten ramp times, improve system performance, and optimize factory output and operating costs.</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“Demand for AGS’ service and spares is driven by our large and growing installed base of manufacturing systems, and customers’ needs to shorten ramp times, improve system performance, and optimize factory output and operating costs.”</td>
+    </tr>
+    <tr id="c_165ea596eb">
+      <td class="mono small">c_165ea596eb</td>
+      <td><span class="chip">market_driver</span></td>
+      <td>Industry conditions that affect AGS’ sales of spares and services are primarily characterized by changes in semiconductor manufacturers’ wafer starts and utilization rates, growth of the installed base of equipment and growing service intensity of newer tools.</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“Industry conditions that affect AGS’ sales of spares and services are primarily characterized by changes in semiconductor manufacturers’ wafer starts and utilization rates, growth of the installed base of equipment and growing service intensity of newer tools.”</td>
+    </tr>
+    <tr id="c_5d195a42a7">
+      <td class="mono small">c_5d195a42a7</td>
+      <td><span class="chip">strategy</span></td>
+      <td>Our strategy is to continue to shift the AGS’ service and spares business to a subscription agreement model, improving customer factory performance and optimizing operating costs, and providing us a more predictable revenue stream.</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“Our strategy is to continue to shift the AGS’ service and spares business to a subscription agreement model, improving customer factory performance and optimizing operating costs, and providing us a more predictable revenue stream.”</td>
+    </tr>
+    <tr id="c_bbb2dab280">
+      <td class="mono small">c_bbb2dab280</td>
+      <td><span class="chip">financial_commentary</span></td>
+      <td>Net revenue for Semiconductor Systems by market for the periods presented were as follows: Foundry, logic and other 67 %, Dynamic random-access memory (DRAM) 26 %, Flash memory (NAND) 7 %.</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“Net revenue for Semiconductor Systems by market for the periods presented were as follows: 2025 2024 Foundry, logic and other 67 % 68 % Dynamic random-access memory (DRAM) 26 % 28 % Flash memory (NAND) 7 % 4 %”</td>
+    </tr>
+    <tr id="c_2ffeacb08d">
+      <td class="mono small">c_2ffeacb08d</td>
+      <td><span class="chip">financial_commentary</span></td>
+      <td>Semiconductor Systems net revenue increased in fiscal 2025 as compared to the prior year as customers continued to make strategic investments in new capacity and new technology transitions.</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“Semiconductor Systems net revenue increased in fiscal 2025 as compared to the prior year as customers continued to make strategic investments in new capacity and new technology transitions.”</td>
+    </tr>
+    <tr id="c_56a066122f">
+      <td class="mono small">c_56a066122f</td>
+      <td><span class="chip">market_driver</span></td>
+      <td>Foundry and logic customers’ spending in fiscal 2025 increased driven primarily by higher customer investments in leading-edge manufacturing technologies.</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“Foundry and logic customers’ spending in fiscal 2025 increased driven primarily by higher customer investments in leading-edge manufacturing technologies.”</td>
+    </tr>
+    <tr id="c_4f17463bd9">
+      <td class="mono small">c_4f17463bd9</td>
+      <td><span class="chip">market_driver</span></td>
+      <td>Memory customers’ spending in fiscal 2025 was higher due to increased customer investments in NAND fabrication equipment upgrades.</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“Memory customers’ spending in fiscal 2025 was higher due to increased customer investments in NAND fabrication equipment upgrades.”</td>
+    </tr>
+    <tr id="c_9e1b93bc6e">
+      <td class="mono small">c_9e1b93bc6e</td>
+      <td><span class="chip">market_driver</span></td>
+      <td>Investments by semiconductor equipment customers are expected to remain strong with growth in the adoption of high-bandwidth memory and other forms of advanced packaging.</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“Investments by semiconductor equipment customers are expected to remain strong with growth in the adoption of high-bandwidth memory and other forms of advanced packaging.”</td>
+    </tr>
+    <tr id="c_477908fb1b">
+      <td class="mono small">c_477908fb1b</td>
+      <td><span class="chip">market_driver</span></td>
+      <td>Demand for services is expected to grow as our installed base of systems and chambers increases and customers renew long-term service agreements.</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“Demand for services is expected to grow as our installed base of systems and chambers increases and customers renew long-term service agreements.”</td>
+    </tr>
+    <tr id="c_51799b5149">
+      <td class="mono small">c_51799b5149</td>
+      <td><span class="chip">market_driver</span></td>
+      <td>Over the longer term, we believe secular drivers such as data center AI, edge AI and the internet of things, robotics and electric and autonomous vehicles will continue to create the next wave of growth for semiconductors and expand our served market opportunities.</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“Over the longer term, we believe secular drivers such as data center AI, edge AI and the internet of things, robotics and electric and autonomous vehicles will continue to create the next wave of growth for semiconductors and expand our served market opportunities.”</td>
+    </tr>
+    <tr id="c_d0fe7c41ec">
+      <td class="mono small">c_d0fe7c41ec</td>
+      <td><span class="chip">market_driver</span></td>
+      <td>We believe device refresh cycles, such as those for PCs and smartphones, will also contribute to the next wave of growth.</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“We believe device refresh cycles, such as those for PCs and smartphones, will also contribute to the next wave of growth.”</td>
+    </tr>
+    <tr id="c_909f1907cc">
+      <td class="mono small">c_909f1907cc</td>
+      <td><span class="chip">customer</span></td>
+      <td>A relatively limited number of customers account for a substantial portion of our business.</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“relatively limited number of customers account for a substantial portion of our business.”</td>
+    </tr>
+    <tr id="c_a542171c0f">
+      <td class="mono small">c_a542171c0f</td>
+      <td><span class="chip">geography</span></td>
+      <td>The geographic concentration of our customer base could shift over time as a result of changes in technology and competitive landscape, as well as government policy and incentives to develop regional semiconductor industries.</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“The geographic concentration of our customer base could shift over time as a result of changes in technology and competitive landscape, as well as government policy and incentives to develop regional semiconductor industries.”</td>
+    </tr>
+    <tr id="c_631c5ad5bb">
+      <td class="mono small">c_631c5ad5bb</td>
+      <td><span class="chip">risk</span></td>
+      <td>The concentration of our customer base increases our risks related to the financial condition of our customers.</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“The concentration of our customer base increases our risks related to the financial condition of our customers.”</td>
+    </tr>
+    <tr id="c_1f6227178c">
+      <td class="mono small">c_1f6227178c</td>
+      <td><span class="chip">risk</span></td>
+      <td>If customers do not place orders, or they substantially reduce, delay or cancel orders, we may not be able to replace the business, which may have a material and adverse impact on our results of operations and financial condition.</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“If customers do not place orders, or they substantially reduce, delay or cancel orders, we may not be able to replace the business, which may have a material and adverse impact on our results of operations and financial condition.”</td>
+    </tr>
+    <tr id="c_e646cafff0">
+      <td class="mono small">c_e646cafff0</td>
+      <td><span class="chip">risk</span></td>
+      <td>Supply chain disruptions, manufacturing interruptions or delays, or the failure to accurately forecast customer demand, could affect our ability to meet customer demand, lead to higher costs, or result in excess or obsolete inventory.</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“Supply chain disruptions, manufacturing interruptions or delays, or the failure to accurately forecast customer demand, could affect our ability to meet customer demand, lead to higher costs, or result in excess or obsolete inventory.”</td>
+    </tr>
+    <tr id="c_2fcd487ab4">
+      <td class="mono small">c_2fcd487ab4</td>
+      <td><span class="chip">risk</span></td>
+      <td>Volatility in demand for our products and worldwide demand for semiconductor chips and electronic devices can impact our suppliers’ ability to meet our demand requirements and has in the past resulted in a shortage of parts, materials and services needed to manufacture our products.</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“Volatility in demand for our products and worldwide demand for semiconductor chips and electronic devices can impact our suppliers’ ability to meet our demand requirements and has in the past resulted in a shortage of parts, materials and services needed to manufacture our products.”</td>
+    </tr>
+    <tr id="c_91d27fb25a">
+      <td class="mono small">c_91d27fb25a</td>
+      <td><span class="chip">risk</span></td>
+      <td>These shortages, as well as delays in and unpredictability of shipments due to transportation interruptions, may adversely impact our manufacturing operations and our ability to meet customer demand.</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“These shortages, as well as delays in and unpredictability of shipments due to transportation interruptions, may adversely impact our manufacturing operations and our ability to meet customer demand.”</td>
+    </tr>
+    <tr id="c_47d3a0347e">
+      <td class="mono small">c_47d3a0347e</td>
+      <td><span class="chip">risk</span></td>
+      <td>Supply chain constraints may increase costs of logistics and parts for our products and may cause us to pass on increased costs to our customers, which may lead to reduced demand.</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“Supply chain constraints may increase costs of logistics and parts for our products and may cause us to pass on increased costs to our customers, which may lead to reduced demand.”</td>
+    </tr>
+    <tr id="c_165ecbbeca">
+      <td class="mono small">c_165ecbbeca</td>
+      <td><span class="chip">financial_commentary</span></td>
+      <td>Applied Materials generated record revenue of $9.12 billion.</td>
+      <td class="mono small">sec_8k_2026-08-13_ex991</td>
+      <td class="muted small">“Applied generated record revenue of $9.12 billion.”</td>
+    </tr>
+    <tr id="c_949956225c">
+      <td class="mono small">c_949956225c</td>
+      <td><span class="chip">financial_commentary</span></td>
+      <td>The company reported GAAP gross margin of 50.3 percent.</td>
+      <td class="mono small">sec_8k_2026-08-13_ex991</td>
+      <td class="muted small">“On a GAAP basis, the company reported gross margin of 50.3 percent,”</td>
+    </tr>
+    <tr id="c_197df51182">
+      <td class="mono small">c_197df51182</td>
+      <td><span class="chip">financial_commentary</span></td>
+      <td>The company reported record operating income of $3.08 billion or 33.7 percent of revenue.</td>
+      <td class="mono small">sec_8k_2026-08-13_ex991</td>
+      <td class="muted small">“record operating income of $3.08 billion or 33.7 percent of revenue,”</td>
+    </tr>
+    <tr id="c_3299e5d13b">
+      <td class="mono small">c_3299e5d13b</td>
+      <td><span class="chip">financial_commentary</span></td>
+      <td>The company reported earnings per share (EPS) of $3.17.</td>
+      <td class="mono small">sec_8k_2026-08-13_ex991</td>
+      <td class="muted small">“and earnings per share (EPS) of $3.17.”</td>
+    </tr>
+    <tr id="c_3de0357de4">
+      <td class="mono small">c_3de0357de4</td>
+      <td><span class="chip">financial_commentary</span></td>
+      <td>The company generated record cash from operations of $3.04 billion.</td>
+      <td class="mono small">sec_8k_2026-08-13_ex991</td>
+      <td class="muted small">“The company generated record cash from operations of $3.04 billion”</td>
+    </tr>
+    <tr id="c_cb51f3acf7">
+      <td class="mono small">c_cb51f3acf7</td>
+      <td><span class="chip">financial_commentary</span></td>
+      <td>Applied Materials achieved its 13th consecutive quarter of year-over-year gross margin expansion.</td>
+      <td class="mono small">sec_8k_2026-08-13_ex991</td>
+      <td class="muted small">“Applied Materials achieved its 13th consecutive quarter of year-over-year gross margin expansion,”</td>
+    </tr>
+    <tr id="c_85b82cf716">
+      <td class="mono small">c_85b82cf716</td>
+      <td><span class="chip">market_driver</span></td>
+      <td>The company expects continued strong revenue growth in the second half of the calendar year, particularly in DRAM as well as leading-edge foundry-logic and advanced packaging.</td>
+      <td class="mono small">sec_8k_2026-08-13_ex991</td>
+      <td class="muted small">“We expect continued strong revenue growth in the second half of the calendar year, particularly in DRAM as well as leading-edge foundry-logic and advanced packaging.”</td>
+    </tr>
+    <tr id="c_3bd4ced984">
+      <td class="mono small">c_3bd4ced984</td>
+      <td><span class="chip">strategy</span></td>
+      <td>The company is making additional manufacturing capacity investments to support projected demand through the end of the decade.</td>
+      <td class="mono small">sec_8k_2026-08-13_ex991</td>
+      <td class="muted small">“we are making additional manufacturing capacity investments to support projected demand through the end of the decade.”</td>
+    </tr>
+    <tr id="c_9030531038">
+      <td class="mono small">c_9030531038</td>
+      <td><span class="chip">product</span></td>
+      <td>Applied Materials introduced six new chipmaking systems for DRAM and advanced packaging.</td>
+      <td class="mono small">sec_8k_2026-08-13_ex991</td>
+      <td class="muted small">“Introduced six new chipmaking systems for DRAM and advanced packaging.”</td>
+    </tr>
+    <tr id="c_d99701fbde">
+      <td class="mono small">c_d99701fbde</td>
+      <td><span class="chip">technology</span></td>
+      <td>The Centura™ Prime™ Epi enhances the selective growth of doped silicon germanium and silicon phosphorous in transistor source/drain regions.</td>
+      <td class="mono small">sec_8k_2026-08-13_ex991</td>
+      <td class="muted small">“Enhanced Centura™ Prime™ Epi: selectively grows doped silicon germanium and silicon phosphorous in transistor source/drain regions, combining advanced strain engineering with precise doping control.”</td>
+    </tr>
+    <tr id="c_c8afd89b58">
+      <td class="mono small">c_c8afd89b58</td>
+      <td><span class="chip">technology</span></td>
+      <td>The Centura™ Prime™ Epi results in higher drive current and transistor efficiency, enabling faster, more power-efficient DRAM and high bandwidth memory (HBM).</td>
+      <td class="mono small">sec_8k_2026-08-13_ex991</td>
+      <td class="muted small">“The result is higher drive current and transistor efficiency, enabling faster, more power-efficient DRAM and high bandwidth memory (HBM).”</td>
+    </tr>
+    <tr id="c_c55413e563">
+      <td class="mono small">c_c55413e563</td>
+      <td><span class="chip">technology</span></td>
+      <td>Opta™ Quad CMP is engineered specifically for advanced packaging and continuously monitors wafer conditions during polish.</td>
+      <td class="mono small">sec_8k_2026-08-13_ex991</td>
+      <td class="muted small">“Opta™ Quad CMP: engineered specifically for advanced packaging, the Opta Quad continuously monitors wafer conditions during polish and dynamically adjusts in real time, improving within-wafer uniformity and total thickness variation control, which is particularly critical for hybrid bonding.”</td>
+    </tr>
+    <tr id="c_734e47797b">
+      <td class="mono small">c_734e47797b</td>
+      <td><span class="chip">technology</span></td>
+      <td>Nokota™ VMax™ 2 ECD provides high-precision copper plating for next-generation packaging applications.</td>
+      <td class="mono small">sec_8k_2026-08-13_ex991</td>
+      <td class="muted small">“Nokota™ VMax™ 2 ECD: high-precision copper plating across a broad range of applications for next-generation packaging, from TSV fill for 3D stacking to fine-pitch interconnects such as microbump formation.”</td>
+    </tr>
+    <tr id="c_b01c585276">
+      <td class="mono small">c_b01c585276</td>
+      <td><span class="chip">technology</span></td>
+      <td>Nokota VMax 2 introduces Adaptive Pattern Tuning (APT) to improve plating uniformity across the wafer.</td>
+      <td class="mono small">sec_8k_2026-08-13_ex991</td>
+      <td class="muted small">“Nokota VMax 2 introduces Adaptive Pattern Tuning (APT), which dynamically shapes the electric field to correct for layout-driven variation and improve plating uniformity across the wafer.”</td>
+    </tr>
+    <tr id="c_39c690a64f">
+      <td class="mono small">c_39c690a64f</td>
+      <td><span class="chip">technology</span></td>
+      <td>Producer™ Avila™ 2 PECVD improves the mechanical stability of ultra-thin DRAM dies by depositing stress-balanced dielectric films around TSVs.</td>
+      <td class="mono small">sec_8k_2026-08-13_ex991</td>
+      <td class="muted small">“Producer™ Avila™ 2 PECVD: improves the mechanical stability of ultra-thin DRAM dies by depositing stress-balanced dielectric films around TSVs, enabling reliable stacking of 12, 16 and future high-layer-count HBM designs.”</td>
+    </tr>
+    <tr id="c_714151d5a1">
+      <td class="mono small">c_714151d5a1</td>
+      <td><span class="chip">technology</span></td>
+      <td>VeritySEM™ 7AP Metrology enables precise measurement of features on thick, heterogeneous and highly warped substrates.</td>
+      <td class="mono small">sec_8k_2026-08-13_ex991</td>
+      <td class="muted small">“VeritySEM™ 7AP Metrology: critical dimension eBeam metrology enables precise measurement of features on thick, heterogeneous and highly warped substrates common in HBM and chiplet architectures.”</td>
+    </tr>
+    <tr id="c_534f9cc03d">
+      <td class="mono small">c_534f9cc03d</td>
+      <td><span class="chip">technology</span></td>
+      <td>VeritySEM AP systems deliver sub-10nm sensitivity, which is orders of magnitude better than optical tools.</td>
+      <td class="mono small">sec_8k_2026-08-13_ex991</td>
+      <td class="muted small">“VeritySEM AP systems automatically reconfigure to support a range of sizes and materials, while delivering sub-10nm sensitivity—orders of magnitude better than optical tools.”</td>
+    </tr>
+    <tr id="c_2216ec6068">
+      <td class="mono small">c_2216ec6068</td>
+      <td><span class="chip">technology</span></td>
+      <td>SEMVision™ G7AP Defect Analysis enables high-resolution defect review and automated classification across silicon, organic and glass substrates.</td>
+      <td class="mono small">sec_8k_2026-08-13_ex991</td>
+      <td class="muted small">“SEMVision™ G7AP Defect Analysis: extends Applied’s leadership in eBeam defect analysis into advanced packaging, enabling high-resolution defect review and automated classification across silicon, organic and glass substrates.”</td>
+    </tr>
+    <tr id="c_05edce8188">
+      <td class="mono small">c_05edce8188</td>
+      <td><span class="chip">technology</span></td>
+      <td>The SEMVision system can accelerate yield learning by helping customers quickly distinguish critical defects from nuisance signals.</td>
+      <td class="mono small">sec_8k_2026-08-13_ex991</td>
+      <td class="muted small">“The system can accelerate yield learning by helping customers quickly distinguish critical defects from nuisance signals.”</td>
+    </tr>
+    <tr id="c_d4488fe02c">
+      <td class="mono small">c_d4488fe02c</td>
+      <td><span class="chip">process_step</span></td>
+      <td>Applied Materials introduced new deposition and etch systems that help chipmakers extend scaling in logic and memory to deliver higher performance, improved energy efficiency and better manufacturing yield for next-generation AI chips.</td>
+      <td class="mono small">sec_8k_2026-08-13_ex991</td>
+      <td class="muted small">“Introduced new deposition and etch systems that help chipmakers extend scaling in logic and memory to deliver higher performance, improved energy efficiency and better manufacturing yield for next-generation AI chips.”</td>
+    </tr>
+    <tr id="c_74da23acab">
+      <td class="mono small">c_74da23acab</td>
+      <td><span class="chip">process_step</span></td>
+      <td>Centris™ Spectral™ SiN ALD leverages innovative microwave plasma technology to deliver uniform silicon nitride deposition in challenging 3D structures.</td>
+      <td class="mono small">sec_8k_2026-08-13_ex991</td>
+      <td class="muted small">“Centris™ Spectral™ SiN ALD: leverages innovative microwave plasma technology to deliver uniform silicon nitride deposition in challenging 3D structures.”</td>
+    </tr>
+    <tr id="c_a70f6f3257">
+      <td class="mono small">c_a70f6f3257</td>
+      <td><span class="chip">process_step</span></td>
+      <td>Producer™ Selectra™ Mo Etch selectively removes molybdenum for wordline separation to enable 3D NAND scaling.</td>
+      <td class="mono small">sec_8k_2026-08-13_ex991</td>
+      <td class="muted small">“Producer™ Selectra™ Mo Etch: selectively removes molybdenum for wordline separation to enable 3D NAND scaling.”</td>
+    </tr>
+    <tr id="c_1b8bd5c730">
+      <td class="mono small">c_1b8bd5c730</td>
+      <td><span class="chip">financial_commentary</span></td>
+      <td>Applied generated record revenue of $7.91 billion.</td>
+      <td class="mono small">sec_8k_2026-05-14_ex991</td>
+      <td class="muted small">“Applied generated record revenue of $7.91 billion.”</td>
+    </tr>
+    <tr id="c_1b77edf159">
+      <td class="mono small">c_1b77edf159</td>
+      <td><span class="chip">financial_commentary</span></td>
+      <td>The company reported gross margin of 49.9 percent.</td>
+      <td class="mono small">sec_8k_2026-05-14_ex991</td>
+      <td class="muted small">“On a GAAP basis, the company reported gross margin of 49.9 percent,”</td>
+    </tr>
+    <tr id="c_c681ce83c4">
+      <td class="mono small">c_c681ce83c4</td>
+      <td><span class="chip">financial_commentary</span></td>
+      <td>The company reported record earnings per share (EPS) of $3.51.</td>
+      <td class="mono small">sec_8k_2026-05-14_ex991</td>
+      <td class="muted small">“and record earnings per share (EPS) of $3.51.”</td>
+    </tr>
+    <tr id="c_ae3986137e">
+      <td class="mono small">c_ae3986137e</td>
+      <td><span class="chip">financial_commentary</span></td>
+      <td>The company reported operating income of $2.52 billion or 31.9 percent of revenue.</td>
+      <td class="mono small">sec_8k_2026-05-14_ex991</td>
+      <td class="muted small">“operating income of $2.52 billion or 31.9 percent of revenue,”</td>
+    </tr>
+    <tr id="c_5d10a30f49">
+      <td class="mono small">c_5d10a30f49</td>
+      <td><span class="chip">market_driver</span></td>
+      <td>Applied Materials expects its semiconductor equipment business to grow more than 30 percent in calendar 2026.</td>
+      <td class="mono small">sec_8k_2026-05-14_ex991</td>
+      <td class="muted small">“we now expect our semiconductor equipment business to grow more than 30 percent in calendar 2026,”</td>
+    </tr>
+    <tr id="c_79612dbb00">
+      <td class="mono small">c_79612dbb00</td>
+      <td><span class="chip">market_driver</span></td>
+      <td>The rapid global build-out of AI computing infrastructure is a demand driver for Applied Materials.</td>
+      <td class="mono small">sec_8k_2026-05-14_ex991</td>
+      <td class="muted small">“The rapid global build-out of AI computing infrastructure combined with Applied’s strong leadership positions in leading-edge logic, DRAM and advanced packaging provide an exceptionally strong foundation for sustained, multi-year revenue and profit growth.”</td>
+    </tr>
+    <tr id="c_0818509475">
+      <td class="mono small">c_0818509475</td>
+      <td><span class="chip">strategy</span></td>
+      <td>Applied has increased its build plan, inventory positions and logistics capacity.</td>
+      <td class="mono small">sec_8k_2026-05-14_ex991</td>
+      <td class="muted small">“We have increased our build plan, inventory positions and logistics capacity,”</td>
+    </tr>
+    <tr id="c_703a65a51a">
+      <td class="mono small">c_703a65a51a</td>
+      <td><span class="chip">financial_commentary</span></td>
+      <td>Applied Materials delivered record quarterly performance.</td>
+      <td class="mono small">sec_8k_2026-05-14_ex991</td>
+      <td class="muted small">“Applied Materials delivered record quarterly performance,”</td>
+    </tr>
+    <tr id="c_cd554e309f">
+      <td class="mono small">c_cd554e309f</td>
+      <td><span class="chip">financial_commentary</span></td>
+      <td>The company generated $845 million in cash from operations.</td>
+      <td class="mono small">sec_8k_2026-05-14_ex991</td>
+      <td class="muted small">“The company generated $845 million in cash from operations”</td>
+    </tr>
+    <tr id="c_460a371356">
+      <td class="mono small">c_460a371356</td>
+      <td><span class="chip">financial_commentary</span></td>
+      <td>Applied distributed $765 million to shareholders through $400 million in share repurchases and $365 million in dividends.</td>
+      <td class="mono small">sec_8k_2026-05-14_ex991</td>
+      <td class="muted small">“and distributed $765 million to shareholders through $400 million in share repurchases and $365 million in dividends.”</td>
+    </tr>
+    <tr id="c_e666813511">
+      <td class="mono small">c_e666813511</td>
+      <td><span class="chip">strategy</span></td>
+      <td>Applied Materials announced several EPIC Center engagements with chipmakers and partners designed to dramatically reduce the time it takes to commercialize breakthrough technologies from early-stage research to full-scale manufacturing.</td>
+      <td class="mono small">sec_8k_2026-05-14_ex991</td>
+      <td class="muted small">“Announced several EPIC Center engagements with chipmakers and partners designed to dramatically reduce the time it takes to commercialize breakthrough technologies from early-stage research to full-scale manufacturing.”</td>
+    </tr>
+    <tr id="c_1363e7d8b8">
+      <td class="mono small">c_1363e7d8b8</td>
+      <td><span class="chip">strategy</span></td>
+      <td>Applied Materials has a new innovation partnership with TSMC to accelerate the development and commercialization of semiconductor technologies required for the next era of AI.</td>
+      <td class="mono small">sec_8k_2026-05-14_ex991</td>
+      <td class="muted small">“A new innovation partnership with TSMC to accelerate the development and commercialization of semiconductor technologies required for the next era of AI.”</td>
+    </tr>
+    <tr id="c_6a2c118213">
+      <td class="mono small">c_6a2c118213</td>
+      <td><span class="chip">technology</span></td>
+      <td>Applied Materials will co-innovate with TSMC at its EPIC Center in Silicon Valley to advance materials engineering, equipment innovation, and process integration technologies.</td>
+      <td class="mono small">sec_8k_2026-05-14_ex991</td>
+      <td class="muted small">“Working together at Applied’s EPIC Center in Silicon Valley, the companies will co-innovate to advance materials engineering, equipment innovation, and process integration technologies designed to deliver energy-efficient performance from the data center to the edge.”</td>
+    </tr>
+    <tr id="c_001c17839a">
+      <td class="mono small">c_001c17839a</td>
+      <td><span class="chip">strategy</span></td>
+      <td>Applied Materials is collaborating with SK hynix to accelerate the development and deployment of next-generation DRAM and high-bandwidth memory (HBM) essential for AI and high-performance computing.</td>
+      <td class="mono small">sec_8k_2026-05-14_ex991</td>
+      <td class="muted small">“A long-term collaboration agreement between Applied and SK hynix to accelerate the development and deployment of next-generation DRAM and high-bandwidth memory (HBM) essential for AI and high-performance computing.”</td>
+    </tr>
+    <tr id="c_16578c2266">
+      <td class="mono small">c_16578c2266</td>
+      <td><span class="chip">technology</span></td>
+      <td>Engineers from Applied and SK hynix will work side-by-side at Applied’s EPIC Center to advance innovation in materials, process integration and 3D advanced packaging.</td>
+      <td class="mono small">sec_8k_2026-05-14_ex991</td>
+      <td class="muted small">“Engineers from both companies will work side-by-side at Applied’s EPIC Center to advance innovation in materials, process integration and 3D advanced packaging as memory architectures move beyond current production nodes.”</td>
+    </tr>
+    <tr id="c_778b766f2e">
+      <td class="mono small">c_778b766f2e</td>
+      <td><span class="chip">strategy</span></td>
+      <td>Applied and Micron Technology are working to develop next-generation DRAM, HBM and NAND solutions that increase the energy-efficient performance of AI systems.</td>
+      <td class="mono small">sec_8k_2026-05-14_ex991</td>
+      <td class="muted small">“Applied and Micron Technology are working to develop next-generation DRAM, HBM and NAND solutions that increase the energy-efficient performance of AI systems.”</td>
+    </tr>
+    <tr id="c_85ce133b62">
+      <td class="mono small">c_85ce133b62</td>
+      <td><span class="chip">product</span></td>
+      <td>Applied Materials introduced chip-making systems designed to create the smallest atomic-scale features in 3D Gate-All-Around transistors for the world’s most advanced logic chips.</td>
+      <td class="mono small">sec_8k_2026-05-14_ex991</td>
+      <td class="muted small">“Introduced chip-making systems designed to create the smallest atomic-scale features in 3D Gate-All-Around transistors for the world’s most advanced logic chips.”</td>
+    </tr>
+    <tr id="c_852bdd7e7a">
+      <td class="mono small">c_852bdd7e7a</td>
+      <td><span class="chip">process_step</span></td>
+      <td>Applied Materials is controlling materials deposition with atomic-level precision.</td>
+      <td class="mono small">sec_8k_2026-05-14_ex991</td>
+      <td class="muted small">“By controlling materials deposition with atomic-level”</td>
+    </tr>
+    <tr id="c_10069afef9">
+      <td class="mono small">c_10069afef9</td>
+      <td><span class="chip">company_overview</span></td>
+      <td>Precision™ Selective Nitride PECVD preserves integrity of shallow trench isolation, reducing parasitic capacitance and boosting chip performance-per-watt.</td>
+      <td class="mono small">sec_8k_2026-05-14_ex991</td>
+      <td class="muted small">“Precision™ Selective Nitride PECVD preserves integrity of shallow trench isolation, reducing parasitic capacitance and boosting chip performance-per-watt.”</td>
+    </tr>
+    <tr id="c_24842c5d55">
+      <td class="mono small">c_24842c5d55</td>
+      <td><span class="chip">company_overview</span></td>
+      <td>Trillium™ ALD wraps silicon nanosheets with complex metal gate stacks that optimize transistors for a wide range of AI computing applications.</td>
+      <td class="mono small">sec_8k_2026-05-14_ex991</td>
+      <td class="muted small">“Trillium™ ALD wraps silicon nanosheets with complex metal gate stacks that optimize transistors for a wide range of AI computing applications.”</td>
+    </tr>
+    <tr id="c_8b5d9bbe32">
+      <td class="mono small">c_8b5d9bbe32</td>
+      <td><span class="chip">company_overview</span></td>
+      <td>The addition of the NEXX team and products will broaden Applied’s portfolio of panel-level advanced packaging technologies which are designed to enable chipmakers and systems companies to build larger-body AI accelerators for higher energy-efficient performance.</td>
+      <td class="mono small">sec_8k_2026-05-14_ex991</td>
+      <td class="muted small">“The addition of the NEXX team and products will broaden Applied’s portfolio of panel-level advanced packaging technologies which are designed to enable chipmakers and systems companies to build larger-body AI accelerators for higher energy-efficient performance.”</td>
+    </tr>
+    <tr id="c_fbf5bfdc6b">
+      <td class="mono small">c_fbf5bfdc6b</td>
+      <td><span class="chip">financial_commentary</span></td>
+      <td>Applied’s total revenue and non-GAAP diluted EPS for the third quarter of fiscal 2026 are expected to be as follows: Total revenue $ 8,950 +/- $ 500.</td>
+      <td class="mono small">sec_8k_2026-05-14_ex991</td>
+      <td class="muted small">“Applied’s total revenue and non-GAAP diluted EPS for the third quarter of fiscal 2026 are expected to be as follows: Total revenue $ 8,950 +/- $ 500.”</td>
+    </tr>
+    <tr id="c_28eedeaddc">
+      <td class="mono small">c_28eedeaddc</td>
+      <td><span class="chip">financial_commentary</span></td>
+      <td>Revenue for Semiconductor Systems in Q2 FY2026 was $ 5,965 million.</td>
+      <td class="mono small">sec_8k_2026-05-14_ex991</td>
+      <td class="muted small">“Semiconductor Systems Q2 FY2026 Q2 FY2025 (in millions, except percentages) Revenue $ 5,965 $ 5,401”</td>
+    </tr>
+    <tr id="c_81fe4a75ed">
+      <td class="mono small">c_81fe4a75ed</td>
+      <td><span class="chip">financial_commentary</span></td>
+      <td>Foundry, logic and other represented 67% of revenue in Q2 FY2026.</td>
+      <td class="mono small">sec_8k_2026-05-14_ex991</td>
+      <td class="muted small">“Foundry, logic and other 67 % 66 %”</td>
+    </tr>
+    <tr id="c_7f84e92077">
+      <td class="mono small">c_7f84e92077</td>
+      <td><span class="chip">financial_commentary</span></td>
+      <td>DRAM represented 29% of revenue in Q2 FY2026.</td>
+      <td class="mono small">sec_8k_2026-05-14_ex991</td>
+      <td class="muted small">“DRAM 29 % 27 %”</td>
+    </tr>
+    <tr id="c_670b3198a2">
+      <td class="mono small">c_670b3198a2</td>
+      <td><span class="chip">financial_commentary</span></td>
+      <td>Flash memory represented 4% of revenue in Q2 FY2026.</td>
+      <td class="mono small">sec_8k_2026-05-14_ex991</td>
+      <td class="muted small">“Flash memory 4 % 7 %”</td>
+    </tr>
+  </tbody>
+</table>
+</section>
+
+<footer>
+  <p class="muted small">
+    Generated 2026-09-26 15:10 UTC.
+    Deterministic financials from SEC XBRL; qualitative claims from language models,
+    each gated on a verbatim source quote. Peer-filing claims are typed INFERENCE
+    and kept in a separate ledger.
+  </p>
+</footer>
+
+</div>
+<script>
+// Ledger filter. Tiny and dependency-free: the ledger is the audit trail, so being
+// able to search it matters more than any interactive flourish.
+(function () {
+  var input = document.getElementById('ledgerFilter');
+  if (!input) return;
+  var rows = Array.prototype.slice.call(
+    document.querySelectorAll('#ledger tbody tr')
+  );
+  input.addEventListener('input', function () {
+    var q = input.value.trim().toLowerCase();
+    rows.forEach(function (r) {
+      r.style.display = !q || r.textContent.toLowerCase().indexOf(q) !== -1 ? '' : 'none';
+    });
+  });
+})();
+</script>
+</body>
+</html>

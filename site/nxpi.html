@@ -1,0 +1,1484 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>NXP Semiconductors N.V. (NXPI) — Semiconductor Intelligence Report</title>
+<style>
+/* Shared stylesheet for the static report site.
+   Inlined into every page so each HTML file is standalone and can be sent as-is.
+   System fonts only - no network request, works offline. */
+
+:root {
+  --bg: #f6f7f9;
+  --panel: #ffffff;
+  --ink: #14181f;
+  --muted: #5d6875;
+  --line: #e2e5ea;
+  --accent: #1f5f9e;
+  --fact: #1d7a4c;
+  --analysis: #8a6100;
+  --inference: #8a3d8a;
+  --neg: #b3261e;
+  --pos: #1d7a4c;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font: 15px/1.6 -apple-system, BlinkMacSystemFont, &#34;Segoe UI&#34;, Roboto,
+        &#34;Helvetica Neue&#34;, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+.wrap { max-width: 1100px; margin: 0 auto; padding: 32px 20px 80px; }
+
+/* ---------- masthead ---------- */
+.masthead { border-bottom: 2px solid var(--ink); padding-bottom: 14px; margin-bottom: 22px; }
+.masthead h1 { margin: 6px 0 2px; font-size: 27px; letter-spacing: -0.01em; }
+.masthead .sub { margin: 0; color: var(--muted); font-size: 14px; }
+.masthead .ticker {
+  font-size: 14px; font-weight: 600; color: var(--accent);
+  border: 1px solid var(--accent); border-radius: 4px;
+  padding: 1px 7px; vertical-align: 3px;
+}
+a.back { color: var(--accent); text-decoration: none; font-size: 13px; }
+a.back:hover { text-decoration: underline; }
+
+/* ---------- stat bar ---------- */
+.bar {
+  display: flex; flex-wrap: wrap; gap: 10px; margin: 0 0 20px;
+}
+.stat {
+  flex: 1 1 150px; background: var(--panel); border: 1px solid var(--line);
+  border-radius: 8px; padding: 12px 14px;
+}
+.stat b { display: block; font-size: 21px; letter-spacing: -0.02em; }
+.stat b small { font-size: 13px; color: var(--muted); font-weight: 500; }
+.stat span { color: var(--muted); font-size: 12px; text-transform: uppercase; letter-spacing: 0.04em; }
+
+/* ---------- sections ---------- */
+section {
+  background: var(--panel); border: 1px solid var(--line); border-radius: 10px;
+  padding: 20px 22px; margin-bottom: 18px;
+}
+h2 {
+  font-size: 18px; margin: 0 0 14px; padding-bottom: 9px;
+  border-bottom: 1px solid var(--line); letter-spacing: -0.01em;
+}
+h2 .n {
+  display: inline-block; min-width: 22px; height: 22px; line-height: 22px;
+  margin-right: 8px; text-align: center; font-size: 12px;
+  background: var(--ink); color: #fff; border-radius: 5px; vertical-align: 2px;
+}
+h3 { font-size: 14px; margin: 20px 0 8px; text-transform: uppercase;
+     letter-spacing: 0.05em; color: var(--muted); }
+h3:first-of-type { margin-top: 4px; }
+h4 { margin: 0 0 5px; font-size: 15px; }
+
+p { margin: 0 0 9px; }
+.muted { color: var(--muted); }
+.small { font-size: 12.5px; }
+.mono { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+.num { text-align: right; font-variant-numeric: tabular-nums; }
+.pos { color: var(--pos); }
+.neg { color: var(--neg); }
+
+/* ---------- tables ---------- */
+table { width: 100%; border-collapse: collapse; margin: 6px 0 10px; font-size: 14px; }
+th {
+  text-align: left; font-size: 11.5px; text-transform: uppercase;
+  letter-spacing: 0.05em; color: var(--muted); font-weight: 600;
+  border-bottom: 1px solid var(--line); padding: 7px 9px;
+}
+td { padding: 8px 9px; border-bottom: 1px solid var(--line); vertical-align: top; }
+tr:last-child td { border-bottom: none; }
+tr.sub td { background: #fafbfc; font-style: italic; }
+tbody tr:target { background: #fff6d9; }
+
+/* ---------- cards / lists ---------- */
+.grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 12px; }
+.card {
+  border: 1px solid var(--line); border-radius: 8px; padding: 13px 15px;
+  background: #fcfcfd;
+}
+.card p:last-child { margin-bottom: 0; }
+ul.claims { margin: 0; padding-left: 18px; }
+ul.claims li { margin-bottom: 8px; }
+.two { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.two ul { margin: 4px 0 0; padding-left: 18px; }
+
+dl.kv { display: grid; grid-template-columns: 190px 1fr; gap: 4px 14px; margin: 0 0 12px; }
+dl.kv dt { color: var(--muted); font-size: 13px; }
+dl.kv dd { margin: 0; }
+
+/* ---------- inline badges ---------- */
+.tag {
+  display: inline-block; font-size: 10.5px; font-weight: 700; letter-spacing: 0.05em;
+  text-transform: uppercase; padding: 1px 6px; border-radius: 4px;
+  vertical-align: 1px; white-space: nowrap;
+}
+.tag.fact { background: #e6f4ec; color: var(--fact); }
+.tag.analysis { background: #fdf3dd; color: var(--analysis); }
+.tag.inference { background: #f7e9f7; color: var(--inference); }
+.tag.disclosed { background: #e6f4ec; color: var(--fact); }
+
+.chip {
+  display: inline-block; font-size: 12px; background: #eef1f5; color: #3c4753;
+  border-radius: 20px; padding: 2px 10px; margin: 0 4px 4px 0;
+}
+.chips { margin: 6px 0; }
+
+a.cid {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 11.5px; color: var(--accent); text-decoration: none;
+  border-bottom: 1px dotted var(--accent);
+}
+a.cid:hover { background: #eaf2fa; }
+.srcs { margin: 7px 0 0; }
+.srcs a.cid { margin-right: 5px; }
+
+/* ---------- callouts ---------- */
+.callout {
+  background: #eef4fa; border-left: 3px solid var(--accent);
+  padding: 11px 14px; border-radius: 0 6px 6px 0; margin: 0 0 18px; font-size: 13.5px;
+}
+.callout.warn { background: #fdf6e6; border-left-color: #c8901c; }
+
+/* ---------- ledger filter ---------- */
+input[type=&#34;search&#34;] {
+  width: 100%; padding: 8px 11px; font-size: 14px; margin: 4px 0 10px;
+  border: 1px solid var(--line); border-radius: 7px; background: #fff;
+  font-family: inherit;
+}
+input[type=&#34;search&#34;]:focus { outline: 2px solid #b9d4ec; border-color: var(--accent); }
+
+footer { margin-top: 26px; padding-top: 14px; border-top: 1px solid var(--line); }
+
+@media (max-width: 620px) {
+  .two { grid-template-columns: 1fr; }
+  dl.kv { grid-template-columns: 1fr; }
+  dl.kv dt { margin-top: 6px; }
+}
+
+/* Stale-data banner: an issuer whose newest SEC filing is years old must be
+   impossible to mistake for current intelligence. */
+.callout.stale {
+  background: #fdecea;
+  border-left-color: var(--neg);
+  border-left-width: 4px;
+}
+
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="masthead">
+  <a class="back" href="index.html">&larr; All companies</a>
+  <h1>NXP Semiconductors N.V. <span class="ticker">NXPI</span></h1>
+  <p class="sub">Semiconductor Company Intelligence Report</p>
+</header>
+
+
+
+<section class="bar">
+  <div class="stat"><b>102</b><span>verified claims</span></div>
+  <div class="stat"><b>20<small>/20</small></b><span>sources</span></div>
+  <div class="stat"><b>7<small>/7</small></b><span>categories at target</span></div>
+  <div class="stat"><b>2026-03-29</b><span>data as of</span></div>
+</section>
+
+<div class="callout">
+  <strong>How to read this.</strong> Claims are tagged
+  <span class="tag fact">FACT</span> (stated in a cited filing),
+  <span class="tag analysis">ANALYSIS</span> (reasoned across facts) or
+  <span class="tag inference">INFERENCE</span> (reasoned with a stated chain).
+  Every factual assertion carries a claim ID, resolvable in the Evidence Ledger.
+  No investment recommendation is made.
+</div>
+
+<section>
+<h2><span class="n">1</span> Company Overview</h2>
+<dl class="kv">
+  <dt>Value chain position</dt><dd>Semiconductor design and manufacturing</dd>
+  <dt>Ticker / CIK</dt><dd>NXPI / 0001413447</dd>
+  <dt>Fiscal year end</dt><dd>month 12-31</dd>
+</dl>
+<ul class="claims">
+  <li>We own a number of trademarks that are used in the conduct of our business. <a class="cid" href="#c_d96b1ded4d">c_d96b1ded4d</a></li>
+  <li>Our trademarks allow us to further distinguish our company and our products and are important in our relationships with customers, suppliers, partners and end-users. <a class="cid" href="#c_90950777df">c_90950777df</a></li>
+</ul>
+</section>
+
+<section>
+<h2><span class="n">1b</span> Geographic Exposure</h2>
+<p class="muted">Revenue by customer location, parsed from the 10-K MD&amp;A table.</p>
+<table>
+  <thead><tr><th>Region</th><th class="num">Revenue</th><th class="num">% of total</th><th class="num">YoY</th></tr></thead>
+  <tbody>
+    <tr class="sub">
+      <td>Americas <span class="muted">(subtotal)</span></td>
+      <td class="num">3,376M</td>
+      <td class="num">-3%</td>
+      <td class="num neg">-2.7%</td>
+    </tr>
+    <tr class="sub">
+      <td>EMEA <span class="muted">(subtotal)</span></td>
+      <td class="num">3,276M</td>
+      <td class="num">-4%</td>
+      <td class="num neg">-4.4%</td>
+    </tr>
+  </tbody>
+</table>
+</section>
+
+<section>
+<h2><span class="n">2</span> Product &amp; Technology</h2>
+
+<h3>Business segments</h3>
+<table>
+  <thead><tr><th>Segment</th><th class="num">Revenue</th><th class="num">% of total</th><th class="num">YoY</th><th>Basis</th></tr></thead>
+  <tbody>
+    <tr>
+      <td>Automotive<div class="muted small">Focuses on providing semiconductor solutions for automotive applications.</div></td>
+      <td class="num">n/a</td>
+      <td class="num">n/a</td>
+      <td class="num ">n/a</td>
+      <td class="muted small">No segment revenue row matched</td>
+    </tr>
+    <tr>
+      <td>Industrial &amp; IoT<div class="muted small">Provides semiconductor solutions for industrial and IoT applications.</div></td>
+      <td class="num">n/a</td>
+      <td class="num">n/a</td>
+      <td class="num ">n/a</td>
+      <td class="muted small">No segment revenue row matched</td>
+    </tr>
+    <tr>
+      <td>Mobile<div class="muted small">Offers semiconductor solutions for mobile devices.</div></td>
+      <td class="num">n/a</td>
+      <td class="num">n/a</td>
+      <td class="num ">n/a</td>
+      <td class="muted small">No segment revenue row matched</td>
+    </tr>
+    <tr>
+      <td>Communication Infrastructure &amp; Other<div class="muted small">Covers semiconductor solutions for communication infrastructure and other applications.</div></td>
+      <td class="num">n/a</td>
+      <td class="num">n/a</td>
+      <td class="num ">n/a</td>
+      <td class="muted small">No segment revenue row matched</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3>Process steps</h3>
+<p class="chips"><span class="chip">Test</span></p>
+
+<h3>Products</h3>
+<div class="grid">
+  <div class="card">
+    <h4>S32N7 Super-Integration Processor Series</h4>
+<p class="muted small">Processor</p><p>Enables a new era where carmakers can digitalize the core functions of every vehicle.</p>    <p class="srcs"><a class="cid" href="#c_96536159c3">c_96536159c3</a><a class="cid" href="#c_ec6649510d">c_ec6649510d</a></p>
+  </div>
+  <div class="card">
+    <h4>i.MX 93W Applications Processor</h4>
+<p class="muted small">Processor</p><p>Expands NXP’s i.MX 93 family, supporting various applications.</p>    <p class="srcs"><a class="cid" href="#c_1d564dbb90">c_1d564dbb90</a><a class="cid" href="#c_f0fa91c6e8">c_f0fa91c6e8</a></p>
+  </div>
+</div>
+
+<h3>Technologies</h3>
+<ul class="claims">
+  <li><b>eIQ Agentic AI Framework</b> — Advances leadership in secure, real-time edge AI.    <span class="srcs"><a class="cid" href="#c_21798ba841">c_21798ba841</a><a class="cid" href="#c_a4e8282d02">c_a4e8282d02</a></span>
+  </li>
+  <li><b>Robotics Solutions with NVIDIA</b> — Developed for reliable, secure, real-time data processing and transport and advanced networking, enabling sensor fusion.    <span class="srcs"><a class="cid" href="#c_d68b254950">c_d68b254950</a><a class="cid" href="#c_4c6b5af90e">c_4c6b5af90e</a></span>
+  </li>
+</ul>
+</section>
+
+<section>
+<h2><span class="n">3</span> Market Drivers</h2>
+<div class="grid">
+  <div class="card">
+    <h4>Software-Defined Vehicles <span class="tag fact">FACT</span></h4>
+    <p>NXP&#39;s differentiated portfolio supports this market.</p>
+    <p class="srcs"><a class="cid" href="#c_f35bff910c">c_f35bff910c</a><a class="cid" href="#c_bbaeba1189">c_bbaeba1189</a></p>
+  </div>
+  <div class="card">
+    <h4>Physical AI <span class="tag fact">FACT</span></h4>
+    <p>NXP&#39;s growth is driven by this emerging market.</p>
+    <p class="srcs"><a class="cid" href="#c_bbaeba1189">c_bbaeba1189</a></p>
+  </div>
+  <div class="card">
+    <h4>Data Center <span class="tag fact">FACT</span></h4>
+    <p>Emerging as an additional growth engine for NXP.</p>
+    <p class="srcs"><a class="cid" href="#c_bbaeba1189">c_bbaeba1189</a></p>
+  </div>
+</div>
+
+<h3>Growth drivers</h3>
+<ul class="claims">
+  <li>Edge Intelligence <span class="tag fact">FACT</span>
+    <span class="srcs"><a class="cid" href="#c_9bdc89a628">c_9bdc89a628</a></span></li>
+  <li>Investment in Emerging Technologies <span class="tag fact">FACT</span>
+    <span class="srcs"><a class="cid" href="#c_b71926efa9">c_b71926efa9</a></span></li>
+</ul>
+</section>
+
+<section>
+<h2><span class="n">4</span> Customer Analysis</h2>
+<div class="card">
+  <h4>Distributors
+<span class="tag disclosed">disclosed</span>
+  </h4>
+<p><b>Value created:</b> NXP provides robust system solutions and qualified customer support.</p>  <div class="two">
+<div><b>Requirements</b><ul><li>Full system capabilities including multiple NXP devices and enabling software</li></ul></div><div><b>Pain points</b><ul><li>Significant variation in order levels and delivery schedules</li></ul></div>  </div>
+  <p class="srcs"><a class="cid" href="#c_ff58b8e119">c_ff58b8e119</a><a class="cid" href="#c_60512916df">c_60512916df</a><a class="cid" href="#c_f23901f225">c_f23901f225</a><a class="cid" href="#c_cdc10ed542">c_cdc10ed542</a><a class="cid" href="#c_9ae6ce5f56">c_9ae6ce5f56</a></p>
+</div>
+<div class="card">
+  <h4>Automotive Manufacturers
+<span class="tag inferred">inferred category</span>  </h4>
+<p><b>Value created:</b> NXP&#39;s solutions support the digitalization of core vehicle functions.</p>  <div class="two">
+<div><b>Requirements</b><ul><li>High-performance, reliable semiconductor solutions</li></ul></div><div><b>Pain points</b><ul><li>Long design cycles and potential for exclusion from future projects</li></ul></div>  </div>
+<p class="muted small">Basis: NXP&#39;s significant revenue from the automotive market and product offerings suggest automotive manufacturers as key customers.</p>  <p class="srcs"><a class="cid" href="#c_f7f73e2624">c_f7f73e2624</a><a class="cid" href="#c_143de63aea">c_143de63aea</a></p>
+</div>
+</section>
+
+<section>
+<h2><span class="n">5</span> Competitive Landscape</h2>
+<table>
+  <thead><tr><th>Competitor</th><th>Basis</th><th>Product overlap</th><th>Technology positioning</th><th>Market exposure</th></tr></thead>
+  <tbody>
+    <tr>
+      <td><b>Infineon Technologies AG</b></td>
+      <td><span class="tag analysis">industry</span></td>
+      <td>Automotive and industrial semiconductor solutions</td>
+      <td>Focus on customized designs and broad technological capabilities</td>
+      <td>Automotive and industrial markets</td>
+    </tr>
+  </tbody>
+</table>
+<div class="grid">
+  <div class="card">
+    <h4>Infineon Technologies AG <span class="tag analysis">industry</span></h4>
+<p><b>Strengths:</b> Strong customer relationships; Broad portfolio of technological capabilities</p><p><b>Potential weaknesses:</b> Dependence on major customers</p>    <p class="srcs"><a class="cid" href="#c_35a43e8a47">c_35a43e8a47</a><a class="cid" href="#c_a7500ea810">c_a7500ea810</a><a class="cid" href="#c_7be25371e5">c_7be25371e5</a><a class="cid" href="#c_94216f06c0">c_94216f06c0</a><a class="cid" href="#c_0818fbb413">c_0818fbb413</a><a class="cid" href="#c_30986bb7e5">c_30986bb7e5</a><a class="cid" href="#c_1944643b61">c_1944643b61</a><a class="cid" href="#c_20f5d0f6ec">c_20f5d0f6ec</a><a class="cid" href="#c_b7a768908a">c_b7a768908a</a><a class="cid" href="#c_7f83f59a78">c_7f83f59a78</a><a class="cid" href="#c_75e6380592">c_75e6380592</a><a class="cid" href="#c_f8f75dd4ca">c_f8f75dd4ca</a></p>
+  </div>
+</div>
+</section>
+
+<section>
+<h2><span class="n">6</span> Business Analysis</h2>
+<table>
+  <thead><tr><th>Metric</th><th class="num">Latest FY</th><th class="num">YoY</th><th>Period</th><th>Source concept</th></tr></thead>
+  <tbody>
+    <tr>
+      <td>revenue</td>
+      <td class="num">12.3B</td>
+      <td class="num neg">-2.7%</td>
+      <td class="muted small">FY2025</td>
+      <td class="muted small mono">us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax</td>
+    </tr>
+    <tr>
+      <td>cost_of_revenue</td>
+      <td class="num">5.6B</td>
+      <td class="num pos">+1.1%</td>
+      <td class="muted small">FY2025</td>
+      <td class="muted small mono">us-gaap:CostOfRevenue</td>
+    </tr>
+    <tr>
+      <td>gross_profit</td>
+      <td class="num">6.7B</td>
+      <td class="num neg">-5.7%</td>
+      <td class="muted small">FY2025</td>
+      <td class="muted small mono">us-gaap:GrossProfit</td>
+    </tr>
+    <tr>
+      <td>rd_expense</td>
+      <td class="num">2.4B</td>
+      <td class="num pos">+0.6%</td>
+      <td class="muted small">FY2025</td>
+      <td class="muted small mono">us-gaap:ResearchAndDevelopmentExpense</td>
+    </tr>
+    <tr>
+      <td>sga_expense</td>
+      <td class="num">1.2B</td>
+      <td class="num pos">+3.4%</td>
+      <td class="muted small">FY2025</td>
+      <td class="muted small mono">us-gaap:SellingGeneralAndAdministrativeExpense</td>
+    </tr>
+    <tr>
+      <td>operating_income</td>
+      <td class="num">3.0B</td>
+      <td class="num neg">-10.8%</td>
+      <td class="muted small">FY2025</td>
+      <td class="muted small mono">us-gaap:OperatingIncomeLoss</td>
+    </tr>
+    <tr>
+      <td>net_income</td>
+      <td class="num">2.0B</td>
+      <td class="num neg">-19.5%</td>
+      <td class="muted small">FY2025</td>
+      <td class="muted small mono">us-gaap:NetIncomeLoss</td>
+    </tr>
+    <tr>
+      <td>diluted_eps</td>
+      <td class="num">$7.95</td>
+      <td class="num neg">-18.3%</td>
+      <td class="muted small">FY2025</td>
+      <td class="muted small mono">us-gaap:EarningsPerShareDiluted</td>
+    </tr>
+    <tr>
+      <td>operating_cash_flow</td>
+      <td class="num">2.8B</td>
+      <td class="num pos">+1.4%</td>
+      <td class="muted small">FY2025</td>
+      <td class="muted small mono">us-gaap:NetCashProvidedByUsedInOperatingActivities</td>
+    </tr>
+    <tr>
+      <td>capex</td>
+      <td class="num">397.0M</td>
+      <td class="num neg">-45.4%</td>
+      <td class="muted small">FY2025</td>
+      <td class="muted small mono">us-gaap:PaymentsToAcquirePropertyPlantAndEquipment</td>
+    </tr>
+    <tr>
+      <td>inventory</td>
+      <td class="num">2.5B</td>
+      <td class="num ">n/a</td>
+      <td class="muted small">FY2026 (instant)</td>
+      <td class="muted small mono">us-gaap:InventoryNet</td>
+    </tr>
+    <tr>
+      <td>shares_diluted</td>
+      <td class="num">254.3M shares</td>
+      <td class="num neg">-1.4%</td>
+      <td class="muted small">FY2025</td>
+      <td class="muted small mono">us-gaap:WeightedAverageNumberOfDilutedSharesOutstanding</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3>Revenue trend</h3>
+<table>
+  <thead><tr><th>Period</th><th class="num">Revenue</th></tr></thead>
+  <tbody>
+    <tr><td>FY2025</td><td class="num">12.3B</td></tr>
+    <tr><td>FY2024</td><td class="num">12.6B</td></tr>
+    <tr><td>FY2023</td><td class="num">13.3B</td></tr>
+    <tr><td>FY2022</td><td class="num">13.2B</td></tr>
+    <tr><td>FY2021</td><td class="num">11.1B</td></tr>
+    <tr><td>FY2020</td><td class="num">8.6B</td></tr>
+    <tr><td>FY2019</td><td class="num">8.9B</td></tr>
+    <tr><td>FY2018</td><td class="num">9.4B</td></tr>
+    <tr><td>FY2017</td><td class="num">9.3B</td></tr>
+    <tr><td>FY2016</td><td class="num">9.5B</td></tr>
+  </tbody>
+</table>
+
+<h3>Management commentary</h3>
+<ul class="claims">
+<li>Historically, our net revenue does not display consistent or predictable seasonal patterns. <a class="cid" href="#c_a3fe22d6f0">c_a3fe22d6f0</a></li><li>Revenue in the Automotive end market was $7,116 million, a decrease of $35 million or 0.5% versus the year ago period. <a class="cid" href="#c_f7f73e2624">c_f7f73e2624</a></li><li>Revenue in the Industrial &amp; IoT end market was $2,273 million, an increase of $4 million or 0.2% versus the year ago period. <a class="cid" href="#c_57af5462e7">c_57af5462e7</a></li><li>Revenue in the Mobile end market was $1,584 million, an increase of $87 million or 5.8% versus the year ago period. <a class="cid" href="#c_40479547b4">c_40479547b4</a></li><li>Revenue in the Communication Infrastructure &amp; Other end market was $1,296 million, a decrease of $401 million or 23.6% versus the year ago period. <a class="cid" href="#c_df503f7612">c_df503f7612</a></li><li>The year-to-date change in revenue was primarily driven by a lower selling mix of products, slightly offset by higher shipment volumes. <a class="cid" href="#c_1d2fb5bb21">c_1d2fb5bb21</a></li><li>Revenue from distributors was $7,051 million, a decrease of $152 million or 2.1% versus the year ago period. <a class="cid" href="#c_33ee172e73">c_33ee172e73</a></li><li>Revenue from direct customers was $5,084 million, a decrease of $207 million or 3.9% versus the year ago period. <a class="cid" href="#c_8a6f8a5e24">c_8a6f8a5e24</a></li><li>As of December 31, 2025, the Company had purchase commitments, other than commitments directly with our foundry joint ventures, of $3,087 million, of which $1,423 million is expected to be paid in the next 12 months. <a class="cid" href="#c_9ddd4b18d8">c_9ddd4b18d8</a></li><li>The Company has committed to invest €500 million, which translated to $587 million, in the equity of the recently founded company ESMC. <a class="cid" href="#c_d02a71be39">c_d02a71be39</a></li></ul>
+</section>
+
+<section>
+<h2><span class="n">7</span> Commercial Insights</h2>
+<div class="grid">
+  <div class="card">
+    <h4>Growth Opportunity <span class="tag analysis">ANALYSIS</span></h4>
+    <p>NXP&#39;s focus on edge intelligence positions it well for growth in emerging markets like Software-Defined Vehicles and Physical AI.</p>
+<p class="muted small">Reasoning: NXP&#39;s portfolio supports next-generation edge intelligence, which is crucial for these markets.</p>    <p class="srcs"><a class="cid" href="#c_9bdc89a628">c_9bdc89a628</a><a class="cid" href="#c_bbaeba1189">c_bbaeba1189</a></p>
+  </div>
+  <div class="card">
+    <h4>Technology Opportunity <span class="tag analysis">ANALYSIS</span></h4>
+    <p>NXP&#39;s hybrid manufacturing model and focus on proprietary specialty process technologies provide a competitive edge.</p>
+<p class="muted small">Reasoning: The hybrid model allows flexibility and efficiency, while proprietary technologies enable product differentiation.</p>    <p class="srcs"><a class="cid" href="#c_fe2c5f99a7">c_fe2c5f99a7</a><a class="cid" href="#c_4a88598c69">c_4a88598c69</a></p>
+  </div>
+  <div class="card">
+    <h4>Business Risk <span class="tag analysis">ANALYSIS</span></h4>
+    <p>The decline in the Communication Infrastructure &amp; Other end market presents a risk that needs addressing.</p>
+<p class="muted small">Reasoning: The significant revenue decrease in this segment could impact overall financial performance.</p>    <p class="srcs"><a class="cid" href="#c_df503f7612">c_df503f7612</a><a class="cid" href="#c_0c8908742b">c_0c8908742b</a></p>
+  </div>
+  <div class="card">
+    <h4>Growth Opportunity <span class="tag analysis">ANALYSIS</span></h4>
+    <p>NXP&#39;s significant investment commitments in new ventures like VSMC and ESMC indicate a strategic focus on expanding manufacturing capabilities.</p>
+<p class="muted small">Reasoning: These investments are likely aimed at securing future capacity and technological advancements.</p>    <p class="srcs"><a class="cid" href="#c_d02a71be39">c_d02a71be39</a><a class="cid" href="#c_af4fee7555">c_af4fee7555</a><a class="cid" href="#c_a57ed2a938">c_a57ed2a938</a></p>
+  </div>
+  <div class="card">
+    <h4>Technology Opportunity <span class="tag analysis">ANALYSIS</span></h4>
+    <p>NXP&#39;s collaboration with NVIDIA and GE HealthCare highlights its strategy to leverage partnerships for technological advancements.</p>
+<p class="muted small">Reasoning: Collaborations with industry leaders can enhance NXP&#39;s capabilities in robotics and edge AI.</p>    <p class="srcs"><a class="cid" href="#c_fb3e06156c">c_fb3e06156c</a><a class="cid" href="#c_d68b254950">c_d68b254950</a></p>
+  </div>
+</div>
+
+<h3>Risks</h3>
+<ul class="claims">
+  <li><b>Price Erosion</b> <span class="muted small">(competitive)</span>    <span class="tag fact">FACT</span>
+<div class="muted small">Mitigation: Focus on reducing production and procurement costs.</div>    <span class="srcs"><a class="cid" href="#c_a51119fe03">c_a51119fe03</a><a class="cid" href="#c_95a98a1a2c">c_95a98a1a2c</a><a class="cid" href="#c_35de71a44a">c_35de71a44a</a><a class="cid" href="#c_9d02afdf0e">c_9d02afdf0e</a></span>
+  </li>
+  <li><b>Customer Concentration</b> <span class="muted small">(customer concentration)</span>    <span class="tag fact">FACT</span>
+    <span class="srcs"><a class="cid" href="#c_ff58b8e119">c_ff58b8e119</a><a class="cid" href="#c_60512916df">c_60512916df</a><a class="cid" href="#c_3d12e55477">c_3d12e55477</a></span>
+  </li>
+  <li><b>Failure to Win New Design Projects</b> <span class="muted small">(competitive)</span>    <span class="tag fact">FACT</span>
+    <span class="srcs"><a class="cid" href="#c_f751b07015">c_f751b07015</a><a class="cid" href="#c_143de63aea">c_143de63aea</a><a class="cid" href="#c_016c013e46">c_016c013e46</a></span>
+  </li>
+</ul>
+</section>
+
+<section>
+<h2>Evidence Coverage</h2>
+<p class="muted">Measured against advisory targets. A category below target means the reviewed sources did not support it - it is not filled in to reach the target.</p>
+<table>
+  <thead><tr><th>Category</th><th class="num">Claims</th><th class="num">Target</th><th>Status</th></tr></thead>
+  <tbody>
+    <tr>
+      <td>Products</td>
+      <td class="num">9</td>
+      <td class="num">3</td>
+      <td><span class="tag fact">at target</span></td>
+    </tr>
+    <tr>
+      <td>Process Steps</td>
+      <td class="num">11</td>
+      <td class="num">2</td>
+      <td><span class="tag fact">at target</span></td>
+    </tr>
+    <tr>
+      <td>Technologies</td>
+      <td class="num">4</td>
+      <td class="num">2</td>
+      <td><span class="tag fact">at target</span></td>
+    </tr>
+    <tr>
+      <td>Customer Needs</td>
+      <td class="num">6</td>
+      <td class="num">2</td>
+      <td><span class="tag fact">at target</span></td>
+    </tr>
+    <tr>
+      <td>Market Drivers</td>
+      <td class="num">13</td>
+      <td class="num">2</td>
+      <td><span class="tag fact">at target</span></td>
+    </tr>
+    <tr>
+      <td>Competitors</td>
+      <td class="num">3</td>
+      <td class="num">1</td>
+      <td><span class="tag fact">at target</span></td>
+    </tr>
+    <tr>
+      <td>Commercial Implications</td>
+      <td class="num">38</td>
+      <td class="num">2</td>
+      <td><span class="tag fact">at target</span></td>
+    </tr>
+  </tbody>
+</table>
+</section>
+
+<section>
+<h2>Sources</h2>
+<table>
+  <thead><tr><th>Source ID</th><th>Type</th><th>Title</th><th>Published</th><th>SHA-256</th></tr></thead>
+  <tbody>
+    <tr>
+      <td class="mono small">sec_8_k_2026-09-02</td>
+      <td>8-K</td>
+      <td>NXP 8-K filed 2026-09-02</td>
+      <td class="muted small">2026-09-02</td>
+      <td class="mono small">d5b71e76e272</td>
+    </tr>
+    <tr>
+      <td class="mono small">sec_8_k_2026-08-28</td>
+      <td>8-K</td>
+      <td>NXP 8-K filed 2026-08-28</td>
+      <td class="muted small">2026-08-28</td>
+      <td class="mono small">95d9dab4e345</td>
+    </tr>
+    <tr>
+      <td class="mono small">sec_10_q_2026-07-28</td>
+      <td>10-Q</td>
+      <td>NXP 10-Q filed 2026-07-28</td>
+      <td class="muted small">2026-07-28</td>
+      <td class="mono small">780f9bce176b</td>
+    </tr>
+    <tr>
+      <td class="mono small">sec_8_k_2026-07-28</td>
+      <td>8-K</td>
+      <td>NXP 8-K filed 2026-07-28</td>
+      <td class="muted small">2026-07-28</td>
+      <td class="mono small">e98de72082ed</td>
+    </tr>
+    <tr>
+      <td class="mono small">sec_8k_2026-07-28_ex991</td>
+      <td>Press Release</td>
+      <td>NXP earnings release 2026-07-28</td>
+      <td class="muted small">2026-07-28</td>
+      <td class="mono small">f652a1daf933</td>
+    </tr>
+    <tr>
+      <td class="mono small">sec_8_k_2026-06-11</td>
+      <td>8-K</td>
+      <td>NXP 8-K filed 2026-06-11</td>
+      <td class="muted small">2026-06-11</td>
+      <td class="mono small">fc62b22bab2e</td>
+    </tr>
+    <tr>
+      <td class="mono small">sec_10_q_2026-04-28</td>
+      <td>10-Q</td>
+      <td>NXP 10-Q filed 2026-04-28</td>
+      <td class="muted small">2026-04-28</td>
+      <td class="mono small">7b837a9d3e54</td>
+    </tr>
+    <tr>
+      <td class="mono small">sec_8_k_2026-04-28</td>
+      <td>8-K</td>
+      <td>NXP 8-K filed 2026-04-28</td>
+      <td class="muted small">2026-04-28</td>
+      <td class="mono small">f7517d800728</td>
+    </tr>
+    <tr>
+      <td class="mono small">sec_8k_2026-04-28_ex991</td>
+      <td>Press Release</td>
+      <td>NXP earnings release 2026-04-28</td>
+      <td class="muted small">2026-04-28</td>
+      <td class="mono small">1273e66a7c7d</td>
+    </tr>
+    <tr>
+      <td class="mono small">sec_8_k_2026-04-20</td>
+      <td>8-K</td>
+      <td>NXP 8-K filed 2026-04-20</td>
+      <td class="muted small">2026-04-20</td>
+      <td class="mono small">8f556e6d6734</td>
+    </tr>
+    <tr>
+      <td class="mono small">sec_8_k_2026-03-12</td>
+      <td>8-K</td>
+      <td>NXP 8-K filed 2026-03-12</td>
+      <td class="muted small">2026-03-12</td>
+      <td class="mono small">9894bd66c06a</td>
+    </tr>
+    <tr>
+      <td class="mono small">sec_10_k_2025</td>
+      <td>10-K</td>
+      <td>NXP 10-K filed 2026-02-19</td>
+      <td class="muted small">2026-02-19</td>
+      <td class="mono small">3c9801786240</td>
+    </tr>
+    <tr>
+      <td class="mono small">sec_8_k_2026-02-09</td>
+      <td>8-K</td>
+      <td>NXP 8-K filed 2026-02-09</td>
+      <td class="muted small">2026-02-09</td>
+      <td class="mono small">069186c4f28e</td>
+    </tr>
+    <tr>
+      <td class="mono small">sec_10_q_2025-10-28</td>
+      <td>10-Q</td>
+      <td>NXP 10-Q filed 2025-10-28</td>
+      <td class="muted small">2025-10-28</td>
+      <td class="mono small">80c2f569d2a7</td>
+    </tr>
+    <tr>
+      <td class="mono small">sec_10_q_2025-07-24</td>
+      <td>10-Q</td>
+      <td>NXP 10-Q filed 2025-07-24</td>
+      <td class="muted small">2025-07-24</td>
+      <td class="mono small">4750c5310d52</td>
+    </tr>
+    <tr>
+      <td class="mono small">sec_10_k_2024</td>
+      <td>10-K</td>
+      <td>NXP 10-K filed 2025-02-20</td>
+      <td class="muted small">2025-02-20</td>
+      <td class="mono small">aadbe78e019c</td>
+    </tr>
+    <tr>
+      <td class="mono small">sec_10_k_2023</td>
+      <td>10-K</td>
+      <td>NXP 10-K filed 2024-02-22</td>
+      <td class="muted small">2024-02-22</td>
+      <td class="mono small">6acf813dc566</td>
+    </tr>
+    <tr>
+      <td class="mono small">sec_xbrl_facts</td>
+      <td>SEC-XBRL</td>
+      <td>NXP Semiconductors N.V. XBRL company facts</td>
+      <td class="muted small"></td>
+      <td class="mono small">a069c3704f51</td>
+    </tr>
+    <tr>
+      <td class="mono small">sec_peer_analog_devices_2025</td>
+      <td>10-K</td>
+      <td>Analog Devices 10-K (peer filing, competitive overlap)</td>
+      <td class="muted small">2025-11-25</td>
+      <td class="mono small">dc3580afb73d</td>
+    </tr>
+    <tr>
+      <td class="mono small">sec_peer_infineon_2009</td>
+      <td>10-K</td>
+      <td>Infineon 20-F (peer filing, competitive overlap)</td>
+      <td class="muted small">2009-12-08</td>
+      <td class="mono small">1a4ab73b6540</td>
+    </tr>
+  </tbody>
+</table>
+<p class="muted small">First-party filings only: annual reports, quarterly reports, 8-K earnings releases (Exhibit 99.1), SEC XBRL company facts, and peer-company filings for competitive overlap.</p>
+</section>
+
+<section>
+<h2>Evidence Ledger</h2>
+<p class="muted">102 verified claims. Each was extracted from the cited filing and checked to contain a verbatim supporting quote.</p>
+<input type="search" id="ledgerFilter" placeholder="Filter claims by text, topic or source…" autocomplete="off">
+<table id="ledger">
+  <thead><tr><th>Claim ID</th><th>Topic</th><th>Claim</th><th>Source</th><th>Verbatim quote</th></tr></thead>
+  <tbody>
+    <tr id="c_fe2c5f99a7">
+      <td class="mono small">c_fe2c5f99a7</td>
+      <td><span class="chip">process_step</span></td>
+      <td>We employ a hybrid manufacturing model where we manufacture semiconductors through a combination of wholly owned manufacturing facilities, a manufacturing facility operated jointly with another semiconductor company and third-party foundries and assembly and test subcontractors.</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“We employ a hybrid manufacturing model where we manufacture semiconductors through a combination of wholly owned manufacturing facilities, a manufacturing facility operated jointly with another semiconductor company and third-party foundries and assembly and test subcontractors.”</td>
+    </tr>
+    <tr id="c_5d017dec7c">
+      <td class="mono small">c_5d017dec7c</td>
+      <td><span class="chip">process_step</span></td>
+      <td>The manufacturing of a semiconductor involves several phases of production, which can be broadly divided into &#39;front-end&#39; and &#39;back-end&#39; processes.</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“The manufacturing of a semiconductor involves several phases of production, which can be broadly divided into &#39;front-end&#39; and &#39;back-end&#39; processes.”</td>
+    </tr>
+    <tr id="c_be9a7c601f">
+      <td class="mono small">c_be9a7c601f</td>
+      <td><span class="chip">process_step</span></td>
+      <td>The front-end production cycle requires high levels of precision and involves as many as 300 process steps.</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“The front-end production cycle requires high levels of precision and involves as many as 300 process steps.”</td>
+    </tr>
+    <tr id="c_eb97003739">
+      <td class="mono small">c_eb97003739</td>
+      <td><span class="chip">process_step</span></td>
+      <td>Back-end processes involve the assembly, test and packaging of semiconductors in a form suitable for distribution.</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“Back-end processes involve the assembly, test and packaging of semiconductors in a form suitable for distribution.”</td>
+    </tr>
+    <tr id="c_5da2c7fd4d">
+      <td class="mono small">c_5da2c7fd4d</td>
+      <td><span class="chip">process_step</span></td>
+      <td>In contrast to the highly complex front-end process, back-end processing is generally less complicated, and as a result we tend to determine the location of our back-end facilities based more on cost factors than on technical considerations.</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“In contrast to the highly complex front-end process, back-end processing is generally less complicated, and as a result we tend to determine the location of our back-end facilities based more on cost factors than on technical considerations.”</td>
+    </tr>
+    <tr id="c_4a88598c69">
+      <td class="mono small">c_4a88598c69</td>
+      <td><span class="chip">process_step</span></td>
+      <td>We primarily focus our internal and joint venture wafer manufacturing operations on running proprietary specialty process technologies that enable us to differentiate our products on key performance features.</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“We primarily focus our internal and joint venture wafer manufacturing operations on running proprietary specialty process technologies that enable us to differentiate our products on key performance features.”</td>
+    </tr>
+    <tr id="c_ed1016089f">
+      <td class="mono small">c_ed1016089f</td>
+      <td><span class="chip">process_step</span></td>
+      <td>Our front-end manufacturing facilities use a broad range of production processes and proprietary design methods, including complementary metal oxide semiconductor (CMOS), bipolar, bipolar CMOS (BiCMOS) and double-diffused metal on silicon oxide semiconductor (DMOS) technologies.</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“Our front-end manufacturing facilities use a broad range of production processes and proprietary design methods, including complementary metal oxide semiconductor (CMOS), bipolar, bipolar CMOS (BiCMOS) and double-diffused metal on silicon oxide semiconductor (DMOS) technologies.”</td>
+    </tr>
+    <tr id="c_527a9b27ad">
+      <td class="mono small">c_527a9b27ad</td>
+      <td><span class="chip">process_step</span></td>
+      <td>Our wafer fabs produce semiconductors with line widths ranging from 90 nanometers to 3 microns for integrated circuits and 0.5 microns to greater than 4 microns for discretes.</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“Our wafer fabs produce semiconductors with line widths ranging from 90 nanometers to 3 microns for integrated circuits and 0.5 microns to greater than 4 microns for discretes.”</td>
+    </tr>
+    <tr id="c_4db0d33f11">
+      <td class="mono small">c_4db0d33f11</td>
+      <td><span class="chip">process_step</span></td>
+      <td>This broad technology portfolio enables us to meet increasing demand from customers for system solutions, which require a variety of technologies.</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“This broad technology portfolio enables us to meet increasing demand from customers for system solutions, which require a variety of technologies.”</td>
+    </tr>
+    <tr id="c_aaf18ef25e">
+      <td class="mono small">c_aaf18ef25e</td>
+      <td><span class="chip">process_step</span></td>
+      <td>As part of executing our hybrid manufacturing model, we have initiated the consolidation of our internal wafer fabs to 300 millimeter factories.</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“As part of executing our hybrid manufacturing model, we have initiated the consolidation of our internal wafer fabs to 300 millimeter factories.”</td>
+    </tr>
+    <tr id="c_95c6fc9e8f">
+      <td class="mono small">c_95c6fc9e8f</td>
+      <td><span class="chip">process_step</span></td>
+      <td>We believe this will enable economic and manufacturing efficiencies in the future.</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“We believe this will enable economic and manufacturing efficiencies in the future.”</td>
+    </tr>
+    <tr id="c_ff58b8e119">
+      <td class="mono small">c_ff58b8e119</td>
+      <td><span class="chip">customer</span></td>
+      <td>Avnet accounted for 23% of our revenue in 2025 and 22% in 2024.</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“Avnet accounted for 23% of our revenue in 2025 and 22% in 2024.”</td>
+    </tr>
+    <tr id="c_60512916df">
+      <td class="mono small">c_60512916df</td>
+      <td><span class="chip">customer</span></td>
+      <td>No other distributor accounted for greater than 10% of our revenue.</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“No other distributor accounted for greater than 10% of our revenue.”</td>
+    </tr>
+    <tr id="c_3d12e55477">
+      <td class="mono small">c_3d12e55477</td>
+      <td><span class="chip">customer</span></td>
+      <td>No direct customer accounted for more than 10% of our revenue in 2025 or 2024.</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“No direct customer accounted for more than 10% of our revenue in 2025 or 2024.”</td>
+    </tr>
+    <tr id="c_e5ef5c25e7">
+      <td class="mono small">c_e5ef5c25e7</td>
+      <td><span class="chip">product</span></td>
+      <td>We design purpose-built, rigorously tested technologies that enable devices to sense, think, connect and act intelligently to improve people&#39;s daily lives.</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“We design purpose-built, rigorously tested technologies that enable devices to sense, think, connect and act intelligently to improve people&#39;s daily lives.”</td>
+    </tr>
+    <tr id="c_da2f8e57bf">
+      <td class="mono small">c_da2f8e57bf</td>
+      <td><span class="chip">market_driver</span></td>
+      <td>We target applications that require stringent overall system and subsystem performance.</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“We target applications that require stringent overall system and subsystem performance.”</td>
+    </tr>
+    <tr id="c_a3ed4ebe39">
+      <td class="mono small">c_a3ed4ebe39</td>
+      <td><span class="chip">strategy</span></td>
+      <td>NXP is uniquely positioned to bring intelligent systems to the edge in Automotive and Industrial &amp; IoT.</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“NXP is uniquely positioned to bring intelligent systems to the edge in Automotive and Industrial &amp; IoT.”</td>
+    </tr>
+    <tr id="c_d083708809">
+      <td class="mono small">c_d083708809</td>
+      <td><span class="chip">strategy</span></td>
+      <td>We allocate our research and development to maintain a healthy mix of emerging growth and mature businesses.</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“Overall, we allocate our research and development to maintain a healthy mix of emerging growth and mature businesses.”</td>
+    </tr>
+    <tr id="c_d96b1ded4d">
+      <td class="mono small">c_d96b1ded4d</td>
+      <td><span class="chip">company_overview</span></td>
+      <td>We own a number of trademarks that are used in the conduct of our business.</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“We own a number of trademarks that are used in the conduct of our business.”</td>
+    </tr>
+    <tr id="c_90950777df">
+      <td class="mono small">c_90950777df</td>
+      <td><span class="chip">company_overview</span></td>
+      <td>Our trademarks allow us to further distinguish our company and our products and are important in our relationships with customers, suppliers, partners and end-users.</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“Our trademarks allow us to further distinguish our company and our products and are important in our relationships with customers, suppliers, partners and end-users.”</td>
+    </tr>
+    <tr id="c_73ca5ac496">
+      <td class="mono small">c_73ca5ac496</td>
+      <td><span class="chip">technology</span></td>
+      <td>We believe it is the combination of our proprietary technology, patents, know-how and other intellectual property rights and assets that creates an advantage for our business.</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“We believe it is the combination of our proprietary technology, patents, know-how and other intellectual property rights and assets that creates an advantage for our business.”</td>
+    </tr>
+    <tr id="c_b2b219980b">
+      <td class="mono small">c_b2b219980b</td>
+      <td><span class="chip">competitor</span></td>
+      <td>We compete with many different semiconductor companies on a global basis, including with both integrated device manufacturers (“IDMs”) as well as fabless companies.</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“We compete with many different semiconductor companies on a global basis, including with both integrated device manufacturers (“IDMs”) as well as fabless companies.”</td>
+    </tr>
+    <tr id="c_35a43e8a47">
+      <td class="mono small">c_35a43e8a47</td>
+      <td><span class="chip">competitor</span></td>
+      <td>Our primary key public competitors in alphabetical order include, but are not limited to, Analog Devices Inc., Broadcom Inc., Infineon Technologies AG, Microchip Technology Inc., Qualcomm Inc., Renesas Electronics Corp., STMicroelectronics NV and Texas Instruments Inc.</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“Our primary key public competitors in alphabetical order include, but are not limited to, Analog Devices Inc., Broadcom Inc., Infineon Technologies AG, Microchip Technology Inc., Qualcomm Inc., Renesas Electronics Corp., STMicroelectronics NV and Texas Instruments Inc.”</td>
+    </tr>
+    <tr id="c_aca38b1105">
+      <td class="mono small">c_aca38b1105</td>
+      <td><span class="chip">competitor</span></td>
+      <td>Most of our competitors compete with us with respect to some, but not all, of our product lines.</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“Most of our competitors compete with us with respect to some, but not all, of our product lines.”</td>
+    </tr>
+    <tr id="c_8f970a0672">
+      <td class="mono small">c_8f970a0672</td>
+      <td><span class="chip">market_driver</span></td>
+      <td>The basis on which we compete varies across end markets and geographic regions.</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“The basis on which we compete varies across end markets and geographic regions.”</td>
+    </tr>
+    <tr id="c_ddc252b305">
+      <td class="mono small">c_ddc252b305</td>
+      <td><span class="chip">market_driver</span></td>
+      <td>This includes competing on the basis of our ability to develop new products and the underlying intellectual property in a timely manner to meet customer requirements in terms of product features, quality, performance, warranty, availability and cost.</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“This includes competing on the basis of our ability to develop new products and the underlying intellectual property in a timely manner to meet customer requirements in terms of product features, quality, performance, warranty, availability and cost.”</td>
+    </tr>
+    <tr id="c_f23901f225">
+      <td class="mono small">c_f23901f225</td>
+      <td><span class="chip">customer</span></td>
+      <td>In addition, we are asked to deliver full system capabilities which include multiple NXP devices and enabling software.</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“In addition, we are asked to deliver full system capabilities which include multiple NXP devices and enabling software.”</td>
+    </tr>
+    <tr id="c_cdc10ed542">
+      <td class="mono small">c_cdc10ed542</td>
+      <td><span class="chip">customer</span></td>
+      <td>This requires in-depth knowledge of specific applications in target markets in order to develop robust system solutions and qualified customer support resources.</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“This requires in-depth knowledge of specific applications in target markets in order to develop robust system solutions and qualified customer support resources.”</td>
+    </tr>
+    <tr id="c_a3fe22d6f0">
+      <td class="mono small">c_a3fe22d6f0</td>
+      <td><span class="chip">financial_commentary</span></td>
+      <td>Historically, our net revenue does not display consistent or predictable seasonal patterns.</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“Historically, our net revenue does not display consistent or predictable seasonal patterns.”</td>
+    </tr>
+    <tr id="c_f7f73e2624">
+      <td class="mono small">c_f7f73e2624</td>
+      <td><span class="chip">financial_commentary</span></td>
+      <td>Revenue in the Automotive end market was $7,116 million, a decrease of $35 million or 0.5% versus the year ago period.</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“Revenue in the Automotive end market was $7,116 million, a decrease of $35 million or 0.5% versus the year ago period.”</td>
+    </tr>
+    <tr id="c_e36b06b765">
+      <td class="mono small">c_e36b06b765</td>
+      <td><span class="chip">market_driver</span></td>
+      <td>The decline in the Automotive end market was driven by processors, partially offset by growth in mixed-signal products.</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“The decline was driven by processors, partially offset by growth in mixed-signal products.”</td>
+    </tr>
+    <tr id="c_57af5462e7">
+      <td class="mono small">c_57af5462e7</td>
+      <td><span class="chip">financial_commentary</span></td>
+      <td>Revenue in the Industrial &amp; IoT end market was $2,273 million, an increase of $4 million or 0.2% versus the year ago period.</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“Revenue in the Industrial &amp; IoT end market was $2,273 million, an increase of $4 million or 0.2% versus the year ago period.”</td>
+    </tr>
+    <tr id="c_41f33768b0">
+      <td class="mono small">c_41f33768b0</td>
+      <td><span class="chip">market_driver</span></td>
+      <td>The increase in the Industrial &amp; IoT end market was attributable to growth in mixed-signal products, partially offset by declines in processors.</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“The increase was attributable to growth in mixed-signal products, partially offset by declines in processors.”</td>
+    </tr>
+    <tr id="c_40479547b4">
+      <td class="mono small">c_40479547b4</td>
+      <td><span class="chip">financial_commentary</span></td>
+      <td>Revenue in the Mobile end market was $1,584 million, an increase of $87 million or 5.8% versus the year ago period.</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“Revenue in the Mobile end market was $1,584 million, an increase of $87 million or 5.8% versus the year ago period.”</td>
+    </tr>
+    <tr id="c_df503f7612">
+      <td class="mono small">c_df503f7612</td>
+      <td><span class="chip">financial_commentary</span></td>
+      <td>Revenue in the Communication Infrastructure &amp; Other end market was $1,296 million, a decrease of $401 million or 23.6% versus the year ago period.</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“Revenue in the Communication Infrastructure &amp; Other end market was $1,296 million, a decrease of $401 million or 23.6% versus the year ago period.”</td>
+    </tr>
+    <tr id="c_0c8908742b">
+      <td class="mono small">c_0c8908742b</td>
+      <td><span class="chip">market_driver</span></td>
+      <td>The decline in the Communication Infrastructure &amp; Other end market was primarily due to processors.</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“The decline was primarily due to processors.”</td>
+    </tr>
+    <tr id="c_1d2fb5bb21">
+      <td class="mono small">c_1d2fb5bb21</td>
+      <td><span class="chip">financial_commentary</span></td>
+      <td>The year-to-date change in revenue was primarily driven by a lower selling mix of products, slightly offset by higher shipment volumes.</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“The year-to-date change in revenue was primarily driven by a lower selling mix of products, slightly offset by higher shipment volumes.”</td>
+    </tr>
+    <tr id="c_33ee172e73">
+      <td class="mono small">c_33ee172e73</td>
+      <td><span class="chip">financial_commentary</span></td>
+      <td>Revenue from distributors was $7,051 million, a decrease of $152 million or 2.1% versus the year ago period.</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“Revenue from distributors was $7,051 million, a decrease of $152 million or 2.1% versus the year ago period.”</td>
+    </tr>
+    <tr id="c_8a6f8a5e24">
+      <td class="mono small">c_8a6f8a5e24</td>
+      <td><span class="chip">financial_commentary</span></td>
+      <td>Revenue from direct customers was $5,084 million, a decrease of $207 million or 3.9% versus the year ago period.</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“Revenue from direct customers was $5,084 million, a decrease of $207 million or 3.9% versus the year ago period.”</td>
+    </tr>
+    <tr id="c_b5b33206bb">
+      <td class="mono small">c_b5b33206bb</td>
+      <td><span class="chip">geography</span></td>
+      <td>From a geographic perspective, revenue increased year-on-year in the China region and declined in the APAC, EMEA, and Americas regions.</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“From a geographic perspective, revenue increased year-on-year in the China region and declined in the APAC, EMEA, and Americas regions.”</td>
+    </tr>
+    <tr id="c_9ddd4b18d8">
+      <td class="mono small">c_9ddd4b18d8</td>
+      <td><span class="chip">financial_commentary</span></td>
+      <td>As of December 31, 2025, the Company had purchase commitments, other than commitments directly with our foundry joint ventures, of $3,087 million, of which $1,423 million is expected to be paid in the next 12 months.</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“As of December 31, 2025, the Company had purchase commitments, other than commitments directly with our foundry joint ventures, of $3,087 million, of which $1,423 million is expected to be paid in the next 12 months.”</td>
+    </tr>
+    <tr id="c_d02a71be39">
+      <td class="mono small">c_d02a71be39</td>
+      <td><span class="chip">financial_commentary</span></td>
+      <td>The Company has committed to invest €500 million, which translated to $587 million, in the equity of the recently founded company ESMC.</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“The Company has committed to invest €500 million, which translated to $587 million, in the equity of the recently founded company ESMC.”</td>
+    </tr>
+    <tr id="c_1adc6b2fa0">
+      <td class="mono small">c_1adc6b2fa0</td>
+      <td><span class="chip">financial_commentary</span></td>
+      <td>The remaining $404 million is expected to be invested over the coming four years, of which approximately $65 million is expected to be paid in the next 12 months.</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“The remaining $404 million is expected to be invested over the coming four years, of which approximately $65 million is expected to be paid in the next 12 months.”</td>
+    </tr>
+    <tr id="c_af4fee7555">
+      <td class="mono small">c_af4fee7555</td>
+      <td><span class="chip">financial_commentary</span></td>
+      <td>The Company has committed to invest approximately $1,600 million in equity of the recently founded company VSMC.</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“The Company has committed to invest approximately $1,600 million in equity of the recently founded company VSMC.”</td>
+    </tr>
+    <tr id="c_ed234313dc">
+      <td class="mono small">c_ed234313dc</td>
+      <td><span class="chip">financial_commentary</span></td>
+      <td>The remaining $969 million is expected to be invested over the coming two years, of which approximately $512 million is expected to be paid in the next 12 months.</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“The remaining $969 million is expected to be invested over the coming two years, of which approximately $512 million is expected to be paid in the next 12 months.”</td>
+    </tr>
+    <tr id="c_a57ed2a938">
+      <td class="mono small">c_a57ed2a938</td>
+      <td><span class="chip">financial_commentary</span></td>
+      <td>NXP has an agreed purchase commitment with VSMC that over the lifetime of the factory the minimal loading will be between 80% - 90%, resulting in a total purchase commitment of approximately $14,096 million that is expected to be purchased over 37 years once wafer production starts.</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“NXP has an agreed purchase commitment with VSMC that over the lifetime of the factory the minimal loading will be between 80% - 90%, resulting in a total purchase commitment of approximately $14,096 million that is expected to be purchased over 37 years once wafer production starts.”</td>
+    </tr>
+    <tr id="c_42ad913837">
+      <td class="mono small">c_42ad913837</td>
+      <td><span class="chip">financial_commentary</span></td>
+      <td>Amounts related to future lease payments for operating lease obligations at December 31, 2025, totaled $315 million, with $69 million expected to be paid within the next 12 months.</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“Amounts related to future lease payments for operating lease obligations at December 31, 2025, totaled $315 million, with $69 million expected to be paid within the next 12 months.”</td>
+    </tr>
+    <tr id="c_6bc8e7e674">
+      <td class="mono small">c_6bc8e7e674</td>
+      <td><span class="chip">financial_commentary</span></td>
+      <td>Outstanding unpaid balances for technology licenses total $270 million as of December 31, 2025, of which $135 million is expected to be paid in the next 12 months.</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“Outstanding unpaid balances for technology licenses total $270 million as of December 31, 2025, of which $135 million is expected to be paid in the next 12 months.”</td>
+    </tr>
+    <tr id="c_3524cbb4c3">
+      <td class="mono small">c_3524cbb4c3</td>
+      <td><span class="chip">financial_commentary</span></td>
+      <td>Cash outflows for capital expenditures were $397 million in 2025, compared to $727 million in 2024.</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“Cash outflows for capital expenditures were $397 million in 2025, compared to $727 million in 2024.”</td>
+    </tr>
+    <tr id="c_b54901779e">
+      <td class="mono small">c_b54901779e</td>
+      <td><span class="chip">financial_commentary</span></td>
+      <td>Our research and development expenditures were $2,360 million in 2025 and $2,347 million in 2024.</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“Our research and development expenditures were $2,360 million in 2025 and $2,347 million in 2024.”</td>
+    </tr>
+    <tr id="c_fd9fc03ff7">
+      <td class="mono small">c_fd9fc03ff7</td>
+      <td><span class="chip">geography</span></td>
+      <td>The Company&#39;s headquarters are located in Eindhoven, the Netherlands.</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“The Company&#39;s headquarters are located in Eindhoven, the Netherlands.”</td>
+    </tr>
+    <tr id="c_7220c4489d">
+      <td class="mono small">c_7220c4489d</td>
+      <td><span class="chip">geography</span></td>
+      <td>The Company operates owned manufacturing facilities primarily in the United States, Netherlands, Malaysia, China, Thailand and Taiwan, as well as in Singapore (SSMC) together with our joint venture partner TSMC.</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“The Company operates owned manufacturing facilities primarily in the United States, Netherlands, Malaysia, China, Thailand and Taiwan, as well as in Singapore (SSMC) together with our joint venture partner TSMC.”</td>
+    </tr>
+    <tr id="c_d7be090e53">
+      <td class="mono small">c_d7be090e53</td>
+      <td><span class="chip">geography</span></td>
+      <td>The Company holds capacity rights in external manufacturing facilities, presently under construction.</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“the Company holds capacity rights in external manufacturing facilities, presently under construction.”</td>
+    </tr>
+    <tr id="c_d5eee4b67a">
+      <td class="mono small">c_d5eee4b67a</td>
+      <td><span class="chip">geography</span></td>
+      <td>The Company also owns or leases other properties in multiple countries for use as administrative, sales or research and development facilities.</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“The Company also owns or leases other properties in multiple countries for use as administrative, sales or research and development facilities.”</td>
+    </tr>
+    <tr id="c_a43d629890">
+      <td class="mono small">c_a43d629890</td>
+      <td><span class="chip">risk</span></td>
+      <td>The Company believes its existing facilities and equipment are in good operating condition and adequate to meet our need for the near future.</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“The Company believes its existing facilities and equipment are in good operating condition and adequate to meet our need for the near future.”</td>
+    </tr>
+    <tr id="c_41abfde24b">
+      <td class="mono small">c_41abfde24b</td>
+      <td><span class="chip">market_driver</span></td>
+      <td>The vast majority of our revenue is derived from sales to manufacturers in the Automotive, Industrial &amp; IoT, Mobile, and Communication Infrastructure end markets.</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“The vast majority of our revenue is derived from sales to manufacturers in the Automotive, Industrial &amp; IoT, Mobile, and Communication Infrastructure end markets.”</td>
+    </tr>
+    <tr id="c_50684eb956">
+      <td class="mono small">c_50684eb956</td>
+      <td><span class="chip">market_driver</span></td>
+      <td>Demand in these markets fluctuates significantly, driven by consumer spending, consumer preferences, the development of new technologies and prevailing economic conditions.</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“Demand in these markets fluctuates significantly, driven by consumer spending, consumer preferences, the development of new technologies and prevailing economic conditions.”</td>
+    </tr>
+    <tr id="c_9ae6ce5f56">
+      <td class="mono small">c_9ae6ce5f56</td>
+      <td><span class="chip">customer</span></td>
+      <td>Such customers have in the past, and may in the future, vary order levels significantly from period to period, request postponements to scheduled delivery dates, modify their orders or reduce lead times.</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“Such customers have in the past, and may in the future, vary order levels significantly from period to period, request postponements to scheduled delivery dates, modify their orders or reduce lead times.”</td>
+    </tr>
+    <tr id="c_9d3e2eb4f7">
+      <td class="mono small">c_9d3e2eb4f7</td>
+      <td><span class="chip">risk</span></td>
+      <td>This can make managing our business difficult, as it limits the predictability of future revenue.</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“This can make managing our business difficult, as it limits the predictability of future revenue.”</td>
+    </tr>
+    <tr id="c_e3daa4d92d">
+      <td class="mono small">c_e3daa4d92d</td>
+      <td><span class="chip">market_driver</span></td>
+      <td>Furthermore, developing industry trends, such as customers’ use of outsourcing and revised supply chain models, including the direct purchase of semiconductor products by end product manufacturers instead of component manufacturers, may affect our revenue, costs, customer relations and working capital requirements.</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“Furthermore, developing industry trends, such as customers’ use of outsourcing and revised supply chain models, including the direct purchase of semiconductor products by end product manufacturers instead of component manufacturers, may affect our revenue, costs, customer relations and working capit”</td>
+    </tr>
+    <tr id="c_7818e29c42">
+      <td class="mono small">c_7818e29c42</td>
+      <td><span class="chip">risk</span></td>
+      <td>If customers do not purchase products made specifically for them, we may not be able to resell such products to other customers or may not be able to require the customers who have ordered these products to pay a cancellation fee.</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“If customers do not purchase products made specifically for them, we may not be able to resell such products to other customers or may not be able to require the customers who have ordered these products to pay a cancellation fee.”</td>
+    </tr>
+    <tr id="c_a51119fe03">
+      <td class="mono small">c_a51119fe03</td>
+      <td><span class="chip">risk</span></td>
+      <td>The semiconductor industry is historically characterized by continued price erosion, especially after a product has been on the market.</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“The semiconductor industry is historically characterized by continued price erosion, especially after a product has been on the market.”</td>
+    </tr>
+    <tr id="c_95a98a1a2c">
+      <td class="mono small">c_95a98a1a2c</td>
+      <td><span class="chip">risk</span></td>
+      <td>Pricing pressure, especially on products containing older technology, can be intense.</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“One of the results of the rapid innovation in the semiconductor industry is that pricing pressure, especially on products containing older technology, can be intense.”</td>
+    </tr>
+    <tr id="c_35de71a44a">
+      <td class="mono small">c_35de71a44a</td>
+      <td><span class="chip">risk</span></td>
+      <td>We must reduce our production and procurement costs in line with the lower revenue we can expect to generate per unit.</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“in order to continue profitably supplying these products, we must reduce our production and procurement costs in line with the lower revenue we can expect to generate per unit.”</td>
+    </tr>
+    <tr id="c_9d02afdf0e">
+      <td class="mono small">c_9d02afdf0e</td>
+      <td><span class="chip">risk</span></td>
+      <td>This must be accomplished through improvements in process technology, production efficiencies and efficient procurement pricing.</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“Usually, this must be accomplished through improvements in process technology, production efficiencies and efficient procurement pricing.”</td>
+    </tr>
+    <tr id="c_926ace7d85">
+      <td class="mono small">c_926ace7d85</td>
+      <td><span class="chip">risk</span></td>
+      <td>We may not be able to cease production of such products, either due to contractual obligations or for customer relationship reasons.</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“Moreover, we may not be able to cease production of such products, either due to contractual obligations or for customer relationship reasons.”</td>
+    </tr>
+    <tr id="c_f751b07015">
+      <td class="mono small">c_f751b07015</td>
+      <td><span class="chip">risk</span></td>
+      <td>Failure to win new design projects and delays in developing new products with anticipated technological advances or in commencing volume shipments of these products may have an adverse effect on our business.</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“Failure to win new design projects and delays in developing new products with anticipated technological advances or in commencing volume shipments of these products may have an adverse effect on our business.”</td>
+    </tr>
+    <tr id="c_143de63aea">
+      <td class="mono small">c_143de63aea</td>
+      <td><span class="chip">risk</span></td>
+      <td>This risk is particularly pronounced in markets where there are only a few potential customers and in the automotive market, where, due to the longer design cycles involved, failure to win a design-in could prevent access to a customer for several years.</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“This risk is particularly pronounced in markets where there are only a few potential customers and in the automotive market, where, due to the longer design cycles involved, failure to win a design-in could prevent access to a customer for several years.”</td>
+    </tr>
+    <tr id="c_016c013e46">
+      <td class="mono small">c_016c013e46</td>
+      <td><span class="chip">risk</span></td>
+      <td>Our failure to win a sufficient number of these bids could result in reduced revenue and hurt our competitive position in future selection processes.</td>
+      <td class="mono small">sec_10_k_2025</td>
+      <td class="muted small">“Our failure to win a sufficient number of these bids could result in reduced revenue and hurt our competitive position in future selection processes.”</td>
+    </tr>
+    <tr id="c_6480fc576b">
+      <td class="mono small">c_6480fc576b</td>
+      <td><span class="chip">financial_commentary</span></td>
+      <td>NXP delivered second-quarter revenue of $3.5 billion, up 19 percent year-on-year and 10 percent sequentially.</td>
+      <td class="mono small">sec_8k_2026-07-28_ex991</td>
+      <td class="muted small">“NXP delivered second-quarter revenue of $3.5 billion, up 19 percent year-on-year and 10 percent sequentially.”</td>
+    </tr>
+    <tr id="c_bbaeba1189">
+      <td class="mono small">c_bbaeba1189</td>
+      <td><span class="chip">market_driver</span></td>
+      <td>This performance reflects the strength of our company-specific growth drivers, particularly in Software-Defined Vehicles and Physical AI, with Data Center emerging as an additional growth engine.</td>
+      <td class="mono small">sec_8k_2026-07-28_ex991</td>
+      <td class="muted small">“This performance reflects the strength of our company-specific growth drivers, particularly in Software-Defined Vehicles and Physical AI, with Data Center emerging as an additional growth engine.”</td>
+    </tr>
+    <tr id="c_9bdc89a628">
+      <td class="mono small">c_9bdc89a628</td>
+      <td><span class="chip">product</span></td>
+      <td>NXP&#39;s portfolio of processing, connectivity, and security solutions positions us to enable next-generation edge intelligence for our customers.</td>
+      <td class="mono small">sec_8k_2026-07-28_ex991</td>
+      <td class="muted small">“NXP&#39;s portfolio of processing, connectivity, and security solutions, positions us to enable next-generation edge intelligence for our customers.”</td>
+    </tr>
+    <tr id="c_e405fcd7d6">
+      <td class="mono small">c_e405fcd7d6</td>
+      <td><span class="chip">financial_commentary</span></td>
+      <td>GAAP gross margin was 57.3 percent, GAAP operating margin was 30.6 percent and GAAP diluted Net Income per Share was $3.02.</td>
+      <td class="mono small">sec_8k_2026-07-28_ex991</td>
+      <td class="muted small">“GAAP gross margin was 57.3 percent, GAAP operating margin was 30.6 percent and GAAP diluted Net Income per Share was $3.02.”</td>
+    </tr>
+    <tr id="c_7ddcf718ed">
+      <td class="mono small">c_7ddcf718ed</td>
+      <td><span class="chip">financial_commentary</span></td>
+      <td>Non-GAAP gross margin was 58.0 percent, non-GAAP operating margin was 35.1 percent, and non-GAAP diluted Net Income per Share was $3.61.</td>
+      <td class="mono small">sec_8k_2026-07-28_ex991</td>
+      <td class="muted small">“Non-GAAP gross margin was 58.0 percent, non-GAAP operating margin was 35.1 percent, and non-GAAP diluted Net Income per Share was $3.61.”</td>
+    </tr>
+    <tr id="c_7acbabbc85">
+      <td class="mono small">c_7acbabbc85</td>
+      <td><span class="chip">financial_commentary</span></td>
+      <td>Cash flow from operations was $860 million, with net capex investments of $69 million, resulting in non-GAAP free cash flow of $791 million or 22.6 percent of revenue.</td>
+      <td class="mono small">sec_8k_2026-07-28_ex991</td>
+      <td class="muted small">“Cash flow from operations was $860 million, with net capex investments of $69 million, resulting in non-GAAP free cash flow of $791 million or 22.6 percent of revenue.”</td>
+    </tr>
+    <tr id="c_7b334dc6b1">
+      <td class="mono small">c_7b334dc6b1</td>
+      <td><span class="chip">financial_commentary</span></td>
+      <td>Capital return during the quarter was $360 million, representing 45.5 percent of second quarter non-GAAP free cash flow.</td>
+      <td class="mono small">sec_8k_2026-07-28_ex991</td>
+      <td class="muted small">“Capital return during the quarter was $360 million, representing 45.5 percent of second quarter non-GAAP free cash flow.”</td>
+    </tr>
+    <tr id="c_1f53105d4d">
+      <td class="mono small">c_1f53105d4d</td>
+      <td><span class="chip">financial_commentary</span></td>
+      <td>Dividends paid during the quarter were $256 million, and share buybacks were $104 million.</td>
+      <td class="mono small">sec_8k_2026-07-28_ex991</td>
+      <td class="muted small">“Dividends paid during the quarter were $256 million, and share buybacks were $104 million.”</td>
+    </tr>
+    <tr id="c_b9576b219a">
+      <td class="mono small">c_b9576b219a</td>
+      <td><span class="chip">financial_commentary</span></td>
+      <td>On April 20, 2026, NXP repaid the $750 million aggregate principal amount of outstanding 3.875% senior unsecured notes due June 18, 2026, at par using available cash.</td>
+      <td class="mono small">sec_8k_2026-07-28_ex991</td>
+      <td class="muted small">“On April 20, 2026, NXP repaid the $750 million aggregate principal amount of outstanding 3.875% senior unsecured notes due June 18, 2026, at par using available cash.”</td>
+    </tr>
+    <tr id="c_f12ad05224">
+      <td class="mono small">c_f12ad05224</td>
+      <td><span class="chip">financial_commentary</span></td>
+      <td>NXP Semiconductors N.V. posted revenue of $12.27 billion in 2025.</td>
+      <td class="mono small">sec_8k_2026-07-28_ex991</td>
+      <td class="muted small">“the company has operations in more than 30 countries and posted revenue of $12.27 billion in 2025.”</td>
+    </tr>
+    <tr id="c_d6c7665375">
+      <td class="mono small">c_d6c7665375</td>
+      <td><span class="chip">market_driver</span></td>
+      <td>NXP Semiconductors is the trusted partner for innovative solutions in the automotive, industrial &amp; IoT, mobile, and communications infrastructure markets.</td>
+      <td class="mono small">sec_8k_2026-07-28_ex991</td>
+      <td class="muted small">“NXP Semiconductors N.V. (NASDAQ: NXPI) is the trusted partner for innovative solutions in the automotive, industrial &amp; IoT, mobile, and communications infrastructure markets.”</td>
+    </tr>
+    <tr id="c_999cc9f293">
+      <td class="mono small">c_999cc9f293</td>
+      <td><span class="chip">financial_commentary</span></td>
+      <td>NXP delivered quarterly revenue of $3.18 billion, up 12% year over year.</td>
+      <td class="mono small">sec_8k_2026-04-28_ex991</td>
+      <td class="muted small">“NXP delivered quarterly revenue of $3.18 billion, up 12% year over year.”</td>
+    </tr>
+    <tr id="c_8d5de69c53">
+      <td class="mono small">c_8d5de69c53</td>
+      <td><span class="chip">market_driver</span></td>
+      <td>The growth reflects sustained investment, disciplined execution, and growing customer adoption of our differentiated portfolio.</td>
+      <td class="mono small">sec_8k_2026-04-28_ex991</td>
+      <td class="muted small">“Our growth reflects sustained investment, disciplined execution, and growing customer adoption of our differentiated portfolio.”</td>
+    </tr>
+    <tr id="c_f35bff910c">
+      <td class="mono small">c_f35bff910c</td>
+      <td><span class="chip">product</span></td>
+      <td>The differentiated portfolio particularly supports software-defined vehicles and physical AI.</td>
+      <td class="mono small">sec_8k_2026-04-28_ex991</td>
+      <td class="muted small">“particularly in industrial and automotive processing that supports software-defined vehicles and physical AI.”</td>
+    </tr>
+    <tr id="c_2768aadf45">
+      <td class="mono small">c_2768aadf45</td>
+      <td><span class="chip">financial_commentary</span></td>
+      <td>The momentum we have built is expected to accelerate through the remainder of 2026.</td>
+      <td class="mono small">sec_8k_2026-04-28_ex991</td>
+      <td class="muted small">“The momentum we have built is expected to accelerate through the remainder of 2026.”</td>
+    </tr>
+    <tr id="c_b71926efa9">
+      <td class="mono small">c_b71926efa9</td>
+      <td><span class="chip">strategy</span></td>
+      <td>NXP is committed to disciplined investment, margin expansion, and portfolio optimization to deliver sustainable, long-term value for shareholders.</td>
+      <td class="mono small">sec_8k_2026-04-28_ex991</td>
+      <td class="muted small">“We remain committed to disciplined investment, margin expansion, and portfolio optimization to deliver sustainable, long-term value for our shareholders.”</td>
+    </tr>
+    <tr id="c_239cd90b69">
+      <td class="mono small">c_239cd90b69</td>
+      <td><span class="chip">financial_commentary</span></td>
+      <td>Revenue was $3.18 billion, up 12 percent year-on-year.</td>
+      <td class="mono small">sec_8k_2026-04-28_ex991</td>
+      <td class="muted small">“Revenue was $3.18 billion, up 12 percent year-on-year;”</td>
+    </tr>
+    <tr id="c_73affdf5f8">
+      <td class="mono small">c_73affdf5f8</td>
+      <td><span class="chip">financial_commentary</span></td>
+      <td>GAAP gross margin was 56.2 percent.</td>
+      <td class="mono small">sec_8k_2026-04-28_ex991</td>
+      <td class="muted small">“GAAP gross margin was 56.2 percent,”</td>
+    </tr>
+    <tr id="c_6dd6a80b0c">
+      <td class="mono small">c_6dd6a80b0c</td>
+      <td><span class="chip">financial_commentary</span></td>
+      <td>GAAP operating margin was 47.3 percent.</td>
+      <td class="mono small">sec_8k_2026-04-28_ex991</td>
+      <td class="muted small">“GAAP operating margin was 47.3 percent and GAAP diluted Net Income per Share was $4.43;”</td>
+    </tr>
+    <tr id="c_6b83f6c388">
+      <td class="mono small">c_6b83f6c388</td>
+      <td><span class="chip">financial_commentary</span></td>
+      <td>Non-GAAP gross margin was 57.1 percent.</td>
+      <td class="mono small">sec_8k_2026-04-28_ex991</td>
+      <td class="muted small">“Non-GAAP gross margin was 57.1 percent,”</td>
+    </tr>
+    <tr id="c_15a9d84711">
+      <td class="mono small">c_15a9d84711</td>
+      <td><span class="chip">financial_commentary</span></td>
+      <td>Non-GAAP operating margin was 33.1 percent.</td>
+      <td class="mono small">sec_8k_2026-04-28_ex991</td>
+      <td class="muted small">“non-GAAP operating margin was 33.1 percent,”</td>
+    </tr>
+    <tr id="c_e9222ea1e5">
+      <td class="mono small">c_e9222ea1e5</td>
+      <td><span class="chip">financial_commentary</span></td>
+      <td>Non-GAAP diluted Net Income per Share was $3.05.</td>
+      <td class="mono small">sec_8k_2026-04-28_ex991</td>
+      <td class="muted small">“non-GAAP diluted Net Income per Share was $3.05;”</td>
+    </tr>
+    <tr id="c_bdf3a6b302">
+      <td class="mono small">c_bdf3a6b302</td>
+      <td><span class="chip">financial_commentary</span></td>
+      <td>Cash flow from operations was $793 million.</td>
+      <td class="mono small">sec_8k_2026-04-28_ex991</td>
+      <td class="muted small">“Cash flow from operations was $793 million,”</td>
+    </tr>
+    <tr id="c_96536159c3">
+      <td class="mono small">c_96536159c3</td>
+      <td><span class="chip">product</span></td>
+      <td>NXP unveiled the S32N7 super-integration processor series.</td>
+      <td class="mono small">sec_8k_2026-04-28_ex991</td>
+      <td class="muted small">“On January 5, 2026, NXP unveiled the S32N7 super-integration processor series to enable a new era where carmakers can digitalize the core functions of every vehicle;”</td>
+    </tr>
+    <tr id="c_21798ba841">
+      <td class="mono small">c_21798ba841</td>
+      <td><span class="chip">product</span></td>
+      <td>NXP announced its new eIQ Agentic AI Framework.</td>
+      <td class="mono small">sec_8k_2026-04-28_ex991</td>
+      <td class="muted small">“On January 6, 2026 NXP announced its new eIQ Agentic AI Framework, advancing its leadership in secure, real-time edge AI;”</td>
+    </tr>
+    <tr id="c_1d564dbb90">
+      <td class="mono small">c_1d564dbb90</td>
+      <td><span class="chip">product</span></td>
+      <td>NXP announced the i.MX 93W applications processor.</td>
+      <td class="mono small">sec_8k_2026-04-28_ex991</td>
+      <td class="muted small">“On March 9, 2026, NXP announced the i.MX 93W applications processor, expanding NXP’s i.MX 93 family;”</td>
+    </tr>
+    <tr id="c_d68b254950">
+      <td class="mono small">c_d68b254950</td>
+      <td><span class="chip">product</span></td>
+      <td>NXP announced innovative robotics solutions developed in collaboration with NVIDIA.</td>
+      <td class="mono small">sec_8k_2026-04-28_ex991</td>
+      <td class="muted small">“On March 16, 2026, NXP announced innovative robotics solutions developed in collaboration with NVIDIA for reliable, secure, real-time data processing and transport and advanced networking, enabling sensor fusion.”</td>
+    </tr>
+    <tr id="c_7ce439f20f">
+      <td class="mono small">c_7ce439f20f</td>
+      <td><span class="chip">market_driver</span></td>
+      <td>NXP is the trusted partner for innovative solutions in the automotive, industrial &amp; IoT, mobile, and communications infrastructure markets.</td>
+      <td class="mono small">sec_8k_2026-04-28_ex991</td>
+      <td class="muted small">“NXP Semiconductors N.V. (NASDAQ: NXPI) is the trusted partner for innovative solutions in the automotive, industrial &amp; IoT, mobile, and communications infrastructure markets.”</td>
+    </tr>
+    <tr id="c_ec6649510d">
+      <td class="mono small">c_ec6649510d</td>
+      <td><span class="chip">product</span></td>
+      <td>NXP unveiled the S32N7 super-integration processor series to enable a new era where carmakers can digitalize the core functions of every vehicle.</td>
+      <td class="mono small">sec_8k_2026-04-28_ex991</td>
+      <td class="muted small">“On January 5, 2026, NXP unveiled the S32N7 super-integration processor series to enable a new era where carmakers can digitalize the core functions of every vehicle;”</td>
+    </tr>
+    <tr id="c_fb3e06156c">
+      <td class="mono small">c_fb3e06156c</td>
+      <td><span class="chip">technology</span></td>
+      <td>NXP and GE HealthCare announced a collaboration to pioneer new advancements in edge AI innovation leveraging NXP’s long history in secure, high-performance edge processing.</td>
+      <td class="mono small">sec_8k_2026-04-28_ex991</td>
+      <td class="muted small">“On January 6, 2026, NXP and GE HealthCare announced a collaboration to pioneer new advancements in edge AI innovation leveraging NXP’s long history in secure, high-performance edge processing;”</td>
+    </tr>
+    <tr id="c_a4e8282d02">
+      <td class="mono small">c_a4e8282d02</td>
+      <td><span class="chip">technology</span></td>
+      <td>NXP announced its new eIQ Agentic AI Framework, advancing its leadership in secure, real-time edge AI.</td>
+      <td class="mono small">sec_8k_2026-04-28_ex991</td>
+      <td class="muted small">“On January 6, 2026 NXP announced its new eIQ Agentic AI Framework, advancing its leadership in secure, real-time edge AI;”</td>
+    </tr>
+    <tr id="c_f0fa91c6e8">
+      <td class="mono small">c_f0fa91c6e8</td>
+      <td><span class="chip">product</span></td>
+      <td>NXP announced the i.MX 93W applications processor, expanding NXP’s i.MX 93 family.</td>
+      <td class="mono small">sec_8k_2026-04-28_ex991</td>
+      <td class="muted small">“On March 9, 2026, NXP announced the i.MX 93W applications processor, expanding NXP’s i.MX 93 family;”</td>
+    </tr>
+    <tr id="c_4c6b5af90e">
+      <td class="mono small">c_4c6b5af90e</td>
+      <td><span class="chip">technology</span></td>
+      <td>NXP announced innovative robotics solutions developed in collaboration with NVIDIA for reliable, secure, real-time data processing and transport and advanced networking, enabling sensor fusion.</td>
+      <td class="mono small">sec_8k_2026-04-28_ex991</td>
+      <td class="muted small">“On March 16, 2026, NXP announced innovative robotics solutions developed in collaboration with NVIDIA for reliable, secure, real-time data processing and transport and advanced networking, enabling sensor fusion.”</td>
+    </tr>
+  </tbody>
+</table>
+</section>
+
+<footer>
+  <p class="muted small">
+    Generated 2026-09-26 15:10 UTC.
+    Deterministic financials from SEC XBRL; qualitative claims from language models,
+    each gated on a verbatim source quote. Peer-filing claims are typed INFERENCE
+    and kept in a separate ledger.
+  </p>
+</footer>
+
+</div>
+<script>
+// Ledger filter. Tiny and dependency-free: the ledger is the audit trail, so being
+// able to search it matters more than any interactive flourish.
+(function () {
+  var input = document.getElementById('ledgerFilter');
+  if (!input) return;
+  var rows = Array.prototype.slice.call(
+    document.querySelectorAll('#ledger tbody tr')
+  );
+  input.addEventListener('input', function () {
+    var q = input.value.trim().toLowerCase();
+    rows.forEach(function (r) {
+      r.style.display = !q || r.textContent.toLowerCase().indexOf(q) !== -1 ? '' : 'none';
+    });
+  });
+})();
+</script>
+</body>
+</html>

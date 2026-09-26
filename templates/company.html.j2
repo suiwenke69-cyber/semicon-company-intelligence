@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{ profile.company.name }}{% if profile.company.ticker %} ({{ profile.company.ticker }}){% endif %} — Semiconductor Intelligence Report</title>
+<style>
+{{ shared_css }}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="masthead">
+  <a class="back" href="index.html">&larr; All companies</a>
+  <h1>{{ profile.company.name }}{% if profile.company.ticker %} <span class="ticker">{{ profile.company.ticker }}</span>{% endif %}</h1>
+  <p class="sub">Semiconductor Company Intelligence Report</p>
+</header>
+
+{% if profile.stale_data %}
+<div class="callout stale">
+  <strong>⚠ Stale data warning.</strong> The most recent SEC filing available for
+  this company is dated <b>{{ profile.newest_filing_date }}</b>. This issuer appears
+  to have stopped filing with the SEC. <b>Everything below is historical, not
+  current intelligence</b> — it is shown for reference only.
+</div>
+{% endif %}
+
+{% set unmet = profile.coverage | rejectattr("met") | list %}
+
+<section class="bar">
+  <div class="stat"><b>{{ profile.evidence | length }}</b><span>verified claims</span></div>
+  <div class="stat"><b>{{ summary.sources_used }}<small>/{{ summary.sources_attempted }}</small></b><span>sources</span></div>
+  <div class="stat"><b>{{ summary.coverage_met }}<small>/{{ summary.coverage_total }}</small></b><span>categories at target</span></div>
+  <div class="stat"><b>{{ profile.as_of or "n/a" }}</b><span>data as of</span></div>
+</section>
+
+<div class="callout">
+  <strong>How to read this.</strong> Claims are tagged
+  <span class="tag fact">FACT</span> (stated in a cited filing),
+  <span class="tag analysis">ANALYSIS</span> (reasoned across facts) or
+  <span class="tag inference">INFERENCE</span> (reasoned with a stated chain).
+  Every factual assertion carries a claim ID, resolvable in the Evidence Ledger.
+  No investment recommendation is made.
+</div>
+
+<section>
+<h2><span class="n">1</span> Company Overview</h2>
+<dl class="kv">
+  <dt>Value chain position</dt><dd>{{ profile.company.value_chain_position or "Not classified" }}</dd>
+  <dt>Ticker / CIK</dt><dd>{{ profile.company.ticker or "n/a" }} / {{ profile.company.cik or "n/a" }}</dd>
+  <dt>Fiscal year end</dt><dd>month {{ profile.company.fiscal_year_end or "n/a" }}</dd>
+</dl>
+{% set overview = profile.evidence | selectattr("topic", "equalto", "company_overview") | list %}
+{% if overview %}
+<ul class="claims">
+  {% for c in overview[:10] %}
+  <li>{{ c.text }} <a class="cid" href="#{{ c.claim_id }}">{{ c.claim_id }}</a></li>
+  {% endfor %}
+</ul>
+{% else %}<p class="muted">No company overview claims were extracted.</p>{% endif %}
+</section>
+
+{% if profile.geographic_revenue %}
+<section>
+<h2><span class="n">1b</span> Geographic Exposure</h2>
+<p class="muted">Revenue by customer location, parsed from the 10-K MD&amp;A table.</p>
+<table>
+  <thead><tr><th>Region</th><th class="num">Revenue</th><th class="num">% of total</th><th class="num">YoY</th></tr></thead>
+  <tbody>
+  {% for g in profile.geographic_revenue %}
+    <tr{% if g.is_subtotal %} class="sub"{% endif %}>
+      <td>{{ g.region }}{% if g.is_subtotal %} <span class="muted">(subtotal)</span>{% endif %}</td>
+      <td class="num">{{ g.revenue_millions | millions }}</td>
+      <td class="num">{{ g.pct_of_total | pct }}</td>
+      <td class="num {{ 'pos' if (g.change_pct or 0) > 0 else 'neg' if g.change_pct is not none else '' }}">{{ g.change_pct | signed_pct }}</td>
+    </tr>
+  {% endfor %}
+  </tbody>
+</table>
+</section>
+{% endif %}
+
+<section>
+<h2><span class="n">2</span> Product &amp; Technology</h2>
+
+{% if profile.business_segments %}
+<h3>Business segments</h3>
+<table>
+  <thead><tr><th>Segment</th><th class="num">Revenue</th><th class="num">% of total</th><th class="num">YoY</th><th>Basis</th></tr></thead>
+  <tbody>
+  {% for s in profile.business_segments %}
+    <tr>
+      <td>{{ s.name }}{% if s.description %}<div class="muted small">{{ s.description }}</div>{% endif %}</td>
+      <td class="num">{{ s.revenue_millions | millions }}</td>
+      <td class="num">{{ s.revenue_pct_of_total | pct }}</td>
+      <td class="num {{ 'pos' if (s.revenue_change_pct or 0) > 0 else 'neg' if s.revenue_change_pct is not none else '' }}">{{ s.revenue_change_pct | signed_pct }}</td>
+      <td class="muted small">{{ s.revenue_note or "" }}</td>
+    </tr>
+  {% endfor %}
+  </tbody>
+</table>
+{% endif %}
+
+{% if profile.process_steps %}
+<h3>Process steps</h3>
+<p class="chips">{% for s in profile.process_steps %}<span class="chip">{{ s.value }}</span>{% endfor %}</p>
+{% endif %}
+
+<h3>Products</h3>
+{% if profile.products %}
+<div class="grid">
+  {% for p in profile.products %}
+  <div class="card">
+    <h4>{{ p.name }}</h4>
+    {% if p.category %}<p class="muted small">{{ p.category }}</p>{% endif %}
+    {% if p.description %}<p>{{ p.description }}</p>{% endif %}
+    {% if p.process_steps %}<p class="chips">{% for s in p.process_steps %}<span class="chip">{{ s.value }}</span>{% endfor %}</p>{% endif %}
+    {% if p.technologies %}<p class="muted small">Technologies: {{ p.technologies | join(", ") }}</p>{% endif %}
+    <p class="srcs">{% for s in p.sources %}<a class="cid" href="#{{ s }}">{{ s }}</a>{% endfor %}</p>
+  </div>
+  {% endfor %}
+</div>
+{% else %}<p class="muted">No products were extracted with verifiable support.</p>{% endif %}
+
+<h3>Technologies</h3>
+{% if profile.technologies %}
+<ul class="claims">
+  {% for t in profile.technologies %}
+  <li><b>{{ t.name }}</b>{% if t.description %} — {{ t.description }}{% endif %}
+    {% if t.differentiator %}<div class="muted small">Differentiator: {{ t.differentiator }}</div>{% endif %}
+    <span class="srcs">{% for s in t.sources %}<a class="cid" href="#{{ s }}">{{ s }}</a>{% endfor %}</span>
+  </li>
+  {% endfor %}
+</ul>
+{% else %}<p class="muted">No technologies were extracted with verifiable support.</p>{% endif %}
+</section>
+
+<section>
+<h2><span class="n">3</span> Market Drivers</h2>
+{% if profile.markets %}
+<div class="grid">
+  {% for m in profile.markets %}
+  <div class="card">
+    <h4>{{ m.driver }} <span class="tag {{ m.claim_type.value | lower }}">{{ m.claim_type.value }}</span></h4>
+    <p>{{ m.relevance }}</p>
+    {% if m.company_exposure %}<p class="muted small">Exposure: {{ m.company_exposure }}</p>{% endif %}
+    <p class="srcs">{% for s in m.sources %}<a class="cid" href="#{{ s }}">{{ s }}</a>{% endfor %}</p>
+  </div>
+  {% endfor %}
+</div>
+{% else %}<p class="muted">No market drivers identified with verifiable support.</p>{% endif %}
+
+{% if profile.growth_drivers %}
+<h3>Growth drivers</h3>
+<ul class="claims">
+  {% for d in profile.growth_drivers %}
+  <li>{{ d.driver }} <span class="tag {{ d.claim_type.value | lower }}">{{ d.claim_type.value }}</span>
+    <span class="srcs">{% for s in d.sources %}<a class="cid" href="#{{ s }}">{{ s }}</a>{% endfor %}</span></li>
+  {% endfor %}
+</ul>
+{% endif %}
+</section>
+
+<section>
+<h2><span class="n">4</span> Customer Analysis</h2>
+{% if profile.customers %}
+{% for c in profile.customers %}
+<div class="card">
+  <h4>{{ c.name }}
+    {% if c.disclosure.value == "DISCLOSED" %}<span class="tag disclosed">disclosed</span>
+    {% else %}<span class="tag inferred">inferred category</span>{% endif %}
+  </h4>
+  {% if c.category %}<p class="muted small">Category: {{ c.category }}</p>{% endif %}
+  {% if c.value_created %}<p><b>Value created:</b> {{ c.value_created }}</p>{% endif %}
+  <div class="two">
+    {% if c.requirements %}<div><b>Requirements</b><ul>{% for r in c.requirements %}<li>{{ r }}</li>{% endfor %}</ul></div>{% endif %}
+    {% if c.pain_points %}<div><b>Pain points</b><ul>{% for p in c.pain_points %}<li>{{ p }}</li>{% endfor %}</ul></div>{% endif %}
+  </div>
+  {% if c.reasoning %}<p class="muted small">Basis: {{ c.reasoning }}</p>{% endif %}
+  <p class="srcs">{% for s in c.sources %}<a class="cid" href="#{{ s }}">{{ s }}</a>{% endfor %}</p>
+</div>
+{% endfor %}
+{% else %}<p class="muted">No customer analysis was produced with verifiable support.</p>{% endif %}
+</section>
+
+<section>
+<h2><span class="n">5</span> Competitive Landscape</h2>
+{% if profile.competitors %}
+<table>
+  <thead><tr><th>Competitor</th><th>Basis</th><th>Product overlap</th><th>Technology positioning</th><th>Market exposure</th></tr></thead>
+  <tbody>
+  {% for c in profile.competitors %}
+    <tr>
+      <td><b>{{ c.name }}</b></td>
+      <td>{% if c.basis == "disclosed" %}<span class="tag fact">disclosed</span>{% else %}<span class="tag analysis">industry</span>{% endif %}</td>
+      <td>{{ c.product_overlap or "" }}</td>
+      <td>{{ c.technology_positioning or "" }}</td>
+      <td>{{ c.market_exposure or "" }}</td>
+    </tr>
+  {% endfor %}
+  </tbody>
+</table>
+<div class="grid">
+  {% for c in profile.competitors %}
+  <div class="card">
+    <h4>{{ c.name }} {% if c.basis == "disclosed" %}<span class="tag fact">disclosed</span>{% else %}<span class="tag analysis">industry</span>{% endif %}</h4>
+    {% if c.strengths %}<p><b>Strengths:</b> {{ c.strengths | join("; ") }}</p>{% endif %}
+    {% if c.potential_weaknesses %}<p><b>Potential weaknesses:</b> {{ c.potential_weaknesses | join("; ") }}</p>{% endif %}
+    <p class="srcs">{% for s in c.sources %}<a class="cid" href="#{{ s }}">{{ s }}</a>{% endfor %}</p>
+  </div>
+  {% endfor %}
+</div>
+{% else %}
+<p class="muted">No competitors were identified with verifiable support.</p>
+<div class="callout">
+  Many issuers do not name competitors in their annual report. Applied Materials'
+  Form 10-K, for example, describes competition generically without naming rivals.
+  A short list here reflects what the filings disclose, not a failed analysis.
+</div>
+{% endif %}
+</section>
+
+<section>
+<h2><span class="n">6</span> Business Analysis</h2>
+{% if profile.financial_metrics %}
+<table>
+  <thead><tr><th>Metric</th><th class="num">Latest FY</th><th class="num">YoY</th><th>Period</th><th>Source concept</th></tr></thead>
+  <tbody>
+  {% for m in profile.financial_metrics %}
+    {% set p = m.latest_annual or m.latest %}
+    {% if p %}
+    <tr>
+      <td>{{ m.metric }}</td>
+      <td class="num">{{ p.value | money(m.unit) }}</td>
+      <td class="num {{ 'pos' if (m.yoy_growth_pct or 0) > 0 else 'neg' if m.yoy_growth_pct is not none else '' }}">{{ m.yoy_growth_pct | signed_pct }}</td>
+      <td class="muted small">{{ p.period_label or "" }}</td>
+      <td class="muted small mono">{{ m.concept }}</td>
+    </tr>
+    {% endif %}
+  {% endfor %}
+  </tbody>
+</table>
+{% endif %}
+
+{% set rev = profile.financial_metrics | selectattr("metric", "equalto", "revenue") | list %}
+{% if rev and rev[0].periods %}
+{% set annuals = rev[0].periods | selectattr("duration_days") | selectattr("duration_days", "gt", 300) | list %}
+{% if annuals | length > 2 %}
+<h3>Revenue trend</h3>
+<table>
+  <thead><tr><th>Period</th><th class="num">Revenue</th></tr></thead>
+  <tbody>
+  {% for p in annuals %}
+    <tr><td>{{ p.period_label }}</td><td class="num">{{ p.value | money(rev[0].unit) }}</td></tr>
+  {% endfor %}
+  </tbody>
+</table>
+{% endif %}
+{% endif %}
+
+{% set commentary = profile.evidence | selectattr("topic", "equalto", "financial_commentary") | list %}
+{% if commentary %}
+<h3>Management commentary</h3>
+<ul class="claims">
+  {% for c in commentary[:10] %}<li>{{ c.text }} <a class="cid" href="#{{ c.claim_id }}">{{ c.claim_id }}</a></li>{% endfor %}
+</ul>
+{% endif %}
+</section>
+
+<section>
+<h2><span class="n">7</span> Commercial Insights</h2>
+{% if profile.commercial_insights %}
+<div class="grid">
+  {% for i in profile.commercial_insights %}
+  <div class="card">
+    <h4>{{ i.kind | replace("_", " ") | title }} <span class="tag {{ i.claim_type.value | lower }}">{{ i.claim_type.value }}</span></h4>
+    <p>{{ i.insight }}</p>
+    {% if i.reasoning %}<p class="muted small">Reasoning: {{ i.reasoning }}</p>{% endif %}
+    <p class="srcs">{% for s in i.sources %}<a class="cid" href="#{{ s }}">{{ s }}</a>{% endfor %}</p>
+  </div>
+  {% endfor %}
+</div>
+{% else %}<p class="muted">No commercial insights were produced.</p>{% endif %}
+
+{% if profile.risks %}
+<h3>Risks</h3>
+<ul class="claims">
+  {% for r in profile.risks %}
+  <li><b>{{ r.risk }}</b>{% if r.category %} <span class="muted small">({{ r.category }})</span>{% endif %}
+    <span class="tag {{ r.claim_type.value | lower }}">{{ r.claim_type.value }}</span>
+    {% if r.mitigation_note %}<div class="muted small">Mitigation: {{ r.mitigation_note }}</div>{% endif %}
+    <span class="srcs">{% for s in r.sources %}<a class="cid" href="#{{ s }}">{{ s }}</a>{% endfor %}</span>
+  </li>
+  {% endfor %}
+</ul>
+{% else %}<p class="muted">No risks were extracted.</p>{% endif %}
+</section>
+
+<section>
+<h2>Evidence Coverage</h2>
+<p class="muted">Measured against advisory targets. A category below target means the reviewed sources did not support it - it is not filled in to reach the target.</p>
+<table>
+  <thead><tr><th>Category</th><th class="num">Claims</th><th class="num">Target</th><th>Status</th></tr></thead>
+  <tbody>
+  {% for c in profile.coverage %}
+    <tr>
+      <td>{{ c.category | replace("_", " ") | title }}</td>
+      <td class="num">{{ c.count }}</td>
+      <td class="num">{{ c.target }}</td>
+      <td>{% if c.met %}<span class="tag fact">at target</span>{% else %}<span class="tag inference">below target</span>{% endif %}</td>
+    </tr>
+  {% endfor %}
+  </tbody>
+</table>
+{% if unmet %}
+<div class="callout warn">
+  <strong>Evidence shortfall.</strong> {{ unmet | length }} categor{{ "y" if unmet | length == 1 else "ies" }}
+  below target. The alternative - generating claims to fill the gap - would defeat the purpose of a source-grounded report.
+</div>
+{% endif %}
+</section>
+
+<section>
+<h2>Sources</h2>
+<table>
+  <thead><tr><th>Source ID</th><th>Type</th><th>Title</th><th>Published</th><th>SHA-256</th></tr></thead>
+  <tbody>
+  {% for s in profile.sources if not s.error %}
+    <tr>
+      <td class="mono small">{{ s.source_id }}</td>
+      <td>{{ s.kind.value }}</td>
+      <td>{{ s.title }}</td>
+      <td class="muted small">{{ s.published or "" }}</td>
+      <td class="mono small">{{ (s.content_hash or "")[:12] }}</td>
+    </tr>
+  {% endfor %}
+  </tbody>
+</table>
+<p class="muted small">First-party filings only: annual reports, quarterly reports, 8-K earnings releases (Exhibit 99.1), SEC XBRL company facts, and peer-company filings for competitive overlap.</p>
+</section>
+
+<section>
+<h2>Evidence Ledger</h2>
+<p class="muted">{{ profile.evidence | length }} verified claims. Each was extracted from the cited filing and checked to contain a verbatim supporting quote.</p>
+<input type="search" id="ledgerFilter" placeholder="Filter claims by text, topic or source…" autocomplete="off">
+<table id="ledger">
+  <thead><tr><th>Claim ID</th><th>Topic</th><th>Claim</th><th>Source</th><th>Verbatim quote</th></tr></thead>
+  <tbody>
+  {% for e in profile.evidence %}
+    <tr id="{{ e.claim_id }}">
+      <td class="mono small">{{ e.claim_id }}</td>
+      <td><span class="chip">{{ e.topic }}</span></td>
+      <td>{{ e.text }}</td>
+      <td class="mono small">{{ e.source_id }}</td>
+      <td class="muted small">“{{ e.excerpt or "" }}”</td>
+    </tr>
+  {% endfor %}
+  </tbody>
+</table>
+</section>
+
+<footer>
+  <p class="muted small">
+    Generated {{ generated.strftime("%Y-%m-%d %H:%M UTC") }}.
+    Deterministic financials from SEC XBRL; qualitative claims from language models,
+    each gated on a verbatim source quote. Peer-filing claims are typed INFERENCE
+    and kept in a separate ledger.
+  </p>
+</footer>
+
+</div>
+<script>
+// Ledger filter. Tiny and dependency-free: the ledger is the audit trail, so being
+// able to search it matters more than any interactive flourish.
+(function () {
+  var input = document.getElementById('ledgerFilter');
+  if (!input) return;
+  var rows = Array.prototype.slice.call(
+    document.querySelectorAll('#ledger tbody tr')
+  );
+  input.addEventListener('input', function () {
+    var q = input.value.trim().toLowerCase();
+    rows.forEach(function (r) {
+      r.style.display = !q || r.textContent.toLowerCase().indexOf(q) !== -1 ? '' : 'none';
+    });
+  });
+})();
+</script>
+</body>
+</html>

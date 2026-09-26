@@ -1,0 +1,193 @@
+# Runtime settings. Kept deliberately flat and explicit.
+
+user_agent_contact: "suiwenke69@gmail.com"   # SEC requires a real contact; edit before heavy use.
+
+http:
+  timeout_seconds: 30
+  max_retries: 3
+  # SEC fair-access guidance is <=10 requests/second. 0.15s spacing keeps us well under.
+  min_seconds_between_requests: 0.15
+
+cache:
+  root: "cache"
+  # Refuse to serve cached artifacts older than this without a re-check.
+  max_age_days: 30
+
+filings:
+  # Annual + quarterly reports. 20-F/40-F are foreign private issuer equivalents (ASML, etc.).
+  annual_forms: ["10-K", "20-F", "40-F"]
+  quarterly_forms: ["10-Q", "6-K"]
+  # Earnings press releases are 8-K exhibits; this is our legal, free earnings-release source.
+  event_forms: ["8-K"]
+  max_annual_filings: 3
+  max_quarterly_filings: 4
+  max_event_filings: 8
+
+sources:
+  # An 8-K's primary document is a cover page; management's actual commentary is
+  # Exhibit 99.1, the earnings press release. This is the highest-value
+  # non-annual source and it is free and first-party on EDGAR.
+  fetch_earnings_releases: true
+  max_earnings_releases: 2
+
+  # Competitor first-party filings, used ONLY to evidence competitive overlap.
+  # Why this matters: a company's own 10-K rarely names its competitors. AMAT's
+  # names none, so competitor analysis built on self-disclosure alone is
+  # structurally weak. Peer filings are first-party, free, and legally unambiguous
+  # - unlike paywalled analyst research.
+  #
+  # Still config rather than inference: the pipeline cannot know who a company
+  # competes with, and guessing would be the exact unsupported claim this project
+  # exists to prevent.
+  fetch_competitor_filings: true
+  max_competitor_documents: 4
+  competitor_char_budget: 15000
+
+  # Peers are declared PER SUBJECT COMPANY. A single global pool is wrong: it would
+  # analyse Micron against equipment makers, producing a confidently incorrect
+  # competitive section.
+  #
+  # Where a subject's own filing already names a competitor, that pairing is used
+  # and marked 'disclosed'. The rest follow the industry grouping the subject
+  # reports in. Peers must have SEC filings - Tokyo Electron, for example, files
+  # only in Japan and has no EDGAR CIK, so it can be named by a subject but cannot
+  # be fetched as a peer source.
+  peer_map:
+    "Applied Materials":
+      - {name: "Lam Research", cik: "0000707549", ticker: "LRCX", basis: "disclosed",
+         overlap_focus: ["Etch", "Deposition", "Advanced Packaging"]}
+      - {name: "KLA", cik: "0000319201", ticker: "KLAC", basis: "disclosed",
+         overlap_focus: ["Process Control", "Inspection", "Metrology"]}
+
+    "Lam Research":
+      - {name: "Applied Materials", cik: "0000006951", ticker: "AMAT", basis: "disclosed",
+         overlap_focus: ["Etch", "Deposition", "Advanced Packaging"]}
+      - {name: "KLA", cik: "0000319201", ticker: "KLAC", basis: "industry",
+         overlap_focus: ["Process Control", "Inspection", "Metrology"]}
+
+    "KLA":
+      - {name: "Applied Materials", cik: "0000006951", ticker: "AMAT", basis: "industry",
+         overlap_focus: ["Process Control", "Inspection", "Metrology"]}
+      - {name: "Onto Innovation", cik: "0000704532", ticker: "ONTO", basis: "industry",
+         overlap_focus: ["Inspection", "Metrology", "Advanced Packaging"]}
+
+    "ASML":
+      - {name: "Applied Materials", cik: "0000006951", ticker: "AMAT", basis: "industry",
+         overlap_focus: ["Deposition", "Etch", "Metrology"]}
+      - {name: "Lam Research", cik: "0000707549", ticker: "LRCX", basis: "industry",
+         overlap_focus: ["Etch", "Deposition"]}
+
+    "Micron":
+      # The two closest memory peers are SK hynix (EDGAR-filable) and Samsung
+      # (files only in Korea, so not available as a peer source).
+      - {name: "SK hynix", cik: "0002120882", ticker: "HXSCL", basis: "industry",
+         overlap_focus: ["DRAM", "NAND", "HBM"]}
+
+    "NVIDIA":
+      - {name: "AMD", cik: "0000002488", ticker: "AMD", basis: "industry",
+         overlap_focus: ["Data center accelerators", "AI compute", "GPU"]}
+      - {name: "Broadcom", cik: "0001730168", ticker: "AVGO", basis: "industry",
+         overlap_focus: ["AI accelerators", "Networking silicon"]}
+
+    "AMD":
+      - {name: "NVIDIA", cik: "0001045810", ticker: "NVDA", basis: "industry",
+         overlap_focus: ["Data center accelerators", "AI compute", "GPU"]}
+      - {name: "Intel", cik: "0000050863", ticker: "INTC", basis: "industry",
+         overlap_focus: ["Server CPUs", "Client CPUs", "Foundry"]}
+
+    "Analog Devices":
+      - {name: "Texas Instruments", cik: "0000097476", ticker: "TXN", basis: "industry",
+         overlap_focus: ["Analog", "Embedded processing", "Industrial and automotive"]}
+      - {name: "NXP", cik: "0001413447", ticker: "NXPI", basis: "industry",
+         overlap_focus: ["Automotive", "Industrial", "Analog"]}
+
+    "NXP":
+      - {name: "Analog Devices", cik: "0000006281", ticker: "ADI", basis: "industry",
+         overlap_focus: ["Automotive", "Industrial", "Analog"]}
+      - {name: "Infineon", cik: "0001107457", ticker: "IFNNY", basis: "industry",
+         overlap_focus: ["Automotive", "Power semiconductors", "Microcontrollers"]}
+
+    "Infineon":
+      - {name: "NXP", cik: "0001413447", ticker: "NXPI", basis: "industry",
+         overlap_focus: ["Automotive", "Microcontrollers", "Power"]}
+      - {name: "STMicroelectronics", cik: "0000932787", ticker: "STM", basis: "industry",
+         overlap_focus: ["Automotive", "Power", "Microcontrollers"]}
+      - {name: "onsemi", cik: "0001097864", ticker: "ON", basis: "industry",
+         overlap_focus: ["Power semiconductors", "Automotive", "Industrial"]}
+
+financials:
+  # Preferred XBRL concept per metric, in priority order. Discovery falls back to a
+  # regex sweep of the company's own taxonomy when none of these exist.
+  concept_preferences:
+    revenue:
+      - "RevenueFromContractWithCustomerExcludingAssessedTax"
+      - "RevenueFromContractWithCustomerIncludingAssessedTax"
+      - "Revenues"
+      - "SalesRevenueNet"
+      - "SalesRevenueGoodsNet"
+    cost_of_revenue:
+      - "CostOfGoodsAndServicesSold"
+      - "CostOfRevenue"
+      - "CostOfGoodsSold"
+    gross_profit:
+      - "GrossProfit"
+    rd_expense:
+      - "ResearchAndDevelopmentExpense"
+    sga_expense:
+      - "SellingGeneralAndAdministrativeExpense"
+    operating_income:
+      - "OperatingIncomeLoss"
+    net_income:
+      - "NetIncomeLoss"
+      - "ProfitLoss"
+    diluted_eps:
+      - "EarningsPerShareDiluted"
+    operating_cash_flow:
+      - "NetCashProvidedByUsedInOperatingActivities"
+      - "NetCashProvidedByUsedInOperatingActivitiesContinuingOperations"
+    capex:
+      - "PaymentsToAcquirePropertyPlantAndEquipment"
+    inventory:
+      - "InventoryNet"
+      - "InventoryFinishedGoodsNetOfReserves"
+    deferred_revenue:
+      - "ContractWithCustomerLiabilityCurrent"
+    shares_diluted:
+      - "WeightedAverageNumberOfDilutedSharesOutstanding"
+  # Max trailing periods to retain per metric (keeps profiles small and readable).
+  max_periods_per_metric: 12
+  # Trailing periods used when computing growth in the report.
+  growth_lookback_periods: 4
+
+llm:
+  enabled: true           # Step 3+ needs this. Requires OPENAI_API_KEY.
+  extract_model: "gpt-4o-mini"
+  synth_model: "gpt-4o"
+  max_output_tokens: 4000
+  temperature: 0
+  # Hard ceiling. The run aborts rather than silently overspending.
+  # Sized for the two-pass pipeline: a coverage pass roughly doubles extraction
+  # volume, and the synthesis call then has to read a 100+ claim ledger. At
+  # configured prices a full run still costs on the order of $0.10.
+  run_token_budget: 150000
+  # Realistic completion size used to PROJECT spend against the budget above.
+  # max_output_tokens still caps any single call; budgeting with the full cap made
+  # the guard abort an affordable run after 11 of 18 chunks.
+  budget_output_estimate: 1200
+  # Ceilings on filing text sent to the model. The planner stops at whichever
+  # binds first, so a pathological filing cannot produce an unbounded prompt.
+  max_extraction_chunks: 18
+  max_extraction_chars: 40000
+  # Earnings releases are compact and dense with commercial language, so they get
+  # a separate budget rather than competing with the 10-K for context space.
+  max_release_chunks: 6
+  max_release_chars: 14000
+  price_per_mtok_input:
+    "gpt-4o-mini": 0.15
+    "gpt-4o": 2.50
+  price_per_mtok_output:
+    "gpt-4o-mini": 0.60
+    "gpt-4o": 10.00
+
+report:
+  excerpt_max_chars: 300   # Keep only short attributed excerpts, never bulk filing text.
