@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Wenke Sui — CV</title>
+<style>
+/* A4, print-first, sized to fit one page. Two colours only so photocopies stay legible. */
+@page { size: A4; margin: 10mm 11mm; }
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font: 8.3pt/1.24 -apple-system, BlinkMacSystemFont, "Segoe UI", Calibri, Arial, sans-serif;
+  color: #16191d;
+  -webkit-font-smoothing: antialiased;
+}
+
+.sheet { width: 188mm; margin: 0 auto; }
+
+h1 { margin: 0 0 0.6mm; font-size: 17pt; letter-spacing: 0.05em; font-weight: 700; text-align: center; }
+.contact { text-align: center; font-size: 8.1pt; color: #3d454e; margin-bottom: 0.9mm; }
+.contact a { color: #1f5f9e; text-decoration: none; }
+.tagline { text-align: center; font-size: 7.9pt; font-weight: 700; letter-spacing: 0.08em; color: #1f5f9e; margin-bottom: 2.6mm; }
+
+h2 {
+  font-size: 8.7pt; letter-spacing: 0.1em; text-transform: uppercase; font-weight: 700;
+  border-bottom: 1pt solid #16191d; padding-bottom: 0.5mm; margin: 2.6mm 0 1.4mm;
+}
+h2:first-of-type { margin-top: 0; }
+
+p { margin: 0 0 1.1mm; }
+ul { margin: 0 0 1.1mm; padding-left: 3.7mm; }
+li { margin-bottom: 0.6mm; }
+strong { font-weight: 650; }
+
+.job { margin-bottom: 1.9mm; }
+.job:last-child { margin-bottom: 0.4mm; }
+.job-head { display: flex; justify-content: space-between; align-items: baseline; gap: 4mm; }
+.job-title { font-weight: 700; font-size: 9pt; }
+.job-meta { font-size: 7.9pt; color: #4a545e; white-space: nowrap; }
+.job-sub { font-size: 7.9pt; color: #3d454e; font-style: italic; margin: 0.3mm 0 0.9mm; }
+.stack { font-size: 7.9pt; color: #4a545e; margin: 0 0 0.9mm; }
+
+.row { display: flex; justify-content: space-between; align-items: baseline; gap: 4mm; margin-top: 1.4mm; }
+.row:first-of-type { margin-top: 0; }
+.row-title { font-weight: 650; }
+.row-meta { font-size: 7.9pt; color: #4a545e; white-space: nowrap; }
+.row-sub { font-size: 7.9pt; color: #3d454e; }
+.skills p { margin-bottom: 0.8mm; }
+
+@media screen {
+  body { background: #eceef1; }
+  .sheet { background: #fff; margin: 7mm auto; padding: 10mm 11mm 8mm; width: 210mm; box-shadow: 0 1px 6px rgba(0,0,0,.14); }
+}
+</style>
+</head>
+<body>
+<div class="sheet">
+
+  <h1>WENKE SUI</h1>
+  <div class="contact">
+    +65 8741 7700 &nbsp;|&nbsp; Singapore &nbsp;|&nbsp; suiwenke69@gmail.com &nbsp;|&nbsp;
+    <a href="https://github.com/suiwenke69-cyber">github.com/suiwenke69-cyber</a>
+  </div>
+  <div class="tagline">SEMICONDUCTOR TECHNOLOGY · OPERATIONS · COMMERCIAL / PRODUCT · AI</div>
+
+  <h2>Profile</h2>
+  <p>
+    NUS MSc candidate in Semiconductor Technology and Operations with a Materials Science
+    background and hands-on thin-film process experience. Builds AI systems that turn public
+    semiconductor and financial data into structured, evidence-traceable analysis — working
+    tools with measured cost and test coverage. Combines fab-level process understanding with
+    the ability to map technology to products, markets, customers and competitive positioning.
+    Seeking roles where technology, product and commercial strategy meet.
+  </p>
+
+  <h2>AI &amp; Analytical Tooling — Solo Projects</h2>
+
+  <div class="job">
+    <div class="job-head">
+      <span class="job-title">Semiconductor Company Intelligence Agent</span>
+      <span class="job-meta">public repo · 6,838 LOC · 122 tests</span>
+    </div>
+    <div class="job-sub">Evidence-grounded pipeline covering Technology → Product → Market → Customer → Competition → Business</div>
+    <ul>
+      <li>Config-driven pipeline analysed across <strong>10 semiconductor companies</strong> (Applied Materials, Lam Research, ASML, NVIDIA, Micron, KLA, AMD, NXP, Analog Devices, Infineon), producing <strong>656 source-cited claims</strong> from <strong>175 first-party SEC documents</strong>; adding a company requires YAML only, with <strong>zero company-specific code</strong>.</li>
+      <li>Designed an <strong>anti-hallucination gate</strong>: every model-extracted claim must carry a verbatim quote verified against the source filing in Python. Tested with 48 deliberately fabricated claims — all rejected; <strong>zero dangling citations</strong> across every run.</li>
+      <li><strong>Removed language models from all numerical work</strong> — financials come from SEC XBRL as exact values and segment/geographic revenue is parsed from 10-K MD&amp;A tables in deterministic Python, eliminating the highest-risk error surface.</li>
+      <li>Cut cost to <strong>~$0.05 per company report</strong> by reducing 324,748 characters of filing text to 29,914 of targeted context (<strong>90.8%</strong>), with all HTTP and model responses cached so repeat runs cost <strong>$0.00</strong>.</li>
+      <li>Diagnosed that Applied Materials' Form 10-K mentions "deposition" <strong>once</strong> and names <strong>no competitor</strong>; closed the gap by ingesting peer filings and 8-K Exhibit 99.1 earnings releases.</li>
+      <li>Documented 18 defects found against real filings — including a YoY metric comparing a 90-day quarter to a 363-day year, and a unit error wrong by <strong>1000×</strong>.</li>
+    </ul>
+  </div>
+
+  <div class="job">
+    <div class="job-head">
+      <span class="job-title">ITrader — Equity Research &amp; Monitoring Assistant</span>
+      <span class="job-meta">20,321 LOC · 396 tests</span>
+    </div>
+    <div class="stack">Python · Streamlit · SQLite · SEC XBRL · 396 offline tests, all passing</div>
+    <ul>
+      <li>Architected <strong>20,321 lines across 84 modules</strong> on one rule — <em>deterministic code first, LLM only to explain results already computed</em> — so every conclusion answers "why" with traceable arithmetic.</li>
+      <li>Implemented all technical indicators from scratch (MA, RSI, MACD, ATR, RVOL) rather than wrapping a library, plus ATR-filtered swing clustering outputting <strong>support/resistance as ranges</strong> with touch counts and strength scores; built a valuation engine that <strong>auto-selects method by company type</strong> and returns Bear/Base/Bull ranges with assumptions exposed.</li>
+      <li>Made <strong>token cost a first principle</strong>: monitoring polls use <strong>zero tokens</strong> (a pure arithmetic module structurally barred from importing any LLM), gated by cooldown → market-state hash → daily budget, with a payload whitelist so <strong>price series cannot be sent to a model</strong>.</li>
+    </ul>
+  </div>
+
+  <div class="job">
+    <div class="job-head">
+      <span class="job-title">Price Action Academy — Interactive Course Platform</span>
+      <span class="job-meta">React · Vite · Supabase · Stripe</span>
+    </div>
+    <ul>
+      <li>Built a <strong>60-lesson</strong> interactive course across 9 modules with in-browser generated charts, walkthroughs and <strong>180 quiz questions</strong>; <strong>6,122 lines</strong> of front-end across 46 files.</li>
+      <li>Implemented a <strong>commercial stack</strong>, not just content: 12 serverless endpoints for Stripe checkout and webhooks, phone authentication and SMS, entitlements and licensed access, backed by 4 Supabase tables with versioned SQL migrations; deployed on Vercel.</li>
+    </ul>
+  </div>
+
+  <h2>Semiconductor Industry &amp; Commercial Knowledge</h2>
+  <ul>
+    <li><strong>Industry ecosystem</strong> — roles and business relationships among fabless firms, IDMs, foundries, OSATs, equipment/materials suppliers, EDA/IP vendors and distributors.</li>
+    <li><strong>Manufacturing flow</strong> — wafer fabrication steps including deposition, lithography, etch, ion implantation, CMP and cleaning, followed by packaging and test.</li>
+    <li><strong>Customer &amp; commercial perspective</strong> — how process requirements, yield, cost, capacity and qualification cycles shape purchasing decisions; able to analyse suppliers, customers, process nodes, capex cycles and competitive positioning, as demonstrated by the competitive and geographic analysis in the agent above.</li>
+  </ul>
+
+  <h2>Education</h2>
+  <div class="row">
+    <span class="row-title">National University of Singapore (NUS) — MSc, Semiconductor Technology and Operations</span>
+    <span class="row-meta">08/2026 – Present</span>
+  </div>
+  <div class="row-sub">Focus: semiconductor manufacturing, process integration, operations, industry value chain</div>
+
+  <div class="row">
+    <span class="row-title">Hokkaido University, Japan — HUSTEP Exchange Program</span>
+    <span class="row-meta">09/2025 – 06/2026</span>
+  </div>
+  <div class="row-sub">JASSO Scholarship, 05/2025</div>
+
+  <div class="row">
+    <span class="row-title">Sun Yat-sen University (Project 985) — BEng, Materials Science and Engineering</span>
+    <span class="row-meta">09/2022 – 06/2026</span>
+  </div>
+  <div class="row-sub">GPA 3.6/4.0 · Xian Weijian International Scholarship, 05/2025</div>
+
+  <h2>Technical Experience &amp; Publication</h2>
+  <div class="row">
+    <span class="row-title">Sb₂Se₃ Thin-Film Preparation &amp; Process Optimization — Sun Yat-sen University</span>
+    <span class="row-meta">10/2025 – Present</span>
+  </div>
+  <ul>
+    <li>Investigated how substrates and magnetron sputtering conditions affect thin-film crystal orientation and morphology; optimised power, pressure and temperature and evaluated process–structure relationships with XRD, SEM and XPS, translating characterisation data into process conclusions.</li>
+  </ul>
+  <div class="row">
+    <span class="row-title">Laser Cladding of Titanium Alloy with Transition Layer — Sun Yat-sen University</span>
+    <span class="row-meta">03/2025 – 12/2025</span>
+  </div>
+  <div class="row">
+    <span class="row-title">Co-author, <em>Buildings</em> (SCI Q2) — Earth-to-Air Heat Exchanger-Assisted Ventilated Double-Skin Facades</span>
+    <span class="row-meta">10/2025</span>
+  </div>
+  <div class="row">
+    <span class="row-title">Deep-Learning Recognition of Material Microscopic Features and Defects</span>
+    <span class="row-meta">09/2023 – 09/2024</span>
+  </div>
+
+  <h2>Skills</h2>
+  <div class="skills">
+    <p><strong>AI / Data</strong> — Python (pydantic, httpx, pandas, numpy, Streamlit) · LLM pipeline design, prompt and cost engineering, deterministic-vs-LLM architecture · pytest (<strong>518 tests</strong> across projects) · SQL/SQLite · React, JavaScript · Git</p>
+    <p><strong>Semiconductor / Materials</strong> — PVD &amp; magnetron sputtering · thin-film deposition · process optimisation · SEM, XRD, TEM, Raman, UV-Vis · fabrication and packaging/test flow</p>
+    <p><strong>Commercial</strong> — technical-to-commercial translation · industry and value-chain analysis · competitive and market intelligence · customer-needs orientation</p>
+    <p><strong>Languages</strong> — Chinese (Native) · English (IELTS 7.5) · Japanese (Conversational)</p>
+  </div>
+
+</div>
+</body>
+</html>
